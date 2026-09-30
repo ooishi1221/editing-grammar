@@ -19,8 +19,16 @@ implementation:
     - preserve geographic and location identity
     - preserve route order between locations
   parameters:
-    locationSet: supplied location identities
-    routeSequence: ordered route between supplied locations
+    locationSet:
+      kind: runtime-input
+      description: Supplied geographic location identities used by the route structure.
+      required: true
+      valueType: array
+    routeSequence:
+      kind: runtime-input
+      description: Supplied ordered route connecting the declared locations.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

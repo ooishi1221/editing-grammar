@@ -19,8 +19,16 @@ implementation:
     - preserve distinction between quoted and narrator layers
     - bind attribution to the quote
   parameters:
-    quoteId: supplied quote identity
-    attribution: supplied attribution or source
+    quoteId:
+      kind: runtime-input
+      description: Supplied identity of the quoted content.
+      required: true
+      valueType: string
+    attribution:
+      kind: runtime-input
+      description: Supplied attribution or source associated with the quote.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

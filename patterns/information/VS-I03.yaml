@@ -22,7 +22,11 @@ implementation:
     - preserve the supplied step order
     - preserve dependency and correspondence among steps
   parameters:
-    stepSequence: ordered step identities and dependencies
+    stepSequence:
+      kind: runtime-input
+      description: Supplied ordered step identities and dependency relationships.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

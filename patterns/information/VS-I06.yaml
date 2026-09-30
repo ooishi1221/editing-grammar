@@ -19,7 +19,11 @@ implementation:
     - map values to one shared quantitative scale
     - preserve label and value correspondence
   parameters:
-    dataSeries: comparable quantitative series
+    dataSeries:
+      kind: runtime-input
+      description: Supplied comparable quantitative series mapped to a shared scale.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

@@ -22,8 +22,16 @@ implementation:
     - bind the annotation to its target
     - preserve target visibility and association
   parameters:
-    annotationTarget: target detail identity
-    annotationText: supplied annotation content
+    annotationTarget:
+      kind: runtime-input
+      description: Supplied identity of the detail receiving the annotation.
+      required: true
+      valueType: string
+    annotationText:
+      kind: runtime-input
+      description: Supplied annotation content bound to the target detail.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

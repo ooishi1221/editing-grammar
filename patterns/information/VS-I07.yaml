@@ -19,7 +19,11 @@ implementation:
     - preserve row and column correspondence
     - keep exact values inspectable
   parameters:
-    tableData: supplied tabular data schema and values
+    tableData:
+      kind: runtime-input
+      description: Supplied tabular schema and exact values to preserve for inspection.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

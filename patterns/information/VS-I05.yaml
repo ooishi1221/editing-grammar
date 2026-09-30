@@ -23,8 +23,16 @@ implementation:
     - present the value as a distinct information beat
     - preserve value and claim association
   parameters:
-    valueId: selected value identity
-    claimId: associated claim identity
+    valueId:
+      kind: runtime-input
+      description: Supplied identity of the selected value receiving emphasis.
+      required: true
+      valueType: string
+    claimId:
+      kind: runtime-input
+      description: Supplied identity of the claim associated with the selected value.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

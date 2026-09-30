@@ -21,7 +21,11 @@ implementation:
     - keep each point independently scannable
     - preserve the supplied order and grouping
   parameters:
-    keyPointList: supplied ordered and grouped key points
+    keyPointList:
+      kind: runtime-input
+      description: Supplied ordered and grouped key-point set.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

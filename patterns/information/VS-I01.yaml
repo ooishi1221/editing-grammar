@@ -22,8 +22,16 @@ implementation:
     - present the definition at the first relevant use
     - preserve association between the term and definition
   parameters:
-    termId: supplied term identity
-    definitionText: bounded definition content
+    termId:
+      kind: runtime-input
+      description: Supplied identity of the term being defined.
+      required: true
+      valueType: string
+    definitionText:
+      kind: runtime-input
+      description: Supplied bounded definition content associated with the term.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

@@ -19,9 +19,21 @@ implementation:
     - bind the source or condition to the relevant claim
     - preserve the scope of applicability
   parameters:
-    claimId: relevant claim identity
-    sourceReference: supplied source reference
-    conditionSet: supplied applicability conditions
+    claimId:
+      kind: runtime-input
+      description: Supplied identity of the claim receiving source or applicability information.
+      required: true
+      valueType: string
+    sourceReference:
+      kind: runtime-input
+      description: Supplied source reference associated with the claim.
+      required: true
+      valueType: string
+    conditionSet:
+      kind: runtime-input
+      description: Supplied applicability conditions associated with the claim.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

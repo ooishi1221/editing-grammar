@@ -19,7 +19,11 @@ implementation:
     - preserve the externally supplied order
     - preserve candidate and rank correspondence
   parameters:
-    rankingData: externally ranked candidate set
+    rankingData:
+      kind: runtime-input
+      description: Externally prepared ranked candidate set whose order must be preserved.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

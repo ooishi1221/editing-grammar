@@ -19,7 +19,11 @@ implementation:
     - preserve chronological order
     - preserve event and time correspondence
   parameters:
-    eventSequence: ordered events with supplied time positions
+    eventSequence:
+      kind: runtime-input
+      description: Supplied ordered events with their authored time positions.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0
