@@ -22,7 +22,12 @@ implementation:
     - "preserve both subjects concurrently"
     - "maintain separation through the simultaneous view"
   parameters:
-    subjectCount: 2
+    subjectCount:
+      kind: constant
+      description: Number of subjects in the simultaneous two-source layout grammar.
+      required: false
+      valueType: number
+      value: 2
 evidence:
   - type: observed
     confidence: 1.0

@@ -19,7 +19,11 @@ implementation:
     - preserve state correspondence
     - display both in stable comparative regions
   parameters:
-    statePair: paired states of one subject
+    statePair:
+      kind: runtime-input
+      description: Supplied paired state identities for one subject.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

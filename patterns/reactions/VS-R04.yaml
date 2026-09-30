@@ -24,7 +24,11 @@ implementation:
     - hold the visual state
     - resume source progression afterward
   parameters:
-    frameTarget: selected frame or beat identity
+    frameTarget:
+      kind: runtime-input
+      description: Supplied frame or beat identity selected for the hold.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

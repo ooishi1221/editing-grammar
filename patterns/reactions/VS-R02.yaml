@@ -25,7 +25,11 @@ implementation:
     - temporarily reframe around the target
     - restore the base framing afterward
   parameters:
-    targetId: selected face or subject identity
+    targetId:
+      kind: runtime-input
+      description: Supplied face or subject identity selected for temporary reframing.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

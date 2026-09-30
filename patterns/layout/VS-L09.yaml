@@ -19,8 +19,16 @@ implementation:
     - preserve complete or critical vertical source content
     - resolve unused frame area without altering semantic source content
   parameters:
-    sourceAspectRatio: supplied source aspect ratio
-    targetFrame: supplied target frame identity
+    sourceAspectRatio:
+      kind: runtime-input
+      description: Supplied source aspect-ratio identity.
+      required: true
+      valueType: string
+    targetFrame:
+      kind: context
+      description: Supplied target frame context used to resolve aspect-ratio adaptation.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

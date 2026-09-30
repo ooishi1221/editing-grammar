@@ -20,7 +20,11 @@ implementation:
     - direct surrounding attention toward the target
     - preserve target visibility
   parameters:
-    targetId: focus target identity
+    targetId:
+      kind: runtime-input
+      description: Supplied focus target identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

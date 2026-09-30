@@ -20,8 +20,16 @@ implementation:
     - preserve the primary material
     - expose the reaction as a secondary view
   parameters:
-    primarySource: primary material source
-    secondarySource: bounded reaction source
+    primarySource:
+      kind: runtime-input
+      description: Supplied primary material source identity.
+      required: true
+      valueType: string
+    secondarySource:
+      kind: runtime-input
+      description: Supplied bounded reaction source identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

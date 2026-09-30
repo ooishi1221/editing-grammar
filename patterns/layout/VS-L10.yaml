@@ -20,8 +20,16 @@ implementation:
     - expose a fine-detail secondary view
     - preserve relationship to the primary view
   parameters:
-    targetId: operation target identity
-    sourceRegion: operation source region
+    targetId:
+      kind: runtime-input
+      description: Supplied operation target identity.
+      required: true
+      valueType: string
+    sourceRegion:
+      kind: runtime-input
+      description: Supplied operation source-region data.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

@@ -19,7 +19,11 @@ implementation:
     - reduce temporal progression for the segment
     - return to the base playback state
   parameters:
-    segmentId: selected motion-analysis segment identity
+    segmentId:
+      kind: runtime-input
+      description: Supplied motion-analysis segment identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

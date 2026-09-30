@@ -19,7 +19,11 @@ implementation:
     - present repeated beats while preserving sequence
     - maintain cumulative reaction context
   parameters:
-    reactionSequence: ordered reaction beat identities
+    reactionSequence:
+      kind: runtime-input
+      description: Supplied ordered reaction beat identities.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

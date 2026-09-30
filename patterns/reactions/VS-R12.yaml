@@ -20,7 +20,11 @@ implementation:
     - isolate it from surrounding content
     - preserve target identity and context
   parameters:
-    targetId: target object or subject identity
+    targetId:
+      kind: runtime-input
+      description: Supplied target object or subject identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

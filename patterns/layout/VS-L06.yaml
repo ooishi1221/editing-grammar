@@ -20,7 +20,11 @@ implementation:
     - keep both in stable distinct regions
     - preserve semantic correspondence
   parameters:
-    sourceSet: explanatory text and corresponding visual sources
+    sourceSet:
+      kind: runtime-input
+      description: Supplied explanatory text and corresponding visual source identities.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

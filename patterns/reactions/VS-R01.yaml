@@ -26,7 +26,11 @@ implementation:
     - "temporarily crop or scale around the target"
     - "return to the base framing after the emphasis beat"
   parameters:
-    emphasisTarget: "subject or keyword"
+    emphasisTarget:
+      kind: runtime-input
+      description: Supplied subject or keyword selected for local emphasis.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

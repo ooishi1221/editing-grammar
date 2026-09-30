@@ -20,7 +20,11 @@ implementation:
     - maintain three distinct stable regions
     - preserve concurrent visibility
   parameters:
-    sourceSet: three source identities
+    sourceSet:
+      kind: runtime-input
+      description: Supplied three source identities.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

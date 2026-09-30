@@ -20,8 +20,16 @@ implementation:
     - keep both concurrently visible
     - preserve the declared primary and secondary roles
   parameters:
-    primarySource: primary material source
-    secondarySource: speaker source
+    primarySource:
+      kind: runtime-input
+      description: Supplied primary material source identity.
+      required: true
+      valueType: string
+    secondarySource:
+      kind: runtime-input
+      description: Supplied speaker source identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

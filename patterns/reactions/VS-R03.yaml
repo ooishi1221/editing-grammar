@@ -27,7 +27,11 @@ implementation:
     - emphasize the target temporarily
     - restore the ordinary state
   parameters:
-    targetId: selected emphasis target identity
+    targetId:
+      kind: runtime-input
+      description: Supplied target identity selected for temporary emphasis.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

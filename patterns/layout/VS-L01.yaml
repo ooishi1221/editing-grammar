@@ -19,7 +19,11 @@ implementation:
     - keep relevant participants concurrently visible
     - preserve spatial relationship while the conversation continues
   parameters:
-    participantSet: relevant participant source identities
+    participantSet:
+      kind: runtime-input
+      description: Supplied relevant participant source identities.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

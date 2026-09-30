@@ -18,7 +18,11 @@ implementation:
     - replay the segment in original event order
     - return to the current timeline afterward
   parameters:
-    segmentId: bounded replay segment identity
+    segmentId:
+      kind: runtime-input
+      description: Supplied bounded replay segment identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

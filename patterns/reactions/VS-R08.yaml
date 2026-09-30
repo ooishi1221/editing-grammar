@@ -25,7 +25,11 @@ implementation:
     - apply a temporary global motion response
     - restore the stable frame afterward
   parameters:
-    impactEvent: supplied impact event
+    impactEvent:
+      kind: runtime-input
+      description: Supplied impact event identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0
