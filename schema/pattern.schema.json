@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ooishi1221/editing-grammar/schema/pattern.schema.json",
+  "title": "Editing Grammar Pattern",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "category",
+    "purpose",
+    "description",
+    "goodFor",
+    "avoidWhen",
+    "tags",
+    "evidence"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "minLength": 1 },
+    "purpose": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "goodFor": { "type": "array", "items": { "type": "string" } },
+    "avoidWhen": { "type": "array", "items": { "type": "string" } },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "sourceName", "confidence"],
+      "properties": {
+        "type": { "enum": ["observed", "inferred", "proposal"] },
+        "sourceName": { "type": "string", "minLength": 1 },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "sourceLocation": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "visual": { "type": "object" },
+    "audio": { "type": "object" },
+    "timing": { "type": "object" },
+    "implementation": { "type": "object" }
+  }
+}
