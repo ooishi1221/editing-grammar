@@ -9,6 +9,20 @@ avoidWhen:
   - "強い衝撃や感情のピークを表したい場面"
 tags:
   - notification
+audio:
+  type: generic-notification-cue
+  cue: information appearance event
+  sync: supplied information appearance event
+timing:
+  trigger: information appearance event
+  duration: at the supplied cue event
+implementation:
+  recipe:
+    - receive the information-appearance event
+    - emit a short generic notification cue
+    - synchronize the cue to the event
+  parameters:
+    cueEvent: supplied information appearance event
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +49,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

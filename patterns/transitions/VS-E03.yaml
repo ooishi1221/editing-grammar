@@ -9,6 +9,20 @@ avoidWhen:
   - "作業の順番を一つずつ理解させたい場面"
 tags:
   - summary
+visual:
+  transition:
+    type: process-montage
+    direction: preserve supplied chronology
+timing:
+  trigger: representative ordered process moments
+  duration: through the supplied moment sequence
+implementation:
+  recipe:
+    - receive representative ordered moments from a longer process
+    - preserve intended chronology
+    - compress the elapsed process into selected moments
+  parameters:
+    momentSequence: representative ordered process moments
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +49,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

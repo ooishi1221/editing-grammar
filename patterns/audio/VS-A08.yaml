@@ -9,6 +9,21 @@ avoidWhen:
   - "音を止めて明確な違和感や間をつくりたい場面"
 tags:
   - continuity
+audio:
+  type: ambient-continuity-bed
+  cue: compatible ambient source across an authored edit boundary
+  sync: supplied authored edit boundary
+timing:
+  trigger: authored edit boundary requiring ambient continuity
+  duration: across the supplied edit boundary
+implementation:
+  recipe:
+    - receive the compatible ambient bed or source
+    - maintain ambient continuity across the authored edit boundary
+    - avoid unintended bed discontinuity
+  parameters:
+    ambientSource: supplied compatible ambient bed or source
+    boundaryId: supplied authored edit boundary identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

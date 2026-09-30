@@ -9,6 +9,21 @@ avoidWhen:
   - "会話の流れを途切れなく保ちたい場面"
 tags:
   - sectioning
+visual:
+  layout:
+    type: explicit-section-boundary
+    position: preserve association between section and label
+timing:
+  trigger: new authored section
+  duration: at the supplied section boundary
+implementation:
+  recipe:
+    - receive the new section identity and label
+    - insert an explicit boundary before the section
+    - preserve section and label association
+  parameters:
+    sectionId: supplied section identity
+    boundaryId: authored section boundary identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

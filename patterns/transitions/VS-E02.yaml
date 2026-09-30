@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - continuity
   - conversation
+audio:
+  type: cross-boundary-scene-audio
+  cue: audio overlap between adjacent scenes
+  sync: supplied scene boundary
+timing:
+  trigger: adjacent scene boundary with audio-overlap intent
+  duration: through the supplied audio crossover
+implementation:
+  recipe:
+    - receive the adjacent scene pair and audio-overlap intent
+    - allow one scene audio source to cross the visual boundary
+    - preserve dialogue and scene continuity
+  parameters:
+    scenePair: adjacent scene identities
+    boundaryId: supplied scene boundary identity
+    direction: supplied audio lead or trail intent
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

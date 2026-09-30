@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - rhythm
   - pacing
+audio:
+  type: beat-aligned-editing
+  cue: supplied music beat events
+  sync: supplied beat grid
+timing:
+  trigger: selected editable event near a supplied beat
+  beatRelation: align when editorial meaning remains higher priority
+implementation:
+  recipe:
+    - receive the music beat grid and editable events
+    - align selected editable events to supplied beats
+    - preserve higher-priority editorial meaning when alignment conflicts
+  parameters:
+    beatGrid: supplied music beat grid or authored beat events
+    editableEvents: selected editable event identities
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

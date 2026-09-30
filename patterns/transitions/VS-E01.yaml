@@ -9,6 +9,17 @@ avoidWhen:
   - "反応を待たせて余韻をつくりたい場面"
 tags:
   - pacing
+timing:
+  trigger: bounded removable interval
+  duration: remove only the supplied interval
+implementation:
+  recipe:
+    - receive the bounded removable interval
+    - remove only that interval
+    - join the surrounding authored beats
+    - preserve semantic continuity
+  parameters:
+    segmentId: bounded removable interval identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

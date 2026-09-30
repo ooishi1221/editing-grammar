@@ -9,6 +9,21 @@ avoidWhen:
   - "情報の出現だけを小さく知らせたい場面"
 tags:
   - transition
+audio:
+  type: directional-transition-cue
+  cue: declared visual movement or transition event
+  sync: supplied movement event
+timing:
+  trigger: declared visual movement or transition event
+  duration: at the supplied movement event
+implementation:
+  recipe:
+    - receive the declared visual movement or transition event
+    - emit a generic directional transition cue
+    - synchronize the cue to the movement event
+  parameters:
+    cueEvent: supplied movement or transition event
+    direction: supplied movement direction
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

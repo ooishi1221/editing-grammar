@@ -9,6 +9,18 @@ avoidWhen:
   - "各工程を正確な順番で説明したい場面"
 tags:
   - summary
+timing:
+  trigger: bounded motion segment with designated peak
+  duration: through the supplied segment and peak
+implementation:
+  recipe:
+    - receive the bounded motion segment and designated peak
+    - compress less-important temporal portions
+    - preserve the designated peak
+    - return to the base temporal state
+  parameters:
+    segmentId: bounded motion segment identity
+    peakEvent: designated peak event identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

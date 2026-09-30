@@ -9,6 +9,22 @@ avoidWhen:
   - "画面内容より会話の音を優先してつなぎたい場面"
 tags:
   - continuity
+visual:
+  transition:
+    type: correspondence-aligned-edit
+    direction: preserve continuity through the declared match
+timing:
+  trigger: declared visual correspondence between source and destination shots
+  duration: at the supplied matching edit points
+implementation:
+  recipe:
+    - receive the source and destination shots
+    - receive the declared visual correspondence
+    - align the edit around that correspondence
+    - preserve continuity through the match
+  parameters:
+    scenePair: source and destination shot identities
+    visualMatch: declared correspondence between shots
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

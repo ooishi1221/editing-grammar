@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - afterglow
   - time-elision
+visual:
+  transition:
+    type: blended-scene-handoff
+    direction: resolve into destination scene
+timing:
+  trigger: adjacent scenes with time-passage or afterglow intent
+  duration: through the temporary blended handoff
+implementation:
+  recipe:
+    - receive the adjacent scenes and transition meaning
+    - create a temporary blended handoff
+    - preserve the intended time-passage or afterglow relationship
+    - resolve into the destination scene
+  parameters:
+    scenePair: adjacent source and destination scenes
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

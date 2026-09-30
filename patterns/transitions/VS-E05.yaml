@@ -9,6 +9,21 @@ avoidWhen:
   - "時間経過や感情の余韻を静かに示したい場面"
 tags:
   - transition
+visual:
+  transition:
+    type: directional-scene-handoff
+    direction: declared narrative direction
+timing:
+  trigger: adjacent states or scenes with a directional relationship
+  duration: through the transition to the destination state
+implementation:
+  recipe:
+    - receive adjacent states or scenes with a directional relationship
+    - transition between them while preserving the declared direction
+    - complete at the destination state
+  parameters:
+    scenePair: adjacent source and destination states
+    direction: declared narrative direction
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

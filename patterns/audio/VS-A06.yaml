@@ -9,6 +9,21 @@ avoidWhen:
   - "競争の点数や進捗を継続して見せたい場面"
 tags:
   - feedback
+audio:
+  type: result-state-feedback-cue
+  cue: externally supplied result state
+  sync: supplied result event
+timing:
+  trigger: externally supplied result event
+  duration: at the supplied result event
+implementation:
+  recipe:
+    - receive the externally supplied result state
+    - map the result state to a distinct feedback cue identity
+    - emit the cue at the result event
+  parameters:
+    resultState: externally supplied result state
+    cueEvent: supplied result event
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation
