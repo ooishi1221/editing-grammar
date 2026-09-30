@@ -30,7 +30,7 @@ export interface PatternSearchResultV2 {
   purpose: string[];
   score: number;
   positiveScore: number;
-  avoidWhenPenalty: number;
+  avoidWhenConflicts: string[];
   matchedPositiveFields: SearchV2PositiveField[];
 }
 
@@ -117,9 +117,8 @@ function hasStrongAvoidWhenConflict(query: string, avoidWhen: string): boolean {
   return longestCommonSubstringLength(query, normalizedAvoidWhen) >= requiredLength;
 }
 
-function avoidWhenPenalty(query: string, pattern: EditingPattern, exactIdOrTitle: boolean): number {
-  if (exactIdOrTitle || !pattern.avoidWhen.some((entry) => hasStrongAvoidWhenConflict(query, entry))) return 0;
-  return 250;
+function avoidWhenConflicts(query: string, pattern: EditingPattern): string[] {
+  return pattern.avoidWhen.filter((entry) => hasStrongAvoidWhenConflict(query, entry));
 }
 
 /**
@@ -150,6 +149,8 @@ export function searchPatterns(patterns: readonly EditingPattern[], query: Patte
 /**
  * Experimental semantic-field retrieval. V2 keeps each field separate so its
  * score can explain why a Pattern was retrieved; it is not a recommendation.
+ * `avoidWhen` is returned as post-retrieval conflict metadata and never alters
+ * rank, because it describes a later candidate-comparison concern.
  */
 export function searchPatternsV2(patterns: readonly EditingPattern[], query: PatternSearchQuery): PatternSearchResultV2[] {
   const normalizedIntent = normalize(query.intent);
@@ -172,16 +173,14 @@ export function searchPatternsV2(patterns: readonly EditingPattern[], query: Pat
       };
       const matchedPositiveFields = searchV2PositiveFields.filter((field) => scores[field] > 0);
       const positiveScore = Object.values(scores).reduce((total, score) => total + score, 0);
-      const exactIdOrTitle = normalizedIntent === normalize(pattern.id) || normalizedIntent === normalize(pattern.title);
-      const penalty = avoidWhenPenalty(normalizedIntent, pattern, exactIdOrTitle);
       return {
         id: pattern.id,
         title: pattern.title,
         category: pattern.category,
         purpose: pattern.purpose,
-        score: positiveScore - penalty,
+        score: positiveScore,
         positiveScore,
-        avoidWhenPenalty: penalty,
+        avoidWhenConflicts: avoidWhenConflicts(normalizedIntent, pattern),
         matchedPositiveFields,
       };
     })

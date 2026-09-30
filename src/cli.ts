@@ -74,7 +74,7 @@ async function search(args: string[]): Promise<number> {
       console.log(`${result.id} — ${result.title} [${result.category}]`);
       console.log(`  purpose: ${result.purpose.join(" / ")}`);
       console.log(`  matched positive fields: ${result.matchedPositiveFields.join(", ")}`);
-      console.log(`  positive score: ${result.positiveScore.toFixed(2)}; avoidWhen penalty: ${result.avoidWhenPenalty}; final score: ${result.score.toFixed(2)}`);
+      console.log(`  positive score: ${result.positiveScore.toFixed(2)}; avoidWhen conflict: ${result.avoidWhenConflicts.length > 0 ? "yes" : "no"}`);
     }
     return 0;
   }
