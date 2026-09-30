@@ -1,0 +1,45 @@
+id: VS-T11
+title: 語句強調
+category: captions
+purpose:
+  - 文中の核を目立たせる
+goodFor:
+  - 一語または短い語句に注意を集める場面
+avoidWhen:
+  - 同一発話内で複数の語句を同じ強さで強調する場面
+tags:
+  - typography
+  - visual
+  - emphasis
+visual:
+  motion:
+    type: scale
+    trigger: keyword
+    durationFrames: [6, 12]
+    easing: easeOutCubic
+    parameters:
+      fromScale: 1.0
+      peakScale: 1.12
+implementation:
+  deterministic: true
+  recipe:
+    - Mark the keyword within the caption token sequence.
+    - Apply the scale motion only to the marked keyword.
+  rendererCandidates:
+    - remotion
+    - hyperframes
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope: [id, title, purpose]
+    source:
+      name: YouTube Editing / Visual Library Japan v0.3
+      location: VS-T11
+      category: 発話テロップ
+      classification: 応用デザイン案
+  - type: inferred
+    confidence: 0.8
+    scope: [tags]
+  - type: proposal
+    confidence: 0.5
+    scope: [category, goodFor, avoidWhen, visual.motion, implementation]

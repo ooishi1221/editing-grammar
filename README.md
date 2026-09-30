@@ -33,7 +33,7 @@ Renderer / Video Harness
 
 ## Current status
 
-P0 scaffold only. The schema, TypeScript contracts, contribution boundary, and skill entry point exist; the pattern library, search, recommendation engine, adapters, and viewer do not.
+Three-Pattern Schema Spike complete: VS-T11, VS-I04, and VS-A03 validate as one-YAML-per-pattern samples. Search, recommendation, adapters, the remaining source audit, and the viewer remain out of scope.
 
 ## Layout
 

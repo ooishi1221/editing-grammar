@@ -1,0 +1,45 @@
+id: VS-A03
+title: 無音・BGM停止
+category: audio
+purpose:
+  - 違和感や間をつくる
+goodFor:
+  - 発話や画面の転換点を意識させたい場面
+avoidWhen:
+  - 情報を連続して聞かせる必要がある場面
+tags:
+  - audio
+  - silence
+  - timing
+audio:
+  type: silence
+  cue: contrast
+  sync: edit-point
+  optional: false
+  notes: Pause or stop the music bed at the chosen edit point.
+timing:
+  trigger: edit-point
+  duration: context-dependent pause
+implementation:
+  deterministic: true
+  recipe:
+    - Identify the edit point that needs contrast or space.
+    - Mute or stop the music bed for the selected pause.
+  rendererCandidates:
+    - ffmpeg
+    - hyperframes
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope: [id, title, purpose]
+    source:
+      name: YouTube Editing / Visual Library Japan v0.3
+      location: VS-A03
+      category: 音
+      classification: 応用デザイン案
+  - type: inferred
+    confidence: 0.8
+    scope: [tags]
+  - type: proposal
+    confidence: 0.5
+    scope: [category, goodFor, avoidWhen, audio, timing, implementation]

@@ -1,0 +1,41 @@
+id: VS-I04
+title: 因果・関係図
+category: information
+purpose:
+  - 要素の関係を整理
+goodFor:
+  - 複数の要素とそのつながりを一画面で説明する場面
+avoidWhen:
+  - 要素数が多く、接続線が読みにくくなる場面
+tags:
+  - information-layout
+  - visual-structure
+  - relationship
+visual:
+  layout:
+    type: relationship-diagram
+    position: center
+    safeArea: title-safe
+implementation:
+  deterministic: true
+  recipe:
+    - Represent each concept as a labeled node.
+    - Connect nodes with labeled directional relationships.
+  rendererCandidates:
+    - remotion
+    - hyperframes
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope: [id, title, purpose]
+    source:
+      name: YouTube Editing / Visual Library Japan v0.3
+      location: VS-I04
+      category: 情報・解説
+      classification: 応用デザイン案
+  - type: inferred
+    confidence: 0.8
+    scope: [tags]
+  - type: proposal
+    confidence: 0.5
+    scope: [category, goodFor, avoidWhen, visual.layout, implementation]
