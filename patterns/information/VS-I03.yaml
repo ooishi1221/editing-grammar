@@ -12,6 +12,17 @@ tags:
   - procedure
   - sequence
   - explanation
+visual:
+  layout:
+    type: ordered-step-structure
+    position: preserve step order and dependency correspondence
+implementation:
+  recipe:
+    - receive the ordered step sequence
+    - preserve the supplied step order
+    - preserve dependency and correspondence among steps
+  parameters:
+    stepSequence: ordered step identities and dependencies
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +49,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

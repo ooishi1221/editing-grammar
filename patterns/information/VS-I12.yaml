@@ -9,6 +9,18 @@ avoidWhen:
   - "編集者の補足として解説を加えたい場面"
 tags:
   - attribution
+visual:
+  layout:
+    type: quote-attribution-association
+    position: preserve distinction between quote and narrator layers
+implementation:
+  recipe:
+    - receive the quoted content and attribution
+    - preserve distinction between quoted and narrator layers
+    - bind attribution to the quote
+  parameters:
+    quoteId: supplied quote identity
+    attribution: supplied attribution or source
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

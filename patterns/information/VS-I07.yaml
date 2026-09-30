@@ -9,6 +9,17 @@ avoidWhen:
   - "一つの数値だけを印象的に記憶させたい場面"
 tags:
   - comparison
+visual:
+  layout:
+    type: tabular-data-structure
+    position: preserve row and column correspondence
+implementation:
+  recipe:
+    - receive the tabular data schema
+    - preserve row and column correspondence
+    - keep exact values inspectable
+  parameters:
+    tableData: supplied tabular data schema and values
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

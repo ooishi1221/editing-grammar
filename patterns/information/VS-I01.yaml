@@ -9,6 +9,21 @@ avoidWhen:
   - "複数の条件や数値を比較して判断させたい場面"
 tags:
   - explanation
+visual:
+  layout:
+    type: term-definition-association
+    position: preserve association between the term and its definition
+timing:
+  trigger: first relevant term use
+  duration: through the bounded definition presentation
+implementation:
+  recipe:
+    - receive the term and bounded definition
+    - present the definition at the first relevant use
+    - preserve association between the term and definition
+  parameters:
+    termId: supplied term identity
+    definitionText: bounded definition content
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

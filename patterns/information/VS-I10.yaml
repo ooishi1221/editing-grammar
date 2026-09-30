@@ -9,6 +9,18 @@ avoidWhen:
   - "時間順だけを簡潔に示したい場面"
 tags:
   - location
+visual:
+  layout:
+    type: geographic-route-structure
+    position: preserve geographic identity and route order
+implementation:
+  recipe:
+    - receive the location set and ordered route
+    - preserve geographic and location identity
+    - preserve route order between locations
+  parameters:
+    locationSet: supplied location identities
+    routeSequence: ordered route between supplied locations
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

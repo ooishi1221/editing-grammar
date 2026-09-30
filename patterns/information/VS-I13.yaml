@@ -11,6 +11,17 @@ avoidWhen:
 tags:
   - summary
   - key-points
+visual:
+  layout:
+    type: key-point-list-structure
+    position: preserve independent scanability and supplied grouping
+implementation:
+  recipe:
+    - receive the ordered key-point set
+    - keep each point independently scannable
+    - preserve the supplied order and grouping
+  parameters:
+    keyPointList: supplied ordered and grouped key points
 evidence:
   - type: observed
     confidence: 1.0
@@ -37,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

@@ -9,6 +9,17 @@ avoidWhen:
   - "複数条件の細かな値を正確に照合させたい場面"
 tags:
   - comparison
+visual:
+  layout:
+    type: shared-quantitative-scale
+    position: preserve label and value correspondence
+implementation:
+  recipe:
+    - receive the comparable quantitative series
+    - map values to one shared quantitative scale
+    - preserve label and value correspondence
+  parameters:
+    dataSeries: comparable quantitative series
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

@@ -9,6 +9,17 @@ avoidWhen:
   - "進行中の企画の現在地だけを示したい場面"
 tags:
   - chronology
+visual:
+  layout:
+    type: chronological-event-structure
+    position: preserve event and time correspondence
+implementation:
+  recipe:
+    - receive the ordered dated or time-positioned events
+    - preserve chronological order
+    - preserve event and time correspondence
+  parameters:
+    eventSequence: ordered events with supplied time positions
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

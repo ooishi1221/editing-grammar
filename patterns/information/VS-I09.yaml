@@ -9,6 +9,21 @@ avoidWhen:
   - "複数要素の因果関係を構造として説明したい場面"
 tags:
   - annotation
+visual:
+  layout:
+    type: annotation-target-binding
+    position: preserve target visibility and annotation association
+timing:
+  trigger: selected target detail
+  duration: through the authored annotation beat
+implementation:
+  recipe:
+    - receive the target detail and annotation
+    - bind the annotation to its target
+    - preserve target visibility and association
+  parameters:
+    annotationTarget: target detail identity
+    annotationText: supplied annotation content
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

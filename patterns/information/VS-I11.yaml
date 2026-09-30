@@ -9,6 +9,17 @@ avoidWhen:
   - "現在の競争状況や点数だけを追わせたい場面"
 tags:
   - comparison
+visual:
+  layout:
+    type: ranked-candidate-structure
+    position: preserve candidate and rank correspondence
+implementation:
+  recipe:
+    - receive the ranked candidate set
+    - preserve the externally supplied order
+    - preserve candidate and rank correspondence
+  parameters:
+    rankingData: externally ranked candidate set
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation
