@@ -1,0 +1,147 @@
+[
+  {
+    "id": "offscreen-speaker",
+    "query": "画面に映っていない人が話したことを分かるようにしたい",
+    "expectedIds": ["VS-T06"],
+    "topN": 5,
+    "category": "captions",
+    "pairwise": { "intendedId": "VS-T06", "falsePositiveId": "VS-B03" }
+  },
+  {
+    "id": "quiet-speech",
+    "query": "聞き取りにくい小さな声を自然に伝えたい",
+    "expectedIds": ["VS-T07"],
+    "topN": 5,
+    "category": "captions"
+  },
+  {
+    "id": "repeat-decisive-moment",
+    "query": "見逃した決定的な動きをもう一度見せたい",
+    "expectedIds": ["VS-R05"],
+    "topN": 5,
+    "category": "reactions"
+  },
+  {
+    "id": "whole-screen-impact",
+    "query": "一撃の衝撃を画面全体で感じさせたい",
+    "expectedIds": ["VS-R08"],
+    "topN": 5,
+    "category": "reactions"
+  },
+  {
+    "id": "unfamiliar-term",
+    "query": "初めて出る専門用語をその場で理解してもらいたい",
+    "expectedIds": ["VS-I01"],
+    "topN": 5,
+    "category": "information"
+  },
+  {
+    "id": "chronological-story",
+    "query": "出来事が起きた順番を迷わず追えるようにしたい",
+    "expectedIds": ["VS-I08"],
+    "topN": 5,
+    "category": "information",
+    "pairwise": { "intendedId": "VS-I08", "falsePositiveId": "VS-G06" }
+  },
+  {
+    "id": "speaker-and-material",
+    "query": "説明している人と資料を一緒に見せたい",
+    "expectedIds": ["VS-L03"],
+    "topN": 5,
+    "category": "layout"
+  },
+  {
+    "id": "fine-operation",
+    "query": "細かな手元の操作を見落とさず読ませたい",
+    "expectedIds": ["VS-L10"],
+    "topN": 5,
+    "category": "layout"
+  },
+  {
+    "id": "compressed-process",
+    "query": "長い制作過程を短時間で見せたい",
+    "expectedIds": ["VS-E03"],
+    "topN": 5,
+    "category": "transitions"
+  },
+  {
+    "id": "elapsed-time",
+    "query": "場面のあいだに時間が飛んだことを知らせたい",
+    "expectedIds": ["VS-E08"],
+    "topN": 5,
+    "category": "transitions",
+    "pairwise": { "intendedId": "VS-E08", "falsePositiveId": "VS-I08" }
+  },
+  {
+    "id": "avoid-audio-discontinuity",
+    "query": "カットのつなぎ目で音が急に切れた感じをなくしたい",
+    "expectedIds": ["VS-A08"],
+    "topN": 5,
+    "category": "audio"
+  },
+  {
+    "id": "audible-judgement",
+    "query": "正解か不正解かを耳でもすぐ分からせたい",
+    "expectedIds": ["VS-A06"],
+    "topN": 5,
+    "category": "audio"
+  },
+  {
+    "id": "current-project-stage",
+    "query": "長い企画のいまの工程を迷わせず示したい",
+    "expectedIds": ["VS-G06"],
+    "topN": 5,
+    "category": "game_ui",
+    "pairwise": { "intendedId": "VS-G06", "falsePositiveId": "VS-I03" }
+  },
+  {
+    "id": "shared-goal",
+    "query": "視聴者に今回達成したいゴールを共有したい",
+    "expectedIds": ["VS-G07"],
+    "topN": 5,
+    "category": "game_ui"
+  },
+  {
+    "id": "publisher-identity",
+    "query": "この映像を誰が発信しているかすぐ伝えたい",
+    "expectedIds": ["VS-B01"],
+    "topN": 5,
+    "category": "branding"
+  },
+  {
+    "id": "introduce-name-role",
+    "query": "登場した人の肩書きと名前を冒頭で紹介したい",
+    "expectedIds": ["VS-B03"],
+    "topN": 5,
+    "category": "branding",
+    "pairwise": { "intendedId": "VS-B03", "falsePositiveId": "VS-T02" }
+  },
+  {
+    "id": "opening-reason",
+    "query": "最初の数秒で続きを見る理由を作りたい",
+    "expectedIds": ["VS-C01"],
+    "topN": 5,
+    "category": "retention"
+  },
+  {
+    "id": "prompt-specific-comments",
+    "query": "視聴者に自分の答えを書き込んでもらいたい",
+    "expectedIds": ["VS-C04"],
+    "topN": 5,
+    "category": "retention"
+  },
+  {
+    "id": "avoid-vertical-ui",
+    "query": "縦動画でアプリのボタンと文字が重ならないようにしたい",
+    "expectedIds": ["VS-S01"],
+    "topN": 5,
+    "category": "shorts"
+  },
+  {
+    "id": "seamless-loop",
+    "query": "見終わりから自然に最初へ戻る短尺にしたい",
+    "expectedIds": ["VS-S04"],
+    "topN": 5,
+    "category": "shorts"
+  }
+]
