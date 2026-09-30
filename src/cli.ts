@@ -1,6 +1,6 @@
 import type { PatternCategory } from "../schema/pattern.js";
 import { loadPatternDocuments, loadPatterns } from "./load.js";
-import { searchPatterns } from "./search.js";
+import { searchPatterns, searchPatternsV2 } from "./search.js";
 import { validatePatternDocuments } from "./validate.js";
 
 const categories = new Set<PatternCategory>([
@@ -12,7 +12,7 @@ function usage(): string {
   return [
     "Usage:",
     "  editing-grammar validate",
-    "  editing-grammar search <query> [--category <category>] [--limit <n>]",
+    "  editing-grammar search <query> [--category <category>] [--limit <n>] [--mode v1|v2]",
     "  editing-grammar show <ID>",
   ].join("\n");
 }
@@ -31,10 +31,11 @@ async function validate(): Promise<number> {
   return 0;
 }
 
-function parseSearchArguments(args: string[]): { intent: string; category?: PatternCategory; limit?: number } {
+function parseSearchArguments(args: string[]): { intent: string; category?: PatternCategory; limit?: number; mode: "v1" | "v2" } {
   const intentParts: string[] = [];
   let category: PatternCategory | undefined;
   let limit: number | undefined;
+  let mode: "v1" | "v2" = "v1";
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
@@ -47,6 +48,10 @@ function parseSearchArguments(args: string[]): { intent: string; category?: Patt
       const parsed = Number(value);
       if (!value || !Number.isInteger(parsed) || parsed < 1) throw new Error("--limit must be a positive integer.");
       limit = parsed;
+    } else if (argument === "--mode") {
+      const value = args[++index];
+      if (value !== "v1" && value !== "v2") throw new Error("--mode must be v1 or v2.");
+      mode = value;
     } else if (argument.startsWith("--")) {
       throw new Error(`Unknown option: ${argument}`);
     } else {
@@ -56,12 +61,25 @@ function parseSearchArguments(args: string[]): { intent: string; category?: Patt
 
   const intent = intentParts.join(" ").trim();
   if (!intent) throw new Error("Search query is required.");
-  return { intent, category, limit };
+  return { intent, category, limit, mode };
 }
 
 async function search(args: string[]): Promise<number> {
   const query = parseSearchArguments(args);
-  const results = searchPatterns(await loadPatterns(), query);
+  const patterns = await loadPatterns();
+  if (query.mode === "v2") {
+    const results = searchPatternsV2(patterns, query);
+    console.log(`${results.length} candidates (v2 experiment)`);
+    for (const result of results) {
+      console.log(`${result.id} — ${result.title} [${result.category}]`);
+      console.log(`  purpose: ${result.purpose.join(" / ")}`);
+      console.log(`  matched positive fields: ${result.matchedPositiveFields.join(", ")}`);
+      console.log(`  positive score: ${result.positiveScore.toFixed(2)}; avoidWhen penalty: ${result.avoidWhenPenalty}; final score: ${result.score.toFixed(2)}`);
+    }
+    return 0;
+  }
+
+  const results = searchPatterns(patterns, query);
   console.log(`${results.length} candidates`);
   for (const result of results) {
     console.log(`${result.id} — ${result.title} [${result.category}]`);

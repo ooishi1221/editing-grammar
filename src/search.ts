@@ -19,6 +19,21 @@ export interface PatternSearchResult {
   matchedFields: SearchableField[];
 }
 
+export const searchV2PositiveFields = ["id", "title", "purpose", "goodFor", "tags", "category"] as const;
+
+export type SearchV2PositiveField = (typeof searchV2PositiveFields)[number];
+
+export interface PatternSearchResultV2 {
+  id: string;
+  title: string;
+  category: PatternCategory;
+  purpose: string[];
+  score: number;
+  positiveScore: number;
+  avoidWhenPenalty: number;
+  matchedPositiveFields: SearchV2PositiveField[];
+}
+
 const defaultLimit = 5;
 
 function normalize(value: string): string {
@@ -71,6 +86,42 @@ function fieldsFor(pattern: EditingPattern): Record<SearchableField, string> {
   };
 }
 
+function bestFieldScore(query: string, values: readonly string[], field: SearchableField): number {
+  return values.reduce((best, value) => Math.max(best, fieldScore(query, value, field)), 0);
+}
+
+function longestCommonSubstringLength(left: string, right: string): number {
+  let previous = Array(right.length + 1).fill(0);
+  let longest = 0;
+
+  for (const leftCharacter of left) {
+    const current = Array(right.length + 1).fill(0);
+    for (let index = 0; index < right.length; index += 1) {
+      if (leftCharacter === right[index]) {
+        current[index + 1] = previous[index] + 1;
+        longest = Math.max(longest, current[index + 1]);
+      }
+    }
+    previous = current;
+  }
+
+  return longest;
+}
+
+function hasStrongAvoidWhenConflict(query: string, avoidWhen: string): boolean {
+  const normalizedAvoidWhen = normalize(avoidWhen);
+  if (query === normalizedAvoidWhen) return true;
+  if (query.length >= 5 && (normalizedAvoidWhen.includes(query) || query.includes(normalizedAvoidWhen))) return true;
+
+  const requiredLength = Math.max(5, Math.ceil(Math.min(query.length, normalizedAvoidWhen.length) * 0.6));
+  return longestCommonSubstringLength(query, normalizedAvoidWhen) >= requiredLength;
+}
+
+function avoidWhenPenalty(query: string, pattern: EditingPattern, exactIdOrTitle: boolean): number {
+  if (exactIdOrTitle || !pattern.avoidWhen.some((entry) => hasStrongAvoidWhenConflict(query, entry))) return 0;
+  return 250;
+}
+
 /**
  * Ranks lexical matches only. A higher score means a closer text match, not a
  * better editing decision.
@@ -90,6 +141,49 @@ export function searchPatterns(patterns: readonly EditingPattern[], query: Patte
       const matchedFields = scores.filter(({ score }) => score > 0).map(({ field }) => field);
       const score = scores.reduce((total, entry) => total + entry.score, 0);
       return { id: pattern.id, title: pattern.title, category: pattern.category, purpose: pattern.purpose, score, matchedFields };
+    })
+    .filter((result) => result.score > 0)
+    .sort((left, right) => right.score - left.score || left.id.localeCompare(right.id))
+    .slice(0, limit);
+}
+
+/**
+ * Experimental semantic-field retrieval. V2 keeps each field separate so its
+ * score can explain why a Pattern was retrieved; it is not a recommendation.
+ */
+export function searchPatternsV2(patterns: readonly EditingPattern[], query: PatternSearchQuery): PatternSearchResultV2[] {
+  const normalizedIntent = normalize(query.intent);
+  if (normalizedIntent.length === 0) return [];
+
+  const limit = query.limit ?? defaultLimit;
+  if (!Number.isInteger(limit) || limit < 1) throw new Error("Search limit must be a positive integer.");
+
+  return patterns
+    .filter((pattern) => query.category === undefined || pattern.category === query.category)
+    .map((pattern) => {
+      const fields = fieldsFor(pattern);
+      const scores: Record<SearchV2PositiveField, number> = {
+        id: fieldScore(normalizedIntent, fields.id, "id") * 10,
+        title: fieldScore(normalizedIntent, fields.title, "title") * 5,
+        purpose: fieldScore(normalizedIntent, fields.purpose, "purpose") * 2,
+        goodFor: bestFieldScore(normalizedIntent, pattern.goodFor, "purpose") * 1.2,
+        tags: bestFieldScore(normalizedIntent, pattern.tags, "category") * 0.35,
+        category: fieldScore(normalizedIntent, fields.category, "category") * 0.25,
+      };
+      const matchedPositiveFields = searchV2PositiveFields.filter((field) => scores[field] > 0);
+      const positiveScore = Object.values(scores).reduce((total, score) => total + score, 0);
+      const exactIdOrTitle = normalizedIntent === normalize(pattern.id) || normalizedIntent === normalize(pattern.title);
+      const penalty = avoidWhenPenalty(normalizedIntent, pattern, exactIdOrTitle);
+      return {
+        id: pattern.id,
+        title: pattern.title,
+        category: pattern.category,
+        purpose: pattern.purpose,
+        score: positiveScore - penalty,
+        positiveScore,
+        avoidWhenPenalty: penalty,
+        matchedPositiveFields,
+      };
     })
     .filter((result) => result.score > 0)
     .sort((left, right) => right.score - left.score || left.id.localeCompare(right.id))

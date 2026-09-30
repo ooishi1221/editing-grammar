@@ -1,0 +1,164 @@
+[
+  {
+    "id": "exact-id",
+    "query": "ＶＳ－Ｒ０１",
+    "expectedIds": ["VS-R01"],
+    "topN": 5,
+    "exact": true
+  },
+  {
+    "id": "exact-title",
+    "query": "二項比較",
+    "expectedIds": ["VS-I02"],
+    "topN": 5,
+    "exact": true
+  },
+  {
+    "id": "conversation-continuity",
+    "query": "会話の流れを滑らかにつなぎたい",
+    "expectedIds": ["VS-E02"],
+    "topN": 5
+  },
+  {
+    "id": "countdown",
+    "query": "残り時間を見せたい",
+    "expectedIds": ["VS-G03"],
+    "topN": 5
+  },
+  {
+    "id": "end-screen",
+    "query": "次に見る動画へ案内したい",
+    "expectedIds": ["VS-C06"],
+    "topN": 5
+  },
+  {
+    "id": "simultaneous-reactions",
+    "query": "二者の反応を同時に見せたい",
+    "expectedIds": ["VS-L02"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-L02", "falsePositiveId": "VS-I02" }
+  },
+  {
+    "id": "common-criteria-comparison",
+    "query": "同じ物差しで二つを比べたい",
+    "expectedIds": ["VS-I02"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-I02", "falsePositiveId": "VS-L02" }
+  },
+  {
+    "id": "shorts-readability",
+    "query": "短い字幕をスマホで読みやすくしたい",
+    "expectedIds": ["VS-S02"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-S02", "falsePositiveId": "VS-T13" }
+  },
+  {
+    "id": "speech-position",
+    "query": "今どの発話を読んでいるか追えるようにしたい",
+    "expectedIds": ["VS-T13"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-T13", "falsePositiveId": "VS-S02" }
+  },
+  {
+    "id": "procedure-explanation",
+    "query": "初めて見る人に手順を順序立てて教えたい",
+    "expectedIds": ["VS-I03"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-I03", "falsePositiveId": "VS-G06" }
+  },
+  {
+    "id": "current-progress",
+    "query": "企画が今どこまで進んでいるか示したい",
+    "expectedIds": ["VS-G06"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-G06", "falsePositiveId": "VS-I03" }
+  },
+  {
+    "id": "structured-summary",
+    "query": "複数の論点を後から参照できるよう整理したい",
+    "expectedIds": ["VS-I13"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-I13", "falsePositiveId": "VS-C05" }
+  },
+  {
+    "id": "retention-recap",
+    "query": "最後に大事な点を短く振り返らせたい",
+    "expectedIds": ["VS-C05"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-C05", "falsePositiveId": "VS-I13" }
+  },
+  {
+    "id": "temporal-space",
+    "query": "音を止めずに反応の間を残したい",
+    "expectedIds": ["VS-E09"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-E09", "falsePositiveId": "VS-A03" }
+  },
+  {
+    "id": "ongoing-speaker-identification",
+    "query": "会話中の話者を継続して分かるようにしたい",
+    "expectedIds": ["VS-T02"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-T02", "falsePositiveId": "VS-B03" }
+  },
+  {
+    "id": "name-and-role-introduction",
+    "query": "人物の名前と役割を最初に紹介したい",
+    "expectedIds": ["VS-B03"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-B03", "falsePositiveId": "VS-T02" }
+  },
+  {
+    "id": "chronological-explanation",
+    "query": "出来事を時間順に説明したい",
+    "expectedIds": ["VS-I08"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-I08", "falsePositiveId": "VS-G06" }
+  },
+  {
+    "id": "live-score-state",
+    "query": "今の点差を追わせたい",
+    "expectedIds": ["VS-G02"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-G02", "falsePositiveId": "VS-I11" }
+  },
+  {
+    "id": "ranked-comparison",
+    "query": "順位で複数候補を比べたい",
+    "expectedIds": ["VS-I11"],
+    "topN": 5,
+    "pairwise": { "intendedId": "VS-I11", "falsePositiveId": "VS-G02" }
+  },
+  {
+    "id": "english-afterglow-tag",
+    "query": "afterglow",
+    "expectedIds": ["VS-T09", "VS-E06", "VS-A07", "VS-E09"],
+    "topN": 5
+  },
+  {
+    "id": "english-split-screen-tag",
+    "query": "split-screen",
+    "expectedIds": ["VS-L02", "VS-L07", "VS-S03"],
+    "topN": 5
+  },
+  {
+    "id": "english-speaker-tag",
+    "query": "speaker-identification",
+    "expectedIds": ["VS-T02", "VS-T06", "VS-B03"],
+    "topN": 5
+  },
+  {
+    "id": "known-lexical-limitation-emotional-ending",
+    "query": "なんかエモく終わらせたい",
+    "expectedIds": ["VS-T09", "VS-E06", "VS-A07"],
+    "topN": 5,
+    "knownLimitation": true
+  },
+  {
+    "id": "known-lexical-limitation-brighten-mood",
+    "query": "画面の空気を明るくしたい",
+    "expectedIds": ["VS-B04", "VS-B06"],
+    "topN": 5,
+    "knownLimitation": true
+  }
+]
