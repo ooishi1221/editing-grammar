@@ -62,16 +62,16 @@ Compare title, purpose, category, provenance, and available structured fields. U
 
 Search rank #1 is a closer lexical match, not the automatic answer. Compare does not recommend. Consider user meaning, tone, brand, references, scene context, and neighboring edits. Return multiple plausible options when they apply to different editing materials.
 
-### 7. Hand off implementation when requested
+### 7. Build a renderer handoff when requested
 
 1. Select the Pattern or Patterns.
 2. Inspect each selected Pattern with `show`.
-3. Use only relevant `visual`, `audio`, `timing`, and `implementation` fields.
-4. Treat implementation fields as library `proposal`, never as source-observed production values.
-5. Combine them with external scene, brand, and platform context.
-6. Pass the resulting handoff to the renderer or Video Harness.
+3. Build a portable handoff with `npm run handoff -- <ID> --values '<json-object>'`.
+4. Supply only known declared runtime or context inputs; inspect `unresolved` required inputs and obtain them from scene or application context.
+5. Never guess a missing required input or treat a grammar constant as caller input.
+6. Treat implementation fields as library `proposal`, never as source-observed production values, then pass the handoff to Video Harness or a renderer adapter.
 
-Missing implementation fields are intentional for some Patterns; do not invent them for semantic-only Patterns. Historical exceptions may contain older renderer or Taste proposals. Editing Grammar is not a renderer or timeline editor.
+Missing implementation fields are intentional for semantic-only Patterns; do not invent them. Historical exceptions may contain older renderer or Taste proposals, which require explicit handoff opt-in. Editing Grammar is not a renderer or timeline editor.
 
 ## Provenance
 

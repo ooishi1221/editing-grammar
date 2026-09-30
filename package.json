@@ -10,6 +10,7 @@
     "validate": "tsx src/cli.ts validate",
     "search": "tsx src/cli.ts search",
     "compare": "tsx src/cli.ts compare",
+    "handoff": "tsx src/cli.ts handoff",
     "show": "tsx src/cli.ts show"
   },
   "devDependencies": {

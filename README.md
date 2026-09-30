@@ -74,6 +74,14 @@ npm run compare -- "二つの商品を同じ条件で比較したい"
 
 The default limit is 3; `--limit` accepts at most 5.
 
+## Handoff
+
+Handoff builds a portable structural contract for an already-selected Pattern. It validates declared inputs and leaves missing required inputs explicit; it selects no renderer and performs no rendering.
+
+```sh
+npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
+```
+
 ## Layout
 
 - `schema/` — portable JSON Schema and TypeScript draft

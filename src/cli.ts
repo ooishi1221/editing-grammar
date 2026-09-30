@@ -1,5 +1,6 @@
 import type { PatternCategory } from "../schema/pattern.js";
 import { buildCandidateComparisons } from "./compare.js";
+import { buildImplementationHandoff, type HandoffContext } from "./handoff.js";
 import { loadPatternDocuments, loadPatterns } from "./load.js";
 import { searchPatterns, searchPatternsV2 } from "./search.js";
 import { validatePatternDocuments } from "./validate.js";
@@ -15,6 +16,7 @@ function usage(): string {
     "  editing-grammar validate",
     "  editing-grammar search <query> [--category <category>] [--limit <n>] [--mode v1|v2]",
     "  editing-grammar compare <query> [--category <category>] [--limit <n>]",
+    "  editing-grammar handoff <ID> [--values <json-object>] [--context <json-object>] [--include-historical]",
     "  editing-grammar show <ID>",
   ].join("\n");
 }
@@ -116,12 +118,76 @@ async function show(args: string[]): Promise<number> {
   return 0;
 }
 
+function parseJsonObject(value: string | undefined, option: string): Record<string, unknown> {
+  if (value === undefined) throw new Error(`${option} requires a JSON object.`);
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    throw new Error(`${option} must be valid JSON.`);
+  }
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error(`${option} must be a JSON object.`);
+  return parsed as Record<string, unknown>;
+}
+
+function parseHandoffContext(value: string | undefined): HandoffContext {
+  const context = parseJsonObject(value, "--context");
+  const allowedKeys = new Set(["scene", "brand", "platform"]);
+  for (const [key, entry] of Object.entries(context)) {
+    if (!allowedKeys.has(key)) throw new Error(`Unknown context key: ${key}`);
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) throw new Error(`Context ${key} must be a JSON object.`);
+  }
+  return context as HandoffContext;
+}
+
+function parseHandoffArguments(args: string[]): { id: string; suppliedValues?: Record<string, unknown>; context?: HandoffContext; includeHistoricalMetadata: boolean } {
+  let id: string | undefined;
+  let suppliedValues: Record<string, unknown> | undefined;
+  let context: HandoffContext | undefined;
+  let includeHistoricalMetadata = false;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === "--values") {
+      if (suppliedValues !== undefined) throw new Error("--values may be provided once.");
+      suppliedValues = parseJsonObject(args[++index], "--values");
+    } else if (argument === "--context") {
+      if (context !== undefined) throw new Error("--context may be provided once.");
+      context = parseHandoffContext(args[++index]);
+    } else if (argument === "--include-historical") {
+      includeHistoricalMetadata = true;
+    } else if (argument.startsWith("--")) {
+      throw new Error(`Unknown option: ${argument}`);
+    } else if (id === undefined) {
+      id = argument;
+    } else {
+      throw new Error("handoff requires exactly one Pattern ID.");
+    }
+  }
+
+  if (id === undefined) throw new Error("handoff requires exactly one Pattern ID.");
+  return { id, suppliedValues, context, includeHistoricalMetadata };
+}
+
+async function handoff(args: string[]): Promise<number> {
+  const options = parseHandoffArguments(args);
+  const pattern = (await loadPatterns()).find((candidate) => candidate.id.toUpperCase() === options.id.toUpperCase());
+  if (pattern === undefined) throw new Error(`Pattern not found: ${options.id}`);
+  console.log(JSON.stringify(buildImplementationHandoff(pattern, {
+    suppliedValues: options.suppliedValues,
+    context: options.context,
+    includeHistoricalMetadata: options.includeHistoricalMetadata,
+  }), null, 2));
+  return 0;
+}
+
 async function run(): Promise<number> {
   const [command, ...args] = process.argv.slice(2);
   if (command === "validate" && args.length === 0) return validate();
   if (command === "search") return search(args);
   if (command === "compare") return compare(args);
   if (command === "show") return show(args);
+  if (command === "handoff") return handoff(args);
   console.error(usage());
   return 1;
 }
