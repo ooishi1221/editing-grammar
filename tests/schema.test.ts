@@ -42,8 +42,19 @@ test("observed evidence requires source metadata", () => {
   assert.ok(result.errors.some((error) => error.field === "/evidence/0/source"));
 });
 
+test("observed evidence accepts source metadata without category or classification", () => {
+  const result = validatePattern({ id: "VS-X05", title: "Minimal source metadata", category: "captions", purpose: ["test"], goodFor: [], avoidWhen: [], tags: [], evidence: [{ type: "observed", confidence: 1, scope: ["title"], source: { name: "External source", location: "Section 1" } }] });
+  assert.equal(result.valid, true);
+});
+
 test("array-index evidence scope fails", () => {
-  const result = validatePattern({ id: "VS-X05", title: "Indexed scope", category: "captions", purpose: ["test"], goodFor: [], avoidWhen: [], tags: [], evidence: [{ type: "proposal", confidence: 0.5, scope: ["tags[0]"] }] });
+  const result = validatePattern({ id: "VS-X06", title: "Indexed scope", category: "captions", purpose: ["test"], goodFor: [], avoidWhen: [], tags: [], evidence: [{ type: "proposal", confidence: 0.5, scope: ["tags[0]"] }] });
   assert.equal(result.valid, false);
   assert.ok(result.errors.some((error) => error.field === "/evidence/0/scope/0"));
+});
+
+test("nonexistent evidence scope fails deterministic validation", () => {
+  const result = validatePattern({ id: "VS-X07", title: "Misspelled scope", category: "captions", purpose: ["test"], goodFor: [], avoidWhen: [], tags: [], visual: { motion: { type: "scale" } }, evidence: [{ type: "proposal", confidence: 0.5, scope: ["visual.moiton"] }] });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some((error) => error.keyword === "scopeExists" && error.field === "/evidence/0/scope/0"));
 });

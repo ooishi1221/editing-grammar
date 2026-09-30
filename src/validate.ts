@@ -17,6 +17,8 @@ export interface PatternValidationIssue { field: string; message: string; keywor
 export interface PatternValidationResult { valid: boolean; errors: PatternValidationIssue[]; }
 export interface DocumentValidationResult extends PatternValidationResult { filePath: string; patternId: string; }
 
+const scopePathSyntax = /^[A-Za-z][A-Za-z0-9]*(\.[A-Za-z][A-Za-z0-9]*)*$/;
+
 function issueFrom(error: ErrorObject): PatternValidationIssue {
   const missingProperty = error.keyword === "required" && typeof error.params.missingProperty === "string" ? error.params.missingProperty : undefined;
   return {
@@ -31,9 +33,42 @@ function patternId(value: unknown): string {
   return "<missing id>";
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function scopePathExists(pattern: unknown, scope: string): boolean {
+  let current = pattern;
+  for (const segment of scope.split(".")) {
+    if (!isRecord(current) || !Object.hasOwn(current, segment)) return false;
+    current = current[segment];
+  }
+  return true;
+}
+
+function scopeIssues(value: unknown): PatternValidationIssue[] {
+  if (!isRecord(value) || !Array.isArray(value.evidence)) return [];
+
+  return value.evidence.flatMap((evidence, evidenceIndex) => {
+    if (!isRecord(evidence) || !Array.isArray(evidence.scope)) return [];
+
+    return evidence.scope.flatMap((scope, scopeIndex) => {
+      if (typeof scope !== "string" || !scopePathSyntax.test(scope) || scopePathExists(value, scope)) return [];
+      return [{
+        field: `/evidence/${evidenceIndex}/scope/${scopeIndex}`,
+        message: `must reference an existing field or subtree: ${scope}`,
+        keyword: "scopeExists",
+      }];
+    });
+  });
+}
+
 export function validatePattern(value: unknown): PatternValidationResult {
-  const valid = validateSchema(value);
-  return { valid, errors: valid ? [] : (validateSchema.errors ?? []).map(issueFrom) };
+  const schemaValid = validateSchema(value);
+  const errors = schemaValid
+    ? scopeIssues(value)
+    : (validateSchema.errors ?? []).map(issueFrom);
+  return { valid: errors.length === 0, errors };
 }
 
 export function validatePatternDocuments(documents: LoadedPatternDocument[]): DocumentValidationResult[] {

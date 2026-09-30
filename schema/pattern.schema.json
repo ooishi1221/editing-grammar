@@ -44,7 +44,7 @@
     "sourceMetadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "location", "category", "classification"],
+      "required": ["name", "location"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "url": { "type": "string", "format": "uri" },

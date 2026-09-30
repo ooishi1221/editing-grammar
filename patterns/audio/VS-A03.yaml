@@ -21,7 +21,6 @@ timing:
   trigger: edit-point
   duration: context-dependent pause
 implementation:
-  deterministic: true
   recipe:
     - Identify the edit point that needs contrast or space.
     - Mute or stop the music bed for the selected pause.
@@ -34,7 +33,8 @@ evidence:
     scope: [id, title, purpose]
     source:
       name: YouTube Editing / Visual Library Japan v0.3
-      location: VS-A03
+      url: https://youtube-editing-visual-library.ayami.chatgpt.site/
+      location: PDF p.13 / VS-A03
       category: 音
       classification: 応用デザイン案
   - type: inferred

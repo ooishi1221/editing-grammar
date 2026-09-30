@@ -5,9 +5,9 @@ export type PatternCategory =
 export type EvidenceType = "observed" | "inferred" | "proposal";
 
 export interface SourceMetadata {
-  name?: string;
+  name: string;
   url?: string;
-  location?: string;
+  location: string;
   category?: string;
   classification?: string;
 }
