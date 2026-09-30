@@ -33,7 +33,19 @@ Renderer / Video Harness
 
 ## Current status
 
-The audited 92-Pattern dataset validates. P0 now includes deterministic local search and full Pattern inspection. Recommendation, adapters, and the viewer remain out of scope.
+**P0 COMPLETE.**
+
+P0 includes:
+
+- audited 92-Pattern source catalog;
+- frozen Pattern schema;
+- 92 one-pattern-per-YAML files;
+- provenance separation: `observed` / `inferred` / `proposal`;
+- deterministic validation and Dataset Integrity checks;
+- deterministic lexical Search and the `show` command;
+- retrieval tests and the Agent Skill workflow.
+
+Semantic Enrichment and Recommendation are not part of P0. Current Search uses only `id`, `title`, `purpose`, and `category`.
 
 ## Search
 
