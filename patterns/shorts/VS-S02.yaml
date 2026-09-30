@@ -3,9 +3,15 @@ title: "短文・逐次字幕"
 category: shorts
 purpose:
   - "小画面で発話を追わせる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "Shortsの小画面で短い字幕を順に読ませたい場面"
+  - "発話を一度に詰め込まずテンポに合わせて分けたい場面"
+avoidWhen:
+  - "発話内の現在位置を逐語的に追跡させたい場面"
+tags:
+  - shorts
+  - captions
+  - readability
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +29,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

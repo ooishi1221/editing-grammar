@@ -3,9 +3,14 @@ title: "要点のおさらい"
 category: retention
 purpose:
   - "理解を定着させる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "視聴後に重要点を短く再確認させたい場面"
+  - "次の行動前に理解を定着させたい場面"
+avoidWhen:
+  - "複数の論点を分類して参照可能に整理する場面"
+tags:
+  - retention
+  - recap
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +28,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

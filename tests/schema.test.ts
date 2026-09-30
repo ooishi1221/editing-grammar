@@ -7,6 +7,21 @@ import { validatePattern, validatePatternDocuments } from "../src/validate.js";
 
 const patternsDirectory = fileURLToPath(new URL("../patterns/", import.meta.url));
 const sourceAuditPath = new URL("../docs/source-audit.md", import.meta.url);
+const originalSpikeIds = new Set(["VS-T11", "VS-I04", "VS-A03"]);
+const p1SemanticEnrichmentIds = new Set([
+  "VS-I02", "VS-L02", "VS-T13", "VS-S02",
+  "VS-I03", "VS-G06", "VS-I13", "VS-C05",
+]);
+const optionalSemanticOrImplementationFields = [
+  "description",
+  "visual",
+  "audio",
+  "timing",
+  "implementation",
+  "requirements",
+  "failureModes",
+  "relatedPatterns",
+] as const;
 
 const sourceCategoryMapping = {
   "発話テロップ": "captions",
@@ -91,25 +106,16 @@ test("all YAML catalog facts faithfully match the source audit", async () => {
 });
 
 test("converted YAML files conform to the conversion policy", async () => {
-  const spikeIds = new Set(["VS-T11", "VS-I04", "VS-A03"]);
-  const convertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => !spikeIds.has(pattern.id));
-  const optionalFields = [
-    "description",
-    "visual",
-    "audio",
-    "timing",
-    "implementation",
-    "requirements",
-    "failureModes",
-    "relatedPatterns",
-  ] as const;
+  const convertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => (
+    !originalSpikeIds.has(pattern.id) && !p1SemanticEnrichmentIds.has(pattern.id)
+  ));
 
-  assert.equal(convertedPatterns.length, 89);
+  assert.equal(convertedPatterns.length, 81);
   for (const pattern of convertedPatterns) {
     assert.deepEqual(pattern.goodFor, [], `${pattern.id}: goodFor`);
     assert.deepEqual(pattern.avoidWhen, [], `${pattern.id}: avoidWhen`);
     assert.deepEqual(pattern.tags, [], `${pattern.id}: tags`);
-    for (const field of optionalFields) {
+    for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
     }
 
@@ -122,6 +128,67 @@ test("converted YAML files conform to the conversion policy", async () => {
     assert.equal(proposal.length, 1, `${pattern.id}: proposal evidence count`);
     assert.deepEqual(observed[0].scope, ["id", "title", "purpose"], `${pattern.id}: observed scope`);
     assert.deepEqual(proposal[0].scope, ["category"], `${pattern.id}: proposal scope`);
+  }
+});
+
+test("P1 semantic enrichment is scoped to the designated eight Patterns", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const enrichedPatterns = patterns.filter((pattern) => p1SemanticEnrichmentIds.has(pattern.id));
+
+  assert.equal(enrichedPatterns.length, 8);
+  assert.deepEqual(new Set(enrichedPatterns.map((pattern) => pattern.id)), p1SemanticEnrichmentIds);
+
+  for (const pattern of enrichedPatterns) {
+    assert.ok(pattern.tags.length > 0, `${pattern.id}: tags`);
+    assert.ok(pattern.tags.length <= 3, `${pattern.id}: tag count`);
+    assert.ok(pattern.tags.every((tag) => /^[a-z]+(?:-[a-z]+)*$/.test(tag)), `${pattern.id}: tag format`);
+    assert.ok(pattern.goodFor.length > 0, `${pattern.id}: goodFor`);
+    assert.ok(pattern.avoidWhen.length > 0, `${pattern.id}: avoidWhen`);
+    for (const field of optionalSemanticOrImplementationFields) {
+      assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
+    }
+
+    const observed = pattern.evidence.filter((evidence) => evidence.type === "observed");
+    const categoryProposal = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal" && JSON.stringify(evidence.scope) === JSON.stringify(["category"])
+    ));
+    const tagInference = pattern.evidence.filter((evidence) => (
+      evidence.type === "inferred" && JSON.stringify(evidence.scope) === JSON.stringify(["tags"])
+    ));
+    const semanticProposal = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal" && JSON.stringify(evidence.scope) === JSON.stringify(["goodFor", "avoidWhen"])
+    ));
+
+    assert.equal(pattern.evidence.length, 4, `${pattern.id}: evidence count`);
+    assert.equal(observed.length, 1, `${pattern.id}: observed evidence count`);
+    assert.deepEqual(observed[0].scope, ["id", "title", "purpose"], `${pattern.id}: observed scope`);
+    assert.equal(categoryProposal.length, 1, `${pattern.id}: category proposal`);
+    assert.equal(tagInference.length, 1, `${pattern.id}: tag inference`);
+    assert.equal(tagInference[0].confidence, 0.8, `${pattern.id}: tag inference confidence`);
+    assert.equal(tagInference[0].source, undefined, `${pattern.id}: tag inference source`);
+    assert.equal(semanticProposal.length, 1, `${pattern.id}: semantic proposal`);
+    assert.equal(semanticProposal[0].confidence, 0.5, `${pattern.id}: semantic proposal confidence`);
+    assert.equal(semanticProposal[0].source, undefined, `${pattern.id}: semantic proposal source`);
+  }
+});
+
+test("P1 semantic pairs retain distinct decision boundaries", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+  const pairs = [
+    ["VS-I02", "VS-L02"],
+    ["VS-T13", "VS-S02"],
+    ["VS-I03", "VS-G06"],
+    ["VS-I13", "VS-C05"],
+  ] as const;
+
+  for (const [leftId, rightId] of pairs) {
+    const left = patternsById.get(leftId);
+    const right = patternsById.get(rightId);
+    assert.ok(left, `Missing ${leftId}`);
+    assert.ok(right, `Missing ${rightId}`);
+    assert.notDeepEqual(left.tags, right.tags, `${leftId}/${rightId}: tags`);
+    assert.notDeepEqual(left.goodFor, right.goodFor, `${leftId}/${rightId}: goodFor`);
+    assert.notDeepEqual(left.avoidWhen, right.avoidWhen, `${leftId}/${rightId}: avoidWhen`);
   }
 });
 

@@ -3,9 +3,15 @@ title: "二分割"
 category: layout
 purpose:
   - "二者の反応を同時に見せる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "二者の反応や視点を同時に追わせたい場面"
+  - "対話や対決の並行した画面情報を保ちたい場面"
+avoidWhen:
+  - "同じ評価軸で差を構造的に比較させたい場面"
+  - "比較基準を明示して整理する必要がある場面"
+tags:
+  - split-screen
+  - simultaneous-view
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +29,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

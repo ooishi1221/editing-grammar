@@ -3,9 +3,14 @@ title: "箇条書きまとめ"
 category: information
 purpose:
   - "複数の要点を整理"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "複数の論点を読み返せる形で整理したい場面"
+  - "説明の中で散らばった要点を構造化したい場面"
+avoidWhen:
+  - "視聴後の理解を短く再確認させることが主目的の場面"
+tags:
+  - summary
+  - key-points
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +28,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

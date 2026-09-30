@@ -3,9 +3,15 @@ title: "進捗・ステップ表示"
 category: game_ui
 purpose:
   - "長い企画の現在地を示す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "企画や挑戦の現在地点と残り段階を示したい場面"
+  - "視聴者に進行中のゴールを追わせたい場面"
+avoidWhen:
+  - "作業手順そのものを初めて説明する場面"
+tags:
+  - progress-ui
+  - sequence
+  - current-state
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +29,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

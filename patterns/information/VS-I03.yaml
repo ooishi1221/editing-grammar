@@ -3,9 +3,15 @@ title: "ステップ図解"
 category: information
 purpose:
   - "作業の順番を示す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "手順の前後関係を初めて理解させたい場面"
+  - "作業方法を順序立てて説明したい場面"
+avoidWhen:
+  - "長い企画の進行状況や残り段階を示す場面"
+tags:
+  - procedure
+  - sequence
+  - explanation
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +29,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen
