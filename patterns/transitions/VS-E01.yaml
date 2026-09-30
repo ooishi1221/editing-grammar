@@ -19,7 +19,11 @@ implementation:
     - join the surrounding authored beats
     - preserve semantic continuity
   parameters:
-    segmentId: bounded removable interval identity
+    segmentId:
+      kind: runtime-input
+      description: Authored bounded interval selected for removal.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

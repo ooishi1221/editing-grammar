@@ -22,7 +22,11 @@ implementation:
     - emit a short generic notification cue
     - synchronize the cue to the event
   parameters:
-    cueEvent: supplied information appearance event
+    cueEvent:
+      kind: runtime-input
+      description: Supplied information-appearance event triggering the notification cue.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

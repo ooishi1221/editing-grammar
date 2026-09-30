@@ -23,8 +23,16 @@ implementation:
     - align selected editable events to supplied beats
     - preserve higher-priority editorial meaning when alignment conflicts
   parameters:
-    beatGrid: supplied music beat grid or authored beat events
-    editableEvents: selected editable event identities
+    beatGrid:
+      kind: runtime-input
+      description: Supplied music beat grid or authored beat-event sequence.
+      required: true
+      valueType: array
+    editableEvents:
+      kind: runtime-input
+      description: Supplied editable event identities eligible for beat alignment.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

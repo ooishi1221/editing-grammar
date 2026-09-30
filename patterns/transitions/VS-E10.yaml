@@ -19,8 +19,16 @@ implementation:
     - preserve the designated peak
     - return to the base temporal state
   parameters:
-    segmentId: bounded motion segment identity
-    peakEvent: designated peak event identity
+    segmentId:
+      kind: runtime-input
+      description: Supplied bounded motion-segment identity receiving temporal compression.
+      required: true
+      valueType: string
+    peakEvent:
+      kind: runtime-input
+      description: Authored peak-event identity that must remain emphasized during compression.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

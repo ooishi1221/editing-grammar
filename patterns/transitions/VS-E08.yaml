@@ -23,8 +23,16 @@ implementation:
     - insert explicit elapsed-time information at that boundary
     - preserve surrounding chronology
   parameters:
-    elapsedInterval: supplied elapsed interval or chronology gap
-    boundaryId: authored chronology boundary identity
+    elapsedInterval:
+      kind: runtime-input
+      description: Supplied elapsed-time or chronology-gap information to expose at the boundary.
+      required: true
+      valueType: object
+    boundaryId:
+      kind: runtime-input
+      description: Authored chronology-boundary identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

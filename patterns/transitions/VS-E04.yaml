@@ -22,8 +22,16 @@ implementation:
     - insert an explicit boundary before the section
     - preserve section and label association
   parameters:
-    sectionId: supplied section identity
-    boundaryId: authored section boundary identity
+    sectionId:
+      kind: runtime-input
+      description: Supplied identity of the section beginning after the explicit boundary.
+      required: true
+      valueType: string
+    boundaryId:
+      kind: runtime-input
+      description: Authored section-boundary identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

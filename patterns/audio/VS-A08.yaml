@@ -22,8 +22,16 @@ implementation:
     - maintain ambient continuity across the authored edit boundary
     - avoid unintended bed discontinuity
   parameters:
-    ambientSource: supplied compatible ambient bed or source
-    boundaryId: supplied authored edit boundary identity
+    ambientSource:
+      kind: runtime-input
+      description: Supplied compatible ambient-bed or room-tone source identity.
+      required: true
+      valueType: string
+    boundaryId:
+      kind: runtime-input
+      description: Authored edit-boundary identity across which ambient continuity is preserved.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

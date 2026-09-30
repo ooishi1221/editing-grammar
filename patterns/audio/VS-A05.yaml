@@ -22,8 +22,16 @@ implementation:
     - emit a generic directional transition cue
     - synchronize the cue to the movement event
   parameters:
-    cueEvent: supplied movement or transition event
-    direction: supplied movement direction
+    cueEvent:
+      kind: runtime-input
+      description: Supplied visual movement or transition event triggering the directional cue.
+      required: true
+      valueType: string
+    direction:
+      kind: runtime-input
+      description: Supplied movement direction associated with the transition cue.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

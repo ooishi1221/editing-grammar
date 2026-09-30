@@ -22,7 +22,11 @@ implementation:
     - preserve intended chronology
     - compress the elapsed process into selected moments
   parameters:
-    momentSequence: representative ordered process moments
+    momentSequence:
+      kind: runtime-input
+      description: Supplied ordered representative moments selected from the longer process.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

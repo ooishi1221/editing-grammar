@@ -23,8 +23,16 @@ implementation:
     - align the edit around that correspondence
     - preserve continuity through the match
   parameters:
-    scenePair: source and destination shot identities
-    visualMatch: declared correspondence between shots
+    scenePair:
+      kind: runtime-input
+      description: Supplied source and destination shot identities participating in the match.
+      required: true
+      valueType: array
+    visualMatch:
+      kind: runtime-input
+      description: Authored visual correspondence between the source and destination shots.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

@@ -22,8 +22,16 @@ implementation:
     - transition between them while preserving the declared direction
     - complete at the destination state
   parameters:
-    scenePair: adjacent source and destination states
-    direction: declared narrative direction
+    scenePair:
+      kind: runtime-input
+      description: Supplied source and destination scene or state identities.
+      required: true
+      valueType: array
+    direction:
+      kind: runtime-input
+      description: Authored narrative direction preserved through the transition.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

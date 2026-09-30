@@ -24,7 +24,11 @@ implementation:
     - preserve the intended time-passage or afterglow relationship
     - resolve into the destination scene
   parameters:
-    scenePair: adjacent source and destination scenes
+    scenePair:
+      kind: runtime-input
+      description: Supplied adjacent source and destination scene identities.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0
