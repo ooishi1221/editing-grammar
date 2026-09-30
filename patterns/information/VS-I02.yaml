@@ -22,8 +22,17 @@ implementation:
     - "define a shared comparison axis"
     - "render each criterion in stable correspondence"
   parameters:
-    subjectCount: 2
-    comparisonAxis: "shared criterion"
+    subjectCount:
+      kind: constant
+      description: Number of subjects in the two-item comparison grammar.
+      required: false
+      valueType: number
+      value: 2
+    comparisonAxis:
+      kind: runtime-input
+      description: Shared criterion used to align the compared subjects.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

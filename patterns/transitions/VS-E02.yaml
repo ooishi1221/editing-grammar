@@ -23,9 +23,21 @@ implementation:
     - allow one scene audio source to cross the visual boundary
     - preserve dialogue and scene continuity
   parameters:
-    scenePair: adjacent scene identities
-    boundaryId: supplied scene boundary identity
-    direction: supplied audio lead or trail intent
+    scenePair:
+      kind: runtime-input
+      description: Adjacent scene identities participating in the cross-boundary audio handoff.
+      required: true
+      valueType: array
+    boundaryId:
+      kind: runtime-input
+      description: Authored scene boundary identity.
+      required: true
+      valueType: string
+    direction:
+      kind: runtime-input
+      description: Authored audio lead-or-trail intent across the visual boundary.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

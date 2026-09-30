@@ -21,7 +21,11 @@ implementation:
     - "place critical text and subjects inside the safe area"
     - "recalculate placement when output safe area changes"
   parameters:
-    safeAreaProfile: "external platform geometry"
+    safeAreaProfile:
+      kind: context
+      description: Platform or output safe-area geometry used to resolve critical placement.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

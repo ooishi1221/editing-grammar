@@ -23,7 +23,11 @@ implementation:
     - "apply the discriminator to the active caption"
     - "preserve base caption readability and placement"
   parameters:
-    speakerKey: "active speaker identity"
+    speakerKey:
+      kind: runtime-input
+      description: Active speaker identity used to select the stable caption discriminator.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

@@ -20,9 +20,21 @@ implementation:
     - keep both concurrently visible in stable vertical-oriented regions
     - preserve source roles and supplied safe-area constraints when provided
   parameters:
-    primarySource: supplied primary source identity
-    secondarySource: supplied secondary source identity
-    safeAreaProfile: supplied safe-area constraints
+    primarySource:
+      kind: runtime-input
+      description: Primary source identity for the vertical two-source view.
+      required: true
+      valueType: string
+    secondarySource:
+      kind: runtime-input
+      description: Secondary source identity for the vertical two-source view.
+      required: true
+      valueType: string
+    safeAreaProfile:
+      kind: context
+      description: Optional platform safe-area constraints used when resolving the vertical layout.
+      required: false
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

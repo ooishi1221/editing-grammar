@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import type { EditingPattern, ImplementationParameterDeclaration } from "../schema/pattern.js";
 import { loadPatternDocuments, loadPatterns } from "../src/load.js";
 import { validatePattern, validatePatternDocuments } from "../src/validate.js";
 
@@ -146,6 +147,26 @@ interface AuditEntry {
   purpose: string;
   sourceCategory: SourceCategory;
   classification: string;
+}
+
+function parameterizedPattern(parameters: unknown): Record<string, unknown> {
+  return {
+    id: "VS-P01",
+    title: "Parameter contract",
+    category: "captions",
+    purpose: ["test"],
+    goodFor: [],
+    avoidWhen: [],
+    tags: [],
+    implementation: { parameters },
+    evidence: [{ type: "proposal", confidence: 0.5, scope: ["implementation"] }],
+  };
+}
+
+function declaredParameter(pattern: EditingPattern, key: string): ImplementationParameterDeclaration {
+  const parameter = pattern.implementation?.parameters?.[key];
+  assert.ok(typeof parameter === "object" && parameter !== null && "kind" in parameter, `${pattern.id}.${key}: declaration`);
+  return parameter as ImplementationParameterDeclaration;
 }
 
 async function auditedEntries(): Promise<AuditEntry[]> {
@@ -423,6 +444,86 @@ test("H6 Shorts and functional branding implementation fields and proposal prove
     ));
     assert.equal(proposals.length, 1, `${id}: implementation proposal evidence`);
   }
+});
+
+test("implementation parameter declarations validate with transitional legacy scalar support", () => {
+  const validDeclarations = [
+    { kind: "runtime-input", description: "Required runtime input.", required: true, valueType: "string" },
+    { kind: "context", description: "Required execution context.", required: true, valueType: "object" },
+    { kind: "context", description: "Optional execution context.", required: false, valueType: "object" },
+    { kind: "constant", description: "String grammar constant.", required: false, valueType: "string", value: "impact-accent" },
+    { kind: "constant", description: "Number grammar constant.", required: false, valueType: "number", value: 2 },
+  ];
+
+  for (const declaration of validDeclarations) {
+    assert.equal(validatePattern(parameterizedPattern({ parameter: declaration })).valid, true, `valid declaration: ${declaration.kind}`);
+  }
+  assert.equal(validatePattern(parameterizedPattern({ legacy: "legacy scalar" })).valid, true, "legacy scalar parameter");
+});
+
+test("implementation parameter declarations reject invalid contracts", () => {
+  const invalidDeclarations = [
+    { label: "runtime input with value", declaration: { kind: "runtime-input", description: "Runtime input.", required: true, valueType: "string", value: "forbidden" } },
+    { label: "context with value", declaration: { kind: "context", description: "Context.", required: true, valueType: "object", value: {} } },
+    { label: "constant without value", declaration: { kind: "constant", description: "Constant.", required: false, valueType: "string" } },
+    { label: "constant required true", declaration: { kind: "constant", description: "Constant.", required: true, valueType: "string", value: "fixed" } },
+    { label: "constant value type mismatch", declaration: { kind: "constant", description: "Constant.", required: false, valueType: "number", value: "two" } },
+    { label: "invalid kind", declaration: { kind: "unsupported", description: "Invalid kind.", required: true, valueType: "string" } },
+    { label: "invalid value type", declaration: { kind: "runtime-input", description: "Invalid type.", required: true, valueType: "date" } },
+    { label: "missing description", declaration: { kind: "runtime-input", required: true, valueType: "string" } },
+    { label: "runtime input missing required", declaration: { kind: "runtime-input", description: "Missing required.", valueType: "string" } },
+    { label: "context missing required", declaration: { kind: "context", description: "Missing required.", valueType: "object" } },
+    { label: "undeclared object", declaration: { arbitrary: "object parameter" } },
+  ];
+
+  for (const { label, declaration } of invalidDeclarations) {
+    assert.equal(validatePattern(parameterizedPattern({ parameter: declaration })).valid, false, label);
+  }
+});
+
+test("representative P3 parameter migrations use complete declarations", async () => {
+  const migratedIds = new Set(["VS-T02", "VS-I02", "VS-A01", "VS-E02", "VS-G02", "VS-S01", "VS-S03", "VS-L05"]);
+  const allowedKinds = new Set(["runtime-input", "context", "constant"]);
+  const allowedValueTypes = new Set(["string", "number", "boolean", "object", "array"]);
+  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => migratedIds.has(pattern.id));
+
+  assert.equal(patterns.length, migratedIds.size);
+  for (const pattern of patterns) {
+    const parameters = pattern.implementation?.parameters;
+    assert.ok(parameters, `${pattern.id}: parameters`);
+    for (const parameter of Object.values(parameters)) {
+      assert.equal(typeof parameter, "object", `${pattern.id}: no legacy scalar parameter`);
+      const declaration = parameter as ImplementationParameterDeclaration;
+      assert.ok(allowedKinds.has(declaration.kind), `${pattern.id}: parameter kind`);
+      assert.ok(declaration.description.length > 0, `${pattern.id}: parameter description`);
+      assert.equal(typeof declaration.required, "boolean", `${pattern.id}: parameter required`);
+      assert.ok(allowedValueTypes.has(declaration.valueType), `${pattern.id}: parameter value type`);
+      assert.equal(declaration.kind === "constant", Object.hasOwn(declaration, "value"), `${pattern.id}: constant value`);
+    }
+  }
+
+  const patternsById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
+  const subjectCount = declaredParameter(patternsById.get("VS-I02")!, "subjectCount");
+  assert.deepEqual(subjectCount, { kind: "constant", description: "Number of subjects in the two-item comparison grammar.", required: false, valueType: "number", value: 2 });
+
+  const speakerKey = declaredParameter(patternsById.get("VS-T02")!, "speakerKey");
+  assert.equal(speakerKey.kind, "runtime-input");
+  assert.equal(speakerKey.valueType, "string");
+  assert.equal(speakerKey.required, true);
+
+  const requiredSafeArea = declaredParameter(patternsById.get("VS-S01")!, "safeAreaProfile");
+  assert.equal(requiredSafeArea.kind, "context");
+  assert.equal(requiredSafeArea.valueType, "object");
+  assert.equal(requiredSafeArea.required, true);
+
+  const optionalSafeArea = declaredParameter(patternsById.get("VS-S03")!, "safeAreaProfile");
+  assert.equal(optionalSafeArea.kind, "context");
+  assert.equal(optionalSafeArea.required, false);
+
+  const scoreState = declaredParameter(patternsById.get("VS-G02")!, "scoreState");
+  assert.equal(scoreState.kind, "runtime-input");
+  assert.equal(scoreState.valueType, "object");
+  assert.equal(scoreState.required, true);
 });
 
 test("P2 implementation coverage partitions the complete catalog", async () => {

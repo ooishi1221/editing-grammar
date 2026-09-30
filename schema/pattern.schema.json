@@ -66,6 +66,72 @@
     },
     "audio": { "type": "object", "additionalProperties": false, "properties": { "type": { "type": "string" }, "cue": { "type": "string" }, "sync": { "type": "string" }, "optional": { "type": "boolean" }, "notes": { "type": "string" } } },
     "timing": { "type": "object", "additionalProperties": false, "properties": { "trigger": { "type": "string" }, "duration": { "type": "string" }, "beatRelation": { "type": "string" } } },
-    "implementation": { "type": "object", "additionalProperties": false, "properties": { "deterministic": { "type": "boolean" }, "recipe": { "$ref": "#/$defs/stringList" }, "rendererCandidates": { "$ref": "#/$defs/stringList" }, "parameters": { "type": "object" } } }
+    "implementationParameterValueType": { "enum": ["string", "number", "boolean", "object", "array"] },
+    "runtimeInputParameterDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "description", "required", "valueType"],
+      "properties": {
+        "kind": { "const": "runtime-input" },
+        "description": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "valueType": { "$ref": "#/$defs/implementationParameterValueType" }
+      }
+    },
+    "contextParameterDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "description", "required", "valueType"],
+      "properties": {
+        "kind": { "const": "context" },
+        "description": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "valueType": { "$ref": "#/$defs/implementationParameterValueType" }
+      }
+    },
+    "constantParameterDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "description", "required", "valueType", "value"],
+      "properties": {
+        "kind": { "const": "constant" },
+        "description": { "type": "string", "minLength": 1 },
+        "required": { "const": false },
+        "valueType": { "$ref": "#/$defs/implementationParameterValueType" },
+        "value": {}
+      },
+      "allOf": [
+        { "if": { "properties": { "valueType": { "const": "string" } } }, "then": { "properties": { "value": { "type": "string" } } } },
+        { "if": { "properties": { "valueType": { "const": "number" } } }, "then": { "properties": { "value": { "type": "number" } } } },
+        { "if": { "properties": { "valueType": { "const": "boolean" } } }, "then": { "properties": { "value": { "type": "boolean" } } } },
+        { "if": { "properties": { "valueType": { "const": "object" } } }, "then": { "properties": { "value": { "type": "object" } } } },
+        { "if": { "properties": { "valueType": { "const": "array" } } }, "then": { "properties": { "value": { "type": "array" } } } }
+      ]
+    },
+    "implementationParameterDeclaration": {
+      "oneOf": [
+        { "$ref": "#/$defs/runtimeInputParameterDeclaration" },
+        { "$ref": "#/$defs/contextParameterDeclaration" },
+        { "$ref": "#/$defs/constantParameterDeclaration" }
+      ]
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "deterministic": { "type": "boolean" },
+        "recipe": { "$ref": "#/$defs/stringList" },
+        "rendererCandidates": { "$ref": "#/$defs/stringList" },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "$ref": "#/$defs/scalar" },
+              { "$ref": "#/$defs/implementationParameterDeclaration" }
+            ]
+          }
+        }
+      }
+    }
   }
 }

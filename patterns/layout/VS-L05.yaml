@@ -23,9 +23,21 @@ implementation:
     - preserve narration continuity
     - return at the authored exit beat
   parameters:
-    primarySource: narration continuity source
-    secondarySource: related B-roll source
-    segmentId: authored insertion interval identity
+    primarySource:
+      kind: runtime-input
+      description: Narration continuity source identity.
+      required: true
+      valueType: string
+    secondarySource:
+      kind: runtime-input
+      description: Related B-roll source identity.
+      required: true
+      valueType: string
+    segmentId:
+      kind: runtime-input
+      description: Authored B-roll insertion interval identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

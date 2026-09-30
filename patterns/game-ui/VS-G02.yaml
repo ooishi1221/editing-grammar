@@ -20,8 +20,16 @@ implementation:
     - preserve participant and value correspondence
     - update the displayed state when the supplied score changes
   parameters:
-    scoreState: supplied current score state
-    participantSet: supplied participant identities
+    scoreState:
+      kind: runtime-input
+      description: Current externally maintained score state.
+      required: true
+      valueType: object
+    participantSet:
+      kind: runtime-input
+      description: Participant identities corresponding to the supplied score state.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

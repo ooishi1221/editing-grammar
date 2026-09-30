@@ -4,6 +4,36 @@ export type PatternCategory =
 
 export type EvidenceType = "observed" | "inferred" | "proposal";
 
+export type ImplementationParameterKind = "runtime-input" | "context" | "constant";
+export type ImplementationParameterValueType = "string" | "number" | "boolean" | "object" | "array";
+export type LegacyImplementationParameter = string | number | boolean;
+
+export interface RuntimeInputParameterDeclaration {
+  kind: "runtime-input";
+  description: string;
+  required: boolean;
+  valueType: ImplementationParameterValueType;
+}
+
+export interface ContextParameterDeclaration {
+  kind: "context";
+  description: string;
+  required: boolean;
+  valueType: ImplementationParameterValueType;
+}
+
+export type ConstantParameterDeclaration =
+  | { kind: "constant"; description: string; required: false; valueType: "string"; value: string }
+  | { kind: "constant"; description: string; required: false; valueType: "number"; value: number }
+  | { kind: "constant"; description: string; required: false; valueType: "boolean"; value: boolean }
+  | { kind: "constant"; description: string; required: false; valueType: "object"; value: Record<string, unknown> }
+  | { kind: "constant"; description: string; required: false; valueType: "array"; value: unknown[] };
+
+export type ImplementationParameterDeclaration =
+  | RuntimeInputParameterDeclaration
+  | ContextParameterDeclaration
+  | ConstantParameterDeclaration;
+
 export interface SourceMetadata {
   name: string;
   url?: string;
@@ -37,7 +67,12 @@ export interface EditingPattern {
   };
   audio?: { type?: string; cue?: string; sync?: string; optional?: boolean; notes?: string };
   timing?: { trigger?: string; duration?: string; beatRelation?: string };
-  implementation?: { deterministic?: boolean; recipe?: string[]; rendererCandidates?: string[]; parameters?: Record<string, unknown> };
+  implementation?: {
+    deterministic?: boolean;
+    recipe?: string[];
+    rendererCandidates?: string[];
+    parameters?: Record<string, LegacyImplementationParameter | ImplementationParameterDeclaration>;
+  };
   requirements?: string[];
   failureModes?: string[];
   relatedPatterns?: string[];

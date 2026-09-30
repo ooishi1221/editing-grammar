@@ -23,7 +23,12 @@ implementation:
     - "trigger a short non-asset-specific accent"
     - "synchronize cue onset with the event"
   parameters:
-    cueIntent: "impact accent"
+    cueIntent:
+      kind: constant
+      description: Structural intent of the synchronized audio cue.
+      required: false
+      valueType: string
+      value: impact-accent
 evidence:
   - type: observed
     confidence: 1.0
