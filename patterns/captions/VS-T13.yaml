@@ -25,8 +25,16 @@ implementation:
     - "advance the current reading position through the tokens"
     - "preserve the already-defined utterance context"
   parameters:
-    utteranceId: "supplied utterance identity"
-    readingPosition: "token alignment state"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for token tracking.
+      required: true
+      valueType: string
+    readingPosition:
+      kind: runtime-input
+      description: Supplied token-alignment or reading-position state for the utterance.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

@@ -115,6 +115,8 @@ const h6ImplementationEnrichmentFields = {
   "VS-B03": ["visual", "timing", "implementation"],
 } as const;
 const h6ImplementationEnrichmentIds = new Set(Object.keys(h6ImplementationEnrichmentFields));
+const parameterContractSpikeIds = new Set(["VS-T02", "VS-I02", "VS-A01", "VS-E02", "VS-G02", "VS-S01", "VS-S03", "VS-L05"]);
+const m1MigratedCaptionIds = new Set(["VS-T01", "VS-T03", "VS-T04", "VS-T05", "VS-T06", "VS-T07", "VS-T08", "VS-T10", "VS-T12", "VS-T13", "VS-T14"]);
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -482,12 +484,11 @@ test("implementation parameter declarations reject invalid contracts", () => {
 });
 
 test("representative P3 parameter migrations use complete declarations", async () => {
-  const migratedIds = new Set(["VS-T02", "VS-I02", "VS-A01", "VS-E02", "VS-G02", "VS-S01", "VS-S03", "VS-L05"]);
   const allowedKinds = new Set(["runtime-input", "context", "constant"]);
   const allowedValueTypes = new Set(["string", "number", "boolean", "object", "array"]);
-  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => migratedIds.has(pattern.id));
+  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => parameterContractSpikeIds.has(pattern.id));
 
-  assert.equal(patterns.length, migratedIds.size);
+  assert.equal(patterns.length, parameterContractSpikeIds.size);
   for (const pattern of patterns) {
     const parameters = pattern.implementation?.parameters;
     assert.ok(parameters, `${pattern.id}: parameters`);
@@ -524,6 +525,63 @@ test("representative P3 parameter migrations use complete declarations", async (
   assert.equal(scoreState.kind, "runtime-input");
   assert.equal(scoreState.valueType, "object");
   assert.equal(scoreState.required, true);
+});
+
+test("M1 caption parameter migrations use complete declarations and preserve the legacy inventory", async () => {
+  const allowedKinds = new Set(["runtime-input", "context", "constant"]);
+  const allowedValueTypes = new Set(["string", "number", "boolean", "object", "array"]);
+  const currentContractIds = new Set([
+    ...p2ImplementationEnrichmentIds,
+    ...h1ImplementationEnrichmentIds,
+    ...h2ImplementationEnrichmentIds,
+    ...h3ImplementationEnrichmentIds,
+    ...h4ImplementationEnrichmentIds,
+    ...h5ImplementationEnrichmentIds,
+    ...h6ImplementationEnrichmentIds,
+  ]);
+  const fullyDeclaredIds = new Set([...parameterContractSpikeIds, ...m1MigratedCaptionIds]);
+  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => currentContractIds.has(pattern.id));
+  const patternsById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
+
+  assert.equal(fullyDeclaredIds.size, 19);
+  assert.deepEqual([...m1MigratedCaptionIds].filter((id) => originalSpikeIds.has(id)), []);
+  for (const id of fullyDeclaredIds) {
+    const parameters = patternsById.get(id)?.implementation?.parameters;
+    assert.ok(parameters, `${id}: parameters`);
+    for (const parameter of Object.values(parameters)) {
+      assert.equal(typeof parameter, "object", `${id}: no legacy scalar parameter`);
+      const declaration = parameter as ImplementationParameterDeclaration;
+      assert.ok(allowedKinds.has(declaration.kind), `${id}: parameter kind`);
+      assert.ok(declaration.description.length > 0, `${id}: parameter description`);
+      assert.equal(typeof declaration.required, "boolean", `${id}: parameter required`);
+      assert.ok(allowedValueTypes.has(declaration.valueType), `${id}: parameter value type`);
+      assert.equal(declaration.kind === "constant", Object.hasOwn(declaration, "value"), `${id}: constant value`);
+    }
+  }
+
+  const allEntries = patterns.flatMap((pattern) => Object.entries(pattern.implementation?.parameters ?? {}).map(([key, value]) => ({ id: pattern.id, key, value })));
+  const legacyEntries = allEntries.filter(({ value }) => typeof value === "string" || typeof value === "number" || typeof value === "boolean");
+  assert.equal(new Set(legacyEntries.map(({ id }) => id)).size, 61);
+  assert.equal(legacyEntries.length, 92);
+
+  const patternsForRepresentativeAssertions = new Map([...patternsById]);
+  const emotionState = declaredParameter(patternsForRepresentativeAssertions.get("VS-T03")!, "emotionState");
+  assert.equal(emotionState.kind, "runtime-input");
+  assert.equal(emotionState.valueType, "string");
+  assert.equal(emotionState.required, true);
+
+  const languagePair = declaredParameter(patternsForRepresentativeAssertions.get("VS-T12")!, "languagePair");
+  assert.equal(languagePair.kind, "runtime-input");
+  assert.equal(languagePair.valueType, "array");
+  assert.equal(languagePair.required, true);
+
+  const readingPosition = declaredParameter(patternsForRepresentativeAssertions.get("VS-T13")!, "readingPosition");
+  assert.equal(readingPosition.kind, "runtime-input");
+  assert.equal(readingPosition.valueType, "object");
+  assert.equal(readingPosition.required, true);
+
+  const editorialLayer = declaredParameter(patternsForRepresentativeAssertions.get("VS-T14")!, "editorialLayer");
+  assert.deepEqual(editorialLayer, { kind: "constant", description: "Structural layer identity separating editorial comments from speaker dialogue.", required: false, valueType: "string", value: "editorial-comment" });
 });
 
 test("P2 implementation coverage partitions the complete catalog", async () => {

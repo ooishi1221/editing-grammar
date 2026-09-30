@@ -23,8 +23,16 @@ implementation:
     - "apply one stable discriminator to the active utterance"
     - "remove or change the discriminator when the emotion state changes"
   parameters:
-    utteranceId: "supplied utterance identity"
-    emotionState: "externally interpreted emotion state"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for the caption behavior.
+      required: true
+      valueType: string
+    emotionState:
+      kind: runtime-input
+      description: Externally interpreted emotion state for the active utterance.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

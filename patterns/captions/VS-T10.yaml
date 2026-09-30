@@ -19,7 +19,11 @@ implementation:
     - "attach a bounded clarification"
     - "keep the annotation semantically associated with its target"
   parameters:
-    annotationTarget: "referenced statement or region"
+    annotationTarget:
+      kind: runtime-input
+      description: Authored statement, region, or reaction beat receiving the annotation.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

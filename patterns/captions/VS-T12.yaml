@@ -20,8 +20,16 @@ implementation:
     - "maintain stable language identity without merging semantic roles"
     - "keep both units readable"
   parameters:
-    utteranceId: "supplied paired utterance identity"
-    languagePair: "source and translation language identities"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied paired utterance identity.
+      required: true
+      valueType: string
+    languagePair:
+      kind: runtime-input
+      description: Source and translation language identities for the paired captions.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

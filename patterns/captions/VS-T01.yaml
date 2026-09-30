@@ -22,7 +22,11 @@ implementation:
     - "present the current utterance unit while it remains relevant"
     - "preserve base caption readability"
   parameters:
-    utteranceId: "supplied utterance identity"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for the caption behavior.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

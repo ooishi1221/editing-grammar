@@ -22,7 +22,12 @@ implementation:
     - "expose it as a separate editorial layer"
     - "never merge it into speaker dialogue attribution"
   parameters:
-    editorialLayer: "separate editorial comment identity"
+    editorialLayer:
+      kind: constant
+      description: Structural layer identity separating editorial comments from speaker dialogue.
+      required: false
+      valueType: string
+      value: editorial-comment
 evidence:
   - type: observed
     confidence: 1.0

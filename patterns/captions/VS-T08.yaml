@@ -23,8 +23,16 @@ implementation:
     - "mark the relevant utterance as high-intensity emphasis"
     - "return to base caption behavior afterward"
   parameters:
-    utteranceId: "supplied utterance identity"
-    voiceIntensity: "high-intensity peak state"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for the caption behavior.
+      required: true
+      valueType: string
+    voiceIntensity:
+      kind: runtime-input
+      description: Externally interpreted voice-intensity state for the active utterance.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

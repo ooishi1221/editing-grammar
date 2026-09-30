@@ -22,8 +22,16 @@ implementation:
     - "render it as a distinct dialogue layer"
     - "preserve association with the relevant subject or beat"
   parameters:
-    utteranceId: "supplied inner-voice identity"
-    speakerKey: "associated subject identity"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for the caption behavior.
+      required: true
+      valueType: string
+    speakerKey:
+      kind: runtime-input
+      description: Supplied speaker or subject identity associated with the utterance.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

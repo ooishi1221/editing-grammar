@@ -23,7 +23,11 @@ implementation:
     - "attach a short reaction annotation to that beat"
     - "keep the annotation distinct from ordinary dialogue"
   parameters:
-    annotationTarget: "selected reaction beat"
+    annotationTarget:
+      kind: runtime-input
+      description: Authored statement, region, or reaction beat receiving the annotation.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

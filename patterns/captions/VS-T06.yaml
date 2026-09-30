@@ -22,8 +22,16 @@ implementation:
     - "bind the current utterance to that speaker"
     - "preserve attribution while the speaker remains offscreen"
   parameters:
-    utteranceId: "supplied utterance identity"
-    speakerKey: "offscreen speaker identity"
+    utteranceId:
+      kind: runtime-input
+      description: Supplied utterance identity for the caption behavior.
+      required: true
+      valueType: string
+    speakerKey:
+      kind: runtime-input
+      description: Supplied speaker or subject identity associated with the utterance.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0
