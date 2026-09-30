@@ -3,9 +3,13 @@ title: "三分割"
 category: layout
 purpose:
   - "三者・三案を比較"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "三者や三案を同時に見比べさせたい場面"
+avoidWhen:
+  - "二項の差を共通基準で丁寧に整理したい場面"
+tags:
+  - split-screen
+  - comparison
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

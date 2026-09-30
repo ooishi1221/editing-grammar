@@ -3,9 +3,13 @@ title: "登録・フォロー案内"
 category: retention
 purpose:
   - "次の接点を案内"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "視聴後に登録やフォローという次の接点を案内したい場面"
+avoidWhen:
+  - "動画内の具体的な意見や回答を求めたい場面"
+tags:
+  - call-to-action
+  - retention
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

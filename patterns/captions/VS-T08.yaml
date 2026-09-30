@@ -3,9 +3,13 @@ title: "絶叫・大声"
 category: captions
 purpose:
   - "声量のピークを可視化"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "大きな発話のピークを視聴者に取りこぼさせたくない場面"
+avoidWhen:
+  - "静かな余韻や控えめな発話を扱う場面"
+tags:
+  - voice-intensity
+  - emphasis
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

@@ -3,9 +3,13 @@ title: "ツッコミ"
 category: captions
 purpose:
   - "意外性を短く強調"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "予想外の発言や反応を短く差し込みたい場面"
+avoidWhen:
+  - "説明の要点を落ち着いて読み取らせたい場面"
+tags:
+  - reaction
+  - emphasis
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

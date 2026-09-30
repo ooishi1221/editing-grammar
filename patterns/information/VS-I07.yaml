@@ -3,9 +3,12 @@ title: "データ表"
 category: information
 purpose:
   - "複数条件を正確に読ませる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "複数条件を列と行で正確に参照させたい場面"
+avoidWhen:
+  - "一つの数値だけを印象的に記憶させたい場面"
+tags:
+  - comparison
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

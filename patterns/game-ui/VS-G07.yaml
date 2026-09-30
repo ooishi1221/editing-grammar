@@ -3,9 +3,13 @@ title: "ミッション・目標"
 category: game_ui
 purpose:
   - "視聴者とゴールを共有"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "企画の到達点を参加者と視聴者で共有したい場面"
+avoidWhen:
+  - "現在の達成率を連続的に追わせたい場面"
+tags:
+  - goal
+  - participation
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

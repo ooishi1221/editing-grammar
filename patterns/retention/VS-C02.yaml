@@ -3,9 +3,13 @@ title: "疑問・先出し"
 category: retention
 purpose:
   - "答えへの関心をつくる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "答えを後に置いて視聴者の関心を保ちたい場面"
+avoidWhen:
+  - "最初にルールや前提を明確に理解させたい場面"
+tags:
+  - curiosity
+  - hook
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

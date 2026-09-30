@@ -3,9 +3,13 @@ title: "コメント誘導"
 category: retention
 purpose:
   - "具体的な参加を促す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "視聴者に具体的なコメントや参加行動を促したい場面"
+avoidWhen:
+  - "外部の継続視聴や登録だけを案内したい場面"
+tags:
+  - participation
+  - call-to-action
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

@@ -3,9 +3,12 @@ title: "話者カラー"
 category: captions
 purpose:
   - "話者を識別する"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "複数人の会話で誰の発話かを即座に分かるようにしたい場面"
+avoidWhen:
+  - "話者の区別より感情の強さを伝えたい場面"
+tags:
+  - speaker-identification
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

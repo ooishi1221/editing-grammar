@@ -3,9 +3,12 @@ title: "横スライド"
 category: transitions
 purpose:
   - "方向性を持って遷移"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "移動や方向の感覚を保って次の画面へ移りたい場面"
+avoidWhen:
+  - "時間経過や感情の余韻を静かに示したい場面"
+tags:
+  - transition
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

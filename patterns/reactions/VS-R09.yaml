@@ -3,9 +3,14 @@ title: "モノクロ落胆"
 category: reactions
 purpose:
   - "落胆を簡潔に表す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "落胆や気落ちを短く明確な転調として見せたい場面"
+avoidWhen:
+  - "強い衝撃や高揚を伝えたい場面"
+tags:
+  - emotion
+  - reaction
+  - contrast
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +28,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

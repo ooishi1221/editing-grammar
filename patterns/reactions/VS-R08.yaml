@@ -3,9 +3,13 @@ title: "画面シェイク"
 category: reactions
 purpose:
   - "衝撃を画面全体に伝える"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "衝撃や驚きを画面全体の感覚として伝えたい場面"
+avoidWhen:
+  - "対象の細部を落ち着いて観察させたい場面"
+tags:
+  - reaction
+  - impact
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

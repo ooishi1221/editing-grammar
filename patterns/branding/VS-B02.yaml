@@ -3,9 +3,13 @@ title: "番組・話題見出し"
 category: branding
 purpose:
   - "現在の話題を示す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "番組内で現在の話題やコーナーを見失わせたくない場面"
+avoidWhen:
+  - "新しい章へ明確に切り替える必要がある場面"
+tags:
+  - topic-navigation
+  - branding
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

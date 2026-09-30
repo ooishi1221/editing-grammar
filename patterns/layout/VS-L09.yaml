@@ -3,9 +3,12 @@ title: "縦素材の背景拡張"
 category: layout
 purpose:
   - "異なる縦横比を収める"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "縦素材を横画面の文脈に収めて見やすくしたい場面"
+avoidWhen:
+  - "縦画面のUI安全領域を優先したい場面"
+tags:
+  - vertical-video
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

@@ -3,9 +3,13 @@ title: "スローモーション"
 category: reactions
 purpose:
   - "動作や表情を読み取らせる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "速い動作や表情の変化を読み取る時間をつくりたい場面"
+avoidWhen:
+  - "一瞬を静止して細部を指し示したい場面"
+tags:
+  - reaction
+  - motion-analysis
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

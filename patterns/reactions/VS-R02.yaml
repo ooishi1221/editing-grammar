@@ -3,9 +3,13 @@ title: "超顔アップ"
 category: reactions
 purpose:
   - "表情を画面の主役にする"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "人物の表情そのものを場面の主題として見せたい場面"
+avoidWhen:
+  - "重要語だけを軽く強調したい場面"
+tags:
+  - reaction
+  - close-up
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

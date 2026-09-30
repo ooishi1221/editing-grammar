@@ -3,9 +3,13 @@ title: "丸ワイプ"
 category: layout
 purpose:
   - "表情を小さく添える"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "本題を保ったまま小さく表情の反応を添えたい場面"
+avoidWhen:
+  - "表情そのものを画面の主役にしたい場面"
+tags:
+  - pip
+  - reaction
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

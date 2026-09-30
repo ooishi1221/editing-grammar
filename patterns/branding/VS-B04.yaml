@@ -3,9 +3,12 @@ title: "マンガ・ゲーム装飾"
 category: branding
 purpose:
   - "企画内の演出トーンを変える"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "企画内だけ演出トーンを切り替えて遊びの文脈をつくりたい場面"
+avoidWhen:
+  - "発信全体の一貫した識別を保ちたい場面"
+tags:
+  - tone
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

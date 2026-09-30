@@ -3,9 +3,13 @@ title: "インパクトSE"
 category: audio
 purpose:
   - "強調の瞬間を同期させる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "視覚的な強調と同じ瞬間に注意を集めたい場面"
+avoidWhen:
+  - "静かな余韻や自然な会話の流れを保ちたい場面"
+tags:
+  - emphasis
+  - impact
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

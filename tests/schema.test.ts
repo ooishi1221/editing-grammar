@@ -105,45 +105,36 @@ test("all YAML catalog facts faithfully match the source audit", async () => {
   }
 });
 
-test("converted YAML files conform to the conversion policy", async () => {
-  const convertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => (
-    !originalSpikeIds.has(pattern.id) && !p1SemanticEnrichmentIds.has(pattern.id)
-  ));
-
-  assert.equal(convertedPatterns.length, 81);
-  for (const pattern of convertedPatterns) {
-    assert.deepEqual(pattern.goodFor, [], `${pattern.id}: goodFor`);
-    assert.deepEqual(pattern.avoidWhen, [], `${pattern.id}: avoidWhen`);
-    assert.deepEqual(pattern.tags, [], `${pattern.id}: tags`);
-    for (const field of optionalSemanticOrImplementationFields) {
-      assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
-    }
-
-    assert.equal(pattern.evidence.some((evidence) => evidence.type === "inferred"), false, `${pattern.id}: inferred evidence`);
-    assert.equal(pattern.evidence.length, 2, `${pattern.id}: evidence count`);
-
-    const observed = pattern.evidence.filter((evidence) => evidence.type === "observed");
-    const proposal = pattern.evidence.filter((evidence) => evidence.type === "proposal");
-    assert.equal(observed.length, 1, `${pattern.id}: observed evidence count`);
-    assert.equal(proposal.length, 1, `${pattern.id}: proposal evidence count`);
-    assert.deepEqual(observed[0].scope, ["id", "title", "purpose"], `${pattern.id}: observed scope`);
-    assert.deepEqual(proposal[0].scope, ["category"], `${pattern.id}: proposal scope`);
-  }
-});
-
-test("P1 semantic enrichment is scoped to the designated eight Patterns", async () => {
+test("all Patterns satisfy the semantic enrichment contract", async () => {
   const patterns = await loadPatterns(patternsDirectory);
-  const enrichedPatterns = patterns.filter((pattern) => p1SemanticEnrichmentIds.has(pattern.id));
+  assert.equal(patterns.length, 92);
 
-  assert.equal(enrichedPatterns.length, 8);
-  assert.deepEqual(new Set(enrichedPatterns.map((pattern) => pattern.id)), p1SemanticEnrichmentIds);
-
-  for (const pattern of enrichedPatterns) {
+  for (const pattern of patterns) {
     assert.ok(pattern.tags.length > 0, `${pattern.id}: tags`);
     assert.ok(pattern.tags.length <= 3, `${pattern.id}: tag count`);
     assert.ok(pattern.tags.every((tag) => /^[a-z]+(?:-[a-z]+)*$/.test(tag)), `${pattern.id}: tag format`);
+    assert.equal(new Set(pattern.tags).size, pattern.tags.length, `${pattern.id}: duplicate tag`);
     assert.ok(pattern.goodFor.length > 0, `${pattern.id}: goodFor`);
+    assert.ok(pattern.goodFor.length <= 2, `${pattern.id}: goodFor count`);
+    assert.equal(new Set(pattern.goodFor).size, pattern.goodFor.length, `${pattern.id}: duplicate goodFor`);
     assert.ok(pattern.avoidWhen.length > 0, `${pattern.id}: avoidWhen`);
+    assert.ok(pattern.avoidWhen.length <= 2, `${pattern.id}: avoidWhen count`);
+    assert.equal(new Set(pattern.avoidWhen).size, pattern.avoidWhen.length, `${pattern.id}: duplicate avoidWhen`);
+    assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
+    assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
+    for (const field of optionalSemanticOrImplementationFields) {
+      if (!originalSpikeIds.has(pattern.id)) {
+        assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
+      }
+    }
+  }
+});
+
+test("source-converted Patterns preserve semantic provenance separation", async () => {
+  const sourceConvertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => !originalSpikeIds.has(pattern.id));
+
+  assert.equal(sourceConvertedPatterns.length, 89);
+  for (const pattern of sourceConvertedPatterns) {
     for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
     }

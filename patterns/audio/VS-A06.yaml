@@ -3,9 +3,12 @@ title: "正解・不正解音"
 category: audio
 purpose:
   - "判定を耳でも伝える"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "正誤や成否を視覚だけに頼らず即座に伝えたい場面"
+avoidWhen:
+  - "競争の点数や進捗を継続して見せたい場面"
+tags:
+  - feedback
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

@@ -3,9 +3,13 @@ title: "リアクション連打"
 category: reactions
 purpose:
   - "同じ反応の累積を見せる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "同じ反応が重なる面白さや圧力を蓄積したい場面"
+avoidWhen:
+  - "一度の決定的な反応だけを強調したい場面"
+tags:
+  - reaction
+  - repetition
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

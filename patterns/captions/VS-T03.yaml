@@ -3,9 +3,13 @@ title: "感情カラー"
 category: captions
 purpose:
   - "気持ちの強さを示す"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "発話の温度や感情の高まりを字幕でも補強したい場面"
+avoidWhen:
+  - "話者の識別を一貫して優先したい場面"
+tags:
+  - emotion
+  - voice-intensity
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

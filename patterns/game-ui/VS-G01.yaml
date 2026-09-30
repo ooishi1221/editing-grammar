@@ -3,9 +3,13 @@ title: "ルール説明"
 category: game_ui
 purpose:
   - "企画の理解を揃える"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "企画開始時に参加条件や進め方をそろえて理解させたい場面"
+avoidWhen:
+  - "進行中の現在地だけを簡潔に示したい場面"
+tags:
+  - rules
+  - explanation
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

@@ -3,9 +3,12 @@ title: "カウントダウン"
 category: game_ui
 purpose:
   - "残り時間を見せる"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "残り時間による緊張や締切を視聴者と共有したい場面"
+avoidWhen:
+  - "長い企画の全体進行を段階として示したい場面"
+tags:
+  - countdown
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +26,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen

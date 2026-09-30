@@ -3,9 +3,13 @@ title: "縦画面の安全配置"
 category: shorts
 purpose:
   - "縦UIとの重なりを減らす"
-goodFor: []
-avoidWhen: []
-tags: []
+goodFor:
+  - "縦UIと重ならない位置に重要情報を置きたい場面"
+avoidWhen:
+  - "横画面の縦素材を収めるレイアウトが必要な場面"
+tags:
+  - shorts
+  - safe-area
 evidence:
   - type: observed
     confidence: 1.0
@@ -23,3 +27,12 @@ evidence:
     confidence: 0.5
     scope:
       - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen
