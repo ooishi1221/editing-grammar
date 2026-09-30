@@ -124,12 +124,7 @@
         "rendererCandidates": { "$ref": "#/$defs/stringList" },
         "parameters": {
           "type": "object",
-          "additionalProperties": {
-            "oneOf": [
-              { "$ref": "#/$defs/scalar" },
-              { "$ref": "#/$defs/implementationParameterDeclaration" }
-            ]
-          }
+          "additionalProperties": { "$ref": "#/$defs/implementationParameterDeclaration" }
         }
       }
     }

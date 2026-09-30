@@ -6,7 +6,6 @@ export type EvidenceType = "observed" | "inferred" | "proposal";
 
 export type ImplementationParameterKind = "runtime-input" | "context" | "constant";
 export type ImplementationParameterValueType = "string" | "number" | "boolean" | "object" | "array";
-export type LegacyImplementationParameter = string | number | boolean;
 
 export interface RuntimeInputParameterDeclaration {
   kind: "runtime-input";
@@ -71,7 +70,7 @@ export interface EditingPattern {
     deterministic?: boolean;
     recipe?: string[];
     rendererCandidates?: string[];
-    parameters?: Record<string, LegacyImplementationParameter | ImplementationParameterDeclaration>;
+    parameters?: Record<string, ImplementationParameterDeclaration>;
   };
   requirements?: string[];
   failureModes?: string[];

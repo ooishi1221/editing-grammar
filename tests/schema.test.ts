@@ -465,7 +465,7 @@ test("H6 Shorts and functional branding implementation fields and proposal prove
   }
 });
 
-test("implementation parameter declarations validate with transitional legacy scalar support", () => {
+test("implementation parameter declarations validate", () => {
   const validDeclarations = [
     { kind: "runtime-input", description: "Required runtime input.", required: true, valueType: "string" },
     { kind: "context", description: "Required execution context.", required: true, valueType: "object" },
@@ -477,7 +477,6 @@ test("implementation parameter declarations validate with transitional legacy sc
   for (const declaration of validDeclarations) {
     assert.equal(validatePattern(parameterizedPattern({ parameter: declaration })).valid, true, `valid declaration: ${declaration.kind}`);
   }
-  assert.equal(validatePattern(parameterizedPattern({ legacy: "legacy scalar" })).valid, true, "legacy scalar parameter");
 });
 
 test("implementation parameter declarations reject invalid contracts", () => {
@@ -493,11 +492,67 @@ test("implementation parameter declarations reject invalid contracts", () => {
     { label: "runtime input missing required", declaration: { kind: "runtime-input", description: "Missing required.", valueType: "string" } },
     { label: "context missing required", declaration: { kind: "context", description: "Missing required.", valueType: "object" } },
     { label: "undeclared object", declaration: { arbitrary: "object parameter" } },
+    { label: "legacy string scalar", declaration: "legacy scalar" },
+    { label: "legacy number scalar", declaration: 2 },
+    { label: "legacy boolean scalar", declaration: true },
   ];
 
   for (const { label, declaration } of invalidDeclarations) {
     assert.equal(validatePattern(parameterizedPattern({ parameter: declaration })).valid, false, label);
   }
+});
+
+test("all implementation parameters use declarations after the P3 cutover", async () => {
+  const allowedKinds = new Set(["runtime-input", "context", "constant"]);
+  const allowedValueTypes = new Set(["string", "number", "boolean", "object", "array"]);
+  const currentContractIds = new Set([
+    ...p2ImplementationEnrichmentIds,
+    ...h1ImplementationEnrichmentIds,
+    ...h2ImplementationEnrichmentIds,
+    ...h3ImplementationEnrichmentIds,
+    ...h4ImplementationEnrichmentIds,
+    ...h5ImplementationEnrichmentIds,
+    ...h6ImplementationEnrichmentIds,
+  ]);
+  const patterns = await loadPatterns(patternsDirectory);
+  const parameterizedPatterns = patterns.filter((pattern) => Object.keys(pattern.implementation?.parameters ?? {}).length > 0);
+
+  assert.equal(currentContractIds.size, 81);
+  assert.equal(parameterizedPatterns.filter((pattern) => currentContractIds.has(pattern.id)).length, 80);
+  assert.deepEqual(
+    patterns.filter((pattern) => currentContractIds.has(pattern.id) && Object.keys(pattern.implementation?.parameters ?? {}).length === 0).map((pattern) => pattern.id),
+    ["VS-E09"],
+  );
+
+  for (const pattern of parameterizedPatterns) {
+    for (const [key, parameter] of Object.entries(pattern.implementation?.parameters ?? {})) {
+      assert.ok(typeof parameter === "object" && parameter !== null, `${pattern.id}.${key}: declaration object`);
+      const declaration = parameter as ImplementationParameterDeclaration;
+      assert.ok(allowedKinds.has(declaration.kind), `${pattern.id}.${key}: kind`);
+      assert.ok(declaration.description.length > 0, `${pattern.id}.${key}: description`);
+      assert.equal(typeof declaration.required, "boolean", `${pattern.id}.${key}: required`);
+      assert.ok(allowedValueTypes.has(declaration.valueType), `${pattern.id}.${key}: value type`);
+      assert.equal(declaration.kind === "constant", Object.hasOwn(declaration, "value"), `${pattern.id}.${key}: constant value`);
+    }
+  }
+});
+
+test("visual motion scalar parameters remain valid outside the implementation contract", async () => {
+  const result = validatePattern({
+    id: "VS-X08",
+    title: "Motion scalar parameters",
+    category: "captions",
+    purpose: ["test"],
+    goodFor: [],
+    avoidWhen: [],
+    tags: [],
+    visual: { motion: { type: "scale", parameters: { fromScale: 1.0, peakScale: 1.12, enabled: true } } },
+    evidence: [{ type: "proposal", confidence: 0.5, scope: ["visual.motion"] }],
+  });
+  assert.equal(result.valid, true);
+
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+  assert.deepEqual(patternsById.get("VS-T11")?.visual?.motion?.parameters, { fromScale: 1.0, peakScale: 1.12 });
 });
 
 test("representative P3 parameter migrations use complete declarations", async () => {

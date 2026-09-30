@@ -47,6 +47,8 @@ P0 includes:
 
 P0 remains frozen. Semantic enrichment and P2 Implementation Enrichment are complete. P2 adds renderer-neutral structural implementation guidance where useful; eight Taste-dominant or non-useful Patterns intentionally remain semantic-only, and three historical spike records remain documented exceptions. Editing Grammar is not a renderer. See the [Implementation Enrichment Summary](docs/implementation-enrichment-summary.md). Recommend is not implemented.
 
+`implementation.parameters` uses typed declarations for runtime inputs, execution context, and grammar constants.
+
 ## Search
 
 Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. The deterministic default is Search v2, which matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `avoidWhen` is returned as candidate-comparison conflict metadata and never changes ranking. Use `--mode v1` for the frozen v1 lexical baseline.
