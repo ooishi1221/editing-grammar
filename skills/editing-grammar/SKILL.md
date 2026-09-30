@@ -1,3 +1,8 @@
+---
+name: editing-grammar
+description: Retrieve and compare video editing Pattern candidates from a scene's editing intent.
+---
+
 # Editing Grammar
 
 ## When to use
@@ -26,17 +31,18 @@ Turn the meaning into short catalog-oriented wording.
 
 ### 3. Search
 
-Search only retrieves plausible candidates. It currently matches `id`, `title`, `purpose`, and `category`; it does not rank `tags`, `goodFor`, `avoidWhen`, descriptions, or implementation fields.
+Search only retrieves plausible candidates. Its default deterministic v2 mode matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `goodFor` is evidence of candidate fit; `avoidWhen` is post-retrieval boundary information for comparing candidates and does not affect rank. Use `--mode v1` only when the frozen lexical baseline is specifically needed.
 
 ```sh
 npm run search -- "話者を識別"
 npm run search -- "比較" --category information
 npm run search -- "余韻" --limit 8
+npm run search -- "比較" --mode v1
 ```
 
 ### 4. Reformulate once or twice if needed
 
-When a conversational query is weak, shorten it, remove incidental context, replace it with editing-purpose wording, or try an adjacent intent. Do not load all 92 Patterns to compensate.
+When a conversational query is weak, the Agent must reformulate the intent: shorten it, remove incidental context, replace it with editing-purpose wording, or try an adjacent intent. Do not load all 92 Patterns to compensate.
 
 For example, 「最後ちょっと寂しい感じで終わらせたい」 can be searched as 「余韻」 and then 「感情の場面を区切る」. Do not fabricate Pattern names or add hidden search synonyms.
 
@@ -52,7 +58,7 @@ npm run show -- VS-T02
 
 ### 6. Compare and select
 
-Compare only fields that are present: title, purpose, category, provenance, and any available structured fields. Do not invent `goodFor` or `avoidWhen` when their arrays are empty.
+Compare title, purpose, category, provenance, and available structured fields. Use `goodFor` to judge candidate fit and `avoidWhen` to identify a plausible candidate's decision boundary. Do not invent semantic values when a field is absent.
 
 Search rank #1 is a closer lexical match, not the automatic answer. Consider user meaning, tone, brand, references, scene context, and neighboring edits. Return multiple plausible options when they apply to different editing materials.
 

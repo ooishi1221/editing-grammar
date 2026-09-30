@@ -35,7 +35,7 @@ function parseSearchArguments(args: string[]): { intent: string; category?: Patt
   const intentParts: string[] = [];
   let category: PatternCategory | undefined;
   let limit: number | undefined;
-  let mode: "v1" | "v2" = "v1";
+  let mode: "v1" | "v2" = "v2";
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index];
@@ -69,7 +69,7 @@ async function search(args: string[]): Promise<number> {
   const patterns = await loadPatterns();
   if (query.mode === "v2") {
     const results = searchPatternsV2(patterns, query);
-    console.log(`${results.length} candidates (v2 experiment)`);
+    console.log(`${results.length} candidates (v2)`);
     for (const result of results) {
       console.log(`${result.id} — ${result.title} [${result.category}]`);
       console.log(`  purpose: ${result.purpose.join(" / ")}`);

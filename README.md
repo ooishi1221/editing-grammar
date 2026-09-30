@@ -45,19 +45,20 @@ P0 includes:
 - deterministic lexical Search and the `show` command;
 - retrieval tests and the Agent Skill workflow.
 
-Semantic Enrichment and Recommendation are not part of P0. Current Search uses only `id`, `title`, `purpose`, and `category`.
+P0 remains frozen. Semantic enrichment is complete; Recommend is not implemented.
 
 ## Search
 
-Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. It currently matches only the uniformly populated `id`, `title`, `purpose`, and `category` fields.
+Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. The deterministic default is Search v2, which matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `avoidWhen` is returned as candidate-comparison conflict metadata and never changes ranking. Use `--mode v1` for the frozen v1 lexical baseline.
 
 ```sh
 npm run search -- "重要語を強調"
 npm run search -- "比較したい" --category information
+npm run search -- "比較したい" --mode v1
 npm run show -- VS-E02
 ```
 
-`show` returns one Pattern in full, including evidence and provenance. Semantic enrichment is not part of P0 search, so queries that rely on unstated concepts or synonyms may not retrieve an intended Pattern yet.
+`show` returns one Pattern in full, including evidence and provenance. Search is deterministic; Recommend is not implemented. Queries that rely on unstated concepts or synonyms may still need Agent-side intent reformulation.
 
 The [Agent Skill](skills/editing-grammar/SKILL.md) handles semantic query reformulation and candidate comparison; lexical Search remains deterministic retrieval.
 
