@@ -49,6 +49,8 @@ P0 remains frozen. Semantic enrichment and P2 Implementation Enrichment are comp
 
 `implementation.parameters` uses typed declarations for runtime inputs, execution context, and grammar constants.
 
+**P3 Portable Renderer Handoff is complete.**
+
 ## Search
 
 Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. The deterministic default is Search v2, which matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `avoidWhen` is returned as candidate-comparison conflict metadata and never changes ranking. Use `--mode v1` for the frozen v1 lexical baseline.

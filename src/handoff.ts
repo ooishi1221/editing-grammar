@@ -55,8 +55,20 @@ export interface ImplementationHandoffSelection {
   includeHistoricalMetadata?: boolean;
 }
 
-const historicalExceptionIds = new Set(["VS-T11", "VS-I04", "VS-A03"]);
-const semanticOnlyIds = new Set(["VS-T09", "VS-R09", "VS-R10", "VS-A07", "VS-B01", "VS-B04", "VS-B05", "VS-B06"]);
+export const currentContractIds: ReadonlySet<string> = new Set([
+  "VS-T01", "VS-T02", "VS-T03", "VS-T04", "VS-T05", "VS-T06", "VS-T07", "VS-T08", "VS-T10", "VS-T12", "VS-T13", "VS-T14",
+  "VS-R01", "VS-R02", "VS-R03", "VS-R04", "VS-R05", "VS-R06", "VS-R07", "VS-R08", "VS-R11", "VS-R12",
+  "VS-I01", "VS-I02", "VS-I03", "VS-I05", "VS-I06", "VS-I07", "VS-I08", "VS-I09", "VS-I10", "VS-I11", "VS-I12", "VS-I13", "VS-I14",
+  "VS-L01", "VS-L02", "VS-L03", "VS-L04", "VS-L05", "VS-L06", "VS-L07", "VS-L08", "VS-L09", "VS-L10",
+  "VS-E01", "VS-E02", "VS-E03", "VS-E04", "VS-E05", "VS-E06", "VS-E07", "VS-E08", "VS-E09", "VS-E10",
+  "VS-A01", "VS-A02", "VS-A04", "VS-A05", "VS-A06", "VS-A08",
+  "VS-G01", "VS-G02", "VS-G03", "VS-G04", "VS-G05", "VS-G06", "VS-G07", "VS-G08",
+  "VS-C01", "VS-C02", "VS-C03", "VS-C04", "VS-C05", "VS-C06",
+  "VS-S01", "VS-S02", "VS-S03", "VS-S04",
+  "VS-B02", "VS-B03",
+]);
+export const historicalExceptionIds: ReadonlySet<string> = new Set(["VS-T11", "VS-I04", "VS-A03"]);
+export const semanticOnlyIds: ReadonlySet<string> = new Set(["VS-T09", "VS-R09", "VS-R10", "VS-A07", "VS-B01", "VS-B04", "VS-B05", "VS-B06"]);
 
 function copyValue<T>(value: T): T {
   if (Array.isArray(value)) return value.map((entry) => copyValue(entry)) as T;
@@ -84,9 +96,10 @@ function implementationEvidence(pattern: EditingPattern): PatternEvidence[] {
 }
 
 function statusFor(patternId: string): HandoffStatus {
+  if (currentContractIds.has(patternId)) return "current-contract";
   if (historicalExceptionIds.has(patternId)) return "historical-exception";
   if (semanticOnlyIds.has(patternId)) return "semantic-only";
-  return "current-contract";
+  throw new Error(`Unclassified Pattern for handoff: ${patternId}`);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

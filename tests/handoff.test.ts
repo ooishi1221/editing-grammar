@@ -6,6 +6,9 @@ import type { EditingPattern } from "../schema/pattern.js";
 import {
   buildImplementationHandoff,
   buildSceneImplementationHandoff,
+  currentContractIds,
+  historicalExceptionIds,
+  semanticOnlyIds,
 } from "../src/handoff.js";
 import { loadPatterns } from "../src/load.js";
 
@@ -22,6 +25,84 @@ async function patternById(id: string): Promise<EditingPattern> {
 function handoffCli(...args: string[]) {
   return spawnSync(tsxPath, [cliPath, "handoff", ...args], { encoding: "utf8" });
 }
+
+test("handoff status sets form the explicit 92-Pattern catalog partition", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const groups = [currentContractIds, historicalExceptionIds, semanticOnlyIds];
+  const combined = new Set(groups.flatMap((group) => [...group]));
+
+  assert.equal(currentContractIds.size, 81);
+  assert.equal(historicalExceptionIds.size, 3);
+  assert.equal(semanticOnlyIds.size, 8);
+  assert.equal(combined.size, 92);
+  for (let left = 0; left < groups.length; left += 1) {
+    for (let right = left + 1; right < groups.length; right += 1) {
+      assert.deepEqual([...groups[left]].filter((id) => groups[right].has(id)), [], `status group ${left}/${right} overlap`);
+    }
+  }
+  assert.deepEqual([...combined].sort(), patterns.map((pattern) => pattern.id).sort());
+});
+
+test("handoff rejects an unknown Pattern instead of assigning a fallback status", () => {
+  const unknownPattern: EditingPattern = {
+    id: "VS-X99",
+    title: "Unknown Pattern",
+    category: "captions",
+    purpose: ["test"],
+    goodFor: [],
+    avoidWhen: [],
+    tags: [],
+    evidence: [],
+  };
+  assert.throws(
+    () => buildImplementationHandoff(unknownPattern),
+    /Unclassified Pattern for handoff: VS-X99/,
+  );
+});
+
+test("all catalog Patterns build handoffs within their explicit status contracts", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const handoffs = patterns.map((pattern) => buildImplementationHandoff(pattern));
+  const byStatus = (status: string) => handoffs.filter((handoff) => handoff.status === status);
+
+  assert.equal(byStatus("current-contract").length, 81);
+  assert.equal(byStatus("historical-exception").length, 3);
+  assert.equal(byStatus("semantic-only").length, 8);
+
+  for (const handoff of byStatus("current-contract")) {
+    assert.notEqual(handoff.grammar, null, `${handoff.pattern.id}: grammar`);
+    assert.deepEqual(handoff.inputs.suppliedValues, {}, `${handoff.pattern.id}: supplied values`);
+    for (const key of handoff.inputs.unresolved) {
+      const declaration = handoff.inputs.declarations[key];
+      assert.ok(declaration, `${handoff.pattern.id}.${key}: declared unresolved input`);
+      assert.notEqual(declaration.kind, "constant", `${handoff.pattern.id}.${key}: constant must not be unresolved`);
+      assert.equal(declaration.required, true, `${handoff.pattern.id}.${key}: unresolved input required`);
+    }
+    assert.equal(Object.entries(handoff.inputs.declarations).some(([key, declaration]) => declaration.kind === "constant" && handoff.inputs.unresolved.includes(key)), false, `${handoff.pattern.id}: constant unresolved`);
+  }
+
+  const e09 = handoffs.find((handoff) => handoff.pattern.id === "VS-E09");
+  assert.ok(e09);
+  assert.deepEqual(e09.inputs, { declarations: {}, suppliedValues: {}, unresolved: [] });
+
+  for (const handoff of byStatus("semantic-only")) {
+    assert.equal(handoff.grammar, null, `${handoff.pattern.id}: grammar`);
+    assert.deepEqual(handoff.inputs, { declarations: {}, suppliedValues: {}, unresolved: [] }, `${handoff.pattern.id}: inputs`);
+    assert.deepEqual(handoff.provenance.implementationEvidence, [], `${handoff.pattern.id}: implementation evidence`);
+  }
+
+  for (const handoff of byStatus("historical-exception")) {
+    assert.notEqual(handoff.grammar, null, `${handoff.pattern.id}: grammar`);
+    assert.deepEqual(handoff.inputs.declarations, {}, `${handoff.pattern.id}: declarations`);
+    assert.deepEqual(handoff.inputs.unresolved, [], `${handoff.pattern.id}: unresolved`);
+    assert.equal("historicalMetadata" in handoff, false, `${handoff.pattern.id}: default historical metadata`);
+
+    const pattern = patterns.find((candidate) => candidate.id === handoff.pattern.id)!;
+    const optedIn = buildImplementationHandoff(pattern, { includeHistoricalMetadata: true });
+    assert.ok(optedIn.historicalMetadata, `${handoff.pattern.id}: opted-in historical metadata`);
+    assert.deepEqual(optedIn.grammar, handoff.grammar, `${handoff.pattern.id}: portable grammar stable`);
+  }
+});
 
 test("current-contract handoff exposes grammar, declarations, and supplied values", async () => {
   const handoff = buildImplementationHandoff(await patternById("VS-I02"), {
