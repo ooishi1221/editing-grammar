@@ -10,6 +10,23 @@ avoidWhen:
 tags:
   - speaker-identification
   - identity
+visual:
+  layout:
+    type: participant-role-introduction
+    position: preserve metadata binding to the relevant participant
+timing:
+  trigger: authored participant introduction beat
+  duration: until the supplied identity context changes
+implementation:
+  recipe:
+    - receive the participant identity and role metadata
+    - bind metadata to the relevant participant
+    - expose it at the authored introduction beat
+    - retire or update it when identity context changes
+  parameters:
+    participantId: supplied participant identity
+    roleMetadata: supplied participant role metadata
+    boundaryId: authored introduction beat identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +53,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

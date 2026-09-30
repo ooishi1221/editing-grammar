@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - topic-navigation
   - branding
+visual:
+  layout:
+    type: current-topic-label-state
+    position: preserve topic and label association
+timing:
+  trigger: supplied current topic state or topic change
+  duration: while the supplied topic remains current
+implementation:
+  recipe:
+    - receive the current topic identity and label
+    - expose the current topic state
+    - update the label when the supplied topic changes
+    - preserve topic and label association
+  parameters:
+    topicId: supplied current topic identity
+    topicLabel: supplied current topic label
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

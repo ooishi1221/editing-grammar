@@ -12,6 +12,21 @@ tags:
   - shorts
   - captions
   - readability
+visual:
+  layout:
+    type: sequential-short-caption-units
+    position: preserve reading order across the supplied sequence
+timing:
+  trigger: authored speech-unit sequence
+  duration: through the relevant supplied caption unit
+implementation:
+  recipe:
+    - receive the supplied speech units
+    - preserve them as short sequential caption units
+    - expose one relevant unit at a time or in the authored sequence
+    - preserve reading order
+  parameters:
+    utteranceSequence: supplied speech and caption-unit sequence
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +53,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

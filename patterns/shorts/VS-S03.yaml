@@ -10,6 +10,19 @@ avoidWhen:
 tags:
   - shorts
   - split-screen
+visual:
+  layout:
+    type: vertical-oriented-two-source-view
+    position: preserve source roles and supplied safe-area constraints
+implementation:
+  recipe:
+    - receive the speaker and demonstration sources
+    - keep both concurrently visible in stable vertical-oriented regions
+    - preserve source roles and supplied safe-area constraints when provided
+  parameters:
+    primarySource: supplied primary source identity
+    secondarySource: supplied secondary source identity
+    safeAreaProfile: supplied safe-area constraints
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +49,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - shorts
   - loop
+visual:
+  transition:
+    type: ending-to-opening-loop-connection
+    direction: preserve declared ending and opening correspondence
+timing:
+  trigger: authored loop boundary
+  duration: through the ending-to-opening connection
+implementation:
+  recipe:
+    - receive the authored ending state and compatible opening state
+    - preserve the declared correspondence between them
+    - connect the ending to the opening without inserting a terminal stop
+    - preserve loop continuity
+  parameters:
+    loopStatePair: supplied ending and opening state pair
+    boundaryId: authored loop boundary identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

@@ -106,6 +106,14 @@ const h5ImplementationEnrichmentFields = {
   "VS-C06": ["visual", "timing", "implementation"],
 } as const;
 const h5ImplementationEnrichmentIds = new Set(Object.keys(h5ImplementationEnrichmentFields));
+const h6ImplementationEnrichmentFields = {
+  "VS-S02": ["visual", "timing", "implementation"],
+  "VS-S03": ["visual", "implementation"],
+  "VS-S04": ["visual", "timing", "implementation"],
+  "VS-B02": ["visual", "timing", "implementation"],
+  "VS-B03": ["visual", "timing", "implementation"],
+} as const;
+const h6ImplementationEnrichmentIds = new Set(Object.keys(h6ImplementationEnrichmentFields));
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -217,7 +225,7 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
     assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
     assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
     for (const field of optionalSemanticOrImplementationFields) {
-      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id) && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id) && !h5ImplementationEnrichmentIds.has(pattern.id)) {
+      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id) && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id) && !h5ImplementationEnrichmentIds.has(pattern.id) && !h6ImplementationEnrichmentIds.has(pattern.id)) {
         assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
       }
     }
@@ -229,10 +237,10 @@ test("source-converted Patterns preserve semantic provenance separation", async 
     !originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)
     && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id)
     && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id)
-    && !h5ImplementationEnrichmentIds.has(pattern.id)
+    && !h5ImplementationEnrichmentIds.has(pattern.id) && !h6ImplementationEnrichmentIds.has(pattern.id)
   ));
 
-  assert.equal(sourceConvertedPatterns.length, 13);
+  assert.equal(sourceConvertedPatterns.length, 8);
   for (const pattern of sourceConvertedPatterns) {
     for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
@@ -377,6 +385,28 @@ test("H5 game UI and retention implementation fields and proposal provenance are
   const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
 
   for (const [id, fields] of Object.entries(h5ImplementationEnrichmentFields)) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing ${id}`);
+    const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
+    assert.deepEqual(addedFields, fields, `${id}: implementation fields`);
+    assert.ok((pattern.implementation?.recipe.length ?? 0) > 0, `${id}: implementation recipe`);
+    assert.equal(pattern.implementation?.deterministic, undefined, `${id}: deterministic must remain absent`);
+    assert.equal(pattern.implementation?.rendererCandidates, undefined, `${id}: renderer candidates must remain absent`);
+
+    const proposals = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && JSON.stringify(evidence.scope) === JSON.stringify(fields)
+    ));
+    assert.equal(proposals.length, 1, `${id}: implementation proposal evidence`);
+  }
+});
+
+test("H6 Shorts and functional branding implementation fields and proposal provenance are bounded to five Patterns", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+
+  for (const [id, fields] of Object.entries(h6ImplementationEnrichmentFields)) {
     const pattern = patternsById.get(id);
     assert.ok(pattern, `Missing ${id}`);
     const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
