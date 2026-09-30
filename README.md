@@ -125,7 +125,9 @@ Editing Grammar returns structural grammar plus declared inputs. A Remotion, FFm
 
 ## Current state
 
-**P3 Portable Renderer Handoff is complete.** P0 through P3 now cover source audit, semantic enrichment, implementation grammar, typed input declarations, deterministic Search v2, Candidate Comparison, and Portable Renderer Handoff. Renderer adapters, npm publishing, and a GitHub release remain out of scope.
+**Release: v0.1.0**
+
+v0.1.0 is the first public contract release of Editing Grammar. P0 through P3 cover source audit, semantic enrichment, implementation grammar, typed input declarations, deterministic Search v2, Candidate Comparison, and Portable Renderer Handoff. Renderer adapters and npm publishing remain out of scope.
 
 ## License
 

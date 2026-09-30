@@ -20,6 +20,8 @@
 
 `npm run build`, `npm run validate`, and `npm test` validate the current catalog. `.github/workflows/ci.yml` runs the same checks for pushes to `main` and pull requests targeting `main`.
 
-## Remaining Before v0.1.0
+## v0.1.0 Release Criteria
+
+v0.1.0 release criteria are satisfied: the public surface, executable examples, contributor guidance, and CI are in place, and the core P0 through P3 contracts are frozen.
 
 No known technical blocker to a GitHub v0.1.0 release.
