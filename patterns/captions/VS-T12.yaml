@@ -9,6 +9,19 @@ avoidWhen:
   - "小さな画面で一つの言語を素早く読ませたい場面"
 tags:
   - translation
+visual:
+  layout:
+    type: "bilingual-paired-captions"
+    position: "preserve paired source and translation units"
+implementation:
+  recipe:
+    - "receive source text and its translation"
+    - "preserve correspondence between the paired units"
+    - "maintain stable language identity without merging semantic roles"
+    - "keep both units readable"
+  parameters:
+    utteranceId: "supplied paired utterance identity"
+    languagePair: "source and translation language identities"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

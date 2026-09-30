@@ -10,6 +10,20 @@ avoidWhen:
 tags:
   - reaction
   - emphasis
+visual:
+  layout:
+    type: "reaction-annotation-layer"
+    position: "attach to the selected reaction beat"
+timing:
+  trigger: "selected surprise or reaction beat"
+  duration: "for the bounded reaction annotation interval"
+implementation:
+  recipe:
+    - "receive the selected surprise or reaction beat"
+    - "attach a short reaction annotation to that beat"
+    - "keep the annotation distinct from ordinary dialogue"
+  parameters:
+    annotationTarget: "selected reaction beat"
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

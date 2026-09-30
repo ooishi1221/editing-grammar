@@ -12,6 +12,21 @@ tags:
   - captions
   - speech-sync
   - reading-position
+visual:
+  layout:
+    type: "token-tracking-caption"
+    position: "preserve the surrounding utterance context"
+timing:
+  trigger: "supplied token alignment update"
+  duration: "through the aligned utterance interval"
+implementation:
+  recipe:
+    - "receive tokenized utterance and timing alignment state"
+    - "advance the current reading position through the tokens"
+    - "preserve the already-defined utterance context"
+  parameters:
+    utteranceId: "supplied utterance identity"
+    readingPosition: "token alignment state"
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +53,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

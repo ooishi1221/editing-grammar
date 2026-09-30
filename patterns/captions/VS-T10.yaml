@@ -9,6 +9,17 @@ avoidWhen:
   - "要点そのものを主役として強調したい場面"
 tags:
   - annotation
+visual:
+  layout:
+    type: "target-bound-clarification"
+    position: "preserve semantic association with the referenced statement or region"
+implementation:
+  recipe:
+    - "receive the referenced statement or region"
+    - "attach a bounded clarification"
+    - "keep the annotation semantically associated with its target"
+  parameters:
+    annotationTarget: "referenced statement or region"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

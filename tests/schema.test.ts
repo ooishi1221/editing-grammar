@@ -22,6 +22,20 @@ const p2ImplementationEnrichmentFields = {
   "VS-S01": ["visual", "implementation"],
 } as const;
 const p2ImplementationEnrichmentIds = new Set(Object.keys(p2ImplementationEnrichmentFields));
+const h1ImplementationEnrichmentFields = {
+  "VS-T01": ["visual", "timing", "implementation"],
+  "VS-T03": ["visual", "timing", "implementation"],
+  "VS-T04": ["visual", "timing", "implementation"],
+  "VS-T05": ["visual", "timing", "implementation"],
+  "VS-T06": ["visual", "timing", "implementation"],
+  "VS-T07": ["visual", "timing", "implementation"],
+  "VS-T08": ["visual", "timing", "implementation"],
+  "VS-T10": ["visual", "implementation"],
+  "VS-T12": ["visual", "implementation"],
+  "VS-T13": ["visual", "timing", "implementation"],
+  "VS-T14": ["visual", "timing", "implementation"],
+} as const;
+const h1ImplementationEnrichmentIds = new Set(Object.keys(h1ImplementationEnrichmentFields));
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -133,7 +147,7 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
     assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
     assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
     for (const field of optionalSemanticOrImplementationFields) {
-      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)) {
+      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id)) {
         assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
       }
     }
@@ -143,9 +157,10 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
 test("source-converted Patterns preserve semantic provenance separation", async () => {
   const sourceConvertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => (
     !originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)
+    && !h1ImplementationEnrichmentIds.has(pattern.id)
   ));
 
-  assert.equal(sourceConvertedPatterns.length, 82);
+  assert.equal(sourceConvertedPatterns.length, 71);
   for (const pattern of sourceConvertedPatterns) {
     for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
@@ -187,6 +202,28 @@ test("P2 implementation spike fields and proposal provenance are bounded to seve
     for (const field of ["description", "requirements", "failureModes", "relatedPatterns"]) {
       assert.equal(Object.hasOwn(pattern, field), false, `${id}: ${field} must remain absent`);
     }
+
+    const proposals = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && JSON.stringify(evidence.scope) === JSON.stringify(fields)
+    ));
+    assert.equal(proposals.length, 1, `${id}: implementation proposal evidence`);
+  }
+});
+
+test("H1 caption implementation fields and proposal provenance are bounded to eleven Patterns", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+
+  for (const [id, fields] of Object.entries(h1ImplementationEnrichmentFields)) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing ${id}`);
+    const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
+    assert.deepEqual(addedFields, fields, `${id}: implementation fields`);
+    assert.ok((pattern.implementation?.recipe.length ?? 0) > 0, `${id}: implementation recipe`);
+    assert.equal(pattern.implementation?.deterministic, undefined, `${id}: deterministic must remain absent`);
+    assert.equal(pattern.implementation?.rendererCandidates, undefined, `${id}: renderer candidates must remain absent`);
 
     const proposals = pattern.evidence.filter((evidence) => (
       evidence.type === "proposal"

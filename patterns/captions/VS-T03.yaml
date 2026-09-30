@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - emotion
   - voice-intensity
+visual:
+  layout:
+    type: "emotion-discriminated-caption"
+    position: "preserve base caption layout"
+timing:
+  trigger: "supplied emotion state change for the active utterance"
+  duration: "while the supplied emotion state remains active"
+implementation:
+  recipe:
+    - "receive the externally interpreted emotion state"
+    - "apply one stable discriminator to the active utterance"
+    - "remove or change the discriminator when the emotion state changes"
+  parameters:
+    utteranceId: "supplied utterance identity"
+    emotionState: "externally interpreted emotion state"
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

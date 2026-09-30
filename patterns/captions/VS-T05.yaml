@@ -9,6 +9,21 @@ avoidWhen:
   - "実際に発せられた情報を正確に伝える場面"
 tags:
   - inner-voice
+visual:
+  layout:
+    type: "inner-voice-dialogue-layer"
+    position: "preserve association with the relevant subject or beat"
+timing:
+  trigger: "supplied inner-voice insertion beat"
+  duration: "for the authored inner-voice interval"
+implementation:
+  recipe:
+    - "classify supplied text as inner voice rather than spoken dialogue"
+    - "render it as a distinct dialogue layer"
+    - "preserve association with the relevant subject or beat"
+  parameters:
+    utteranceId: "supplied inner-voice identity"
+    speakerKey: "associated subject identity"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

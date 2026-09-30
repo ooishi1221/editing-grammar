@@ -9,6 +9,20 @@ avoidWhen:
   - "話者自身の発言として受け取らせる必要がある場面"
 tags:
   - annotation
+visual:
+  layout:
+    type: "editorial-comment-layer"
+    position: "keep separate from speaker dialogue attribution"
+timing:
+  trigger: "authored editorial insertion beat"
+  duration: "for the authored editorial interval"
+implementation:
+  recipe:
+    - "receive an editorial comment and authored insertion beat"
+    - "expose it as a separate editorial layer"
+    - "never merge it into speaker dialogue attribution"
+  parameters:
+    editorialLayer: "separate editorial comment identity"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +49,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

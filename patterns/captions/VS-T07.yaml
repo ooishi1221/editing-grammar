@@ -9,6 +9,21 @@ avoidWhen:
   - "声量のピークや強い感情を前面に出したい場面"
 tags:
   - voice-intensity
+visual:
+  layout:
+    type: "low-intensity-caption"
+    position: "preserve base caption readability"
+timing:
+  trigger: "supplied low-intensity speech state"
+  duration: "while the low-intensity state applies to the utterance"
+implementation:
+  recipe:
+    - "receive the externally determined low-intensity speech state"
+    - "mark the current utterance as low-intensity"
+    - "preserve readability despite reduced vocal intensity"
+  parameters:
+    utteranceId: "supplied utterance identity"
+    voiceIntensity: "low-intensity speech state"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

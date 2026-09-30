@@ -9,6 +9,21 @@ avoidWhen:
   - "画面内の話者を通常の字幕で追えば足りる場面"
 tags:
   - speaker-identification
+visual:
+  layout:
+    type: "offscreen-speaker-attribution"
+    position: "preserve attribution with the current utterance"
+timing:
+  trigger: "offscreen speaker utterance render"
+  duration: "while the supplied speaker remains offscreen"
+implementation:
+  recipe:
+    - "receive an offscreen speaker identity"
+    - "bind the current utterance to that speaker"
+    - "preserve attribution while the speaker remains offscreen"
+  parameters:
+    utteranceId: "supplied utterance identity"
+    speakerKey: "offscreen speaker identity"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

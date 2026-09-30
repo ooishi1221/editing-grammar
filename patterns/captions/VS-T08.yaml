@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - voice-intensity
   - emphasis
+visual:
+  layout:
+    type: "high-intensity-caption"
+    position: "preserve base caption context"
+timing:
+  trigger: "supplied voice-intensity peak"
+  duration: "for the relevant high-intensity utterance interval"
+implementation:
+  recipe:
+    - "receive the externally determined voice-intensity peak"
+    - "mark the relevant utterance as high-intensity emphasis"
+    - "return to base caption behavior afterward"
+  parameters:
+    utteranceId: "supplied utterance identity"
+    voiceIntensity: "high-intensity peak state"
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

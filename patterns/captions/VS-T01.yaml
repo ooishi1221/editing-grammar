@@ -9,6 +9,20 @@ avoidWhen:
   - "話者の識別や感情の強さを明確に分けたい場面"
 tags:
   - readability
+visual:
+  layout:
+    type: "utterance-caption"
+    position: "preserve base caption layout"
+timing:
+  trigger: "supplied utterance start and end"
+  duration: "while the current utterance remains relevant"
+implementation:
+  recipe:
+    - "segment supplied speech into readable utterance units"
+    - "present the current utterance unit while it remains relevant"
+    - "preserve base caption readability"
+  parameters:
+    utteranceId: "supplied utterance identity"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +49,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation
