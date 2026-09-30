@@ -12,6 +12,16 @@ const p1SemanticEnrichmentIds = new Set([
   "VS-I02", "VS-L02", "VS-T13", "VS-S02",
   "VS-I03", "VS-G06", "VS-I13", "VS-C05",
 ]);
+const p2ImplementationEnrichmentFields = {
+  "VS-T02": ["visual", "timing", "implementation"],
+  "VS-R01": ["visual", "timing", "implementation"],
+  "VS-I02": ["visual", "implementation"],
+  "VS-L02": ["visual", "implementation"],
+  "VS-A01": ["audio", "timing", "implementation"],
+  "VS-E09": ["timing", "implementation"],
+  "VS-S01": ["visual", "implementation"],
+} as const;
+const p2ImplementationEnrichmentIds = new Set(Object.keys(p2ImplementationEnrichmentFields));
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -123,7 +133,7 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
     assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
     assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
     for (const field of optionalSemanticOrImplementationFields) {
-      if (!originalSpikeIds.has(pattern.id)) {
+      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)) {
         assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
       }
     }
@@ -131,9 +141,11 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
 });
 
 test("source-converted Patterns preserve semantic provenance separation", async () => {
-  const sourceConvertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => !originalSpikeIds.has(pattern.id));
+  const sourceConvertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => (
+    !originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)
+  ));
 
-  assert.equal(sourceConvertedPatterns.length, 89);
+  assert.equal(sourceConvertedPatterns.length, 82);
   for (const pattern of sourceConvertedPatterns) {
     for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
@@ -160,6 +172,29 @@ test("source-converted Patterns preserve semantic provenance separation", async 
     assert.equal(semanticProposal.length, 1, `${pattern.id}: semantic proposal`);
     assert.equal(semanticProposal[0].confidence, 0.5, `${pattern.id}: semantic proposal confidence`);
     assert.equal(semanticProposal[0].source, undefined, `${pattern.id}: semantic proposal source`);
+  }
+});
+
+test("P2 implementation spike fields and proposal provenance are bounded to seven Patterns", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+
+  for (const [id, fields] of Object.entries(p2ImplementationEnrichmentFields)) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing ${id}`);
+    const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
+    assert.deepEqual(addedFields, fields, `${id}: implementation fields`);
+    assert.equal(pattern.implementation?.deterministic, undefined, `${id}: deterministic must remain absent`);
+    for (const field of ["description", "requirements", "failureModes", "relatedPatterns"]) {
+      assert.equal(Object.hasOwn(pattern, field), false, `${id}: ${field} must remain absent`);
+    }
+
+    const proposals = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && JSON.stringify(evidence.scope) === JSON.stringify(fields)
+    ));
+    assert.equal(proposals.length, 1, `${id}: implementation proposal evidence`);
   }
 });
 

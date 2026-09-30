@@ -10,6 +10,20 @@ avoidWhen:
 tags:
   - emphasis
   - impact
+audio:
+  type: "accent sound cue"
+  cue: "emphasis event"
+  sync: "synchronize onset with visual emphasis"
+timing:
+  trigger: "visual or emphasis event"
+  duration: "short accent at the event"
+implementation:
+  recipe:
+    - "receive the emphasis event"
+    - "trigger a short non-asset-specific accent"
+    - "synchronize cue onset with the event"
+  parameters:
+    cueIntent: "impact accent"
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - audio
+      - timing
+      - implementation

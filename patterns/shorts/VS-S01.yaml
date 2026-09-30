@@ -10,6 +10,18 @@ avoidWhen:
 tags:
   - shorts
   - safe-area
+visual:
+  layout:
+    type: "vertical safe placement"
+    position: "keep critical text and subjects within the safe area"
+    safeArea: "externally resolved vertical platform safe area"
+implementation:
+  recipe:
+    - "obtain active platform safe-area geometry"
+    - "place critical text and subjects inside the safe area"
+    - "recalculate placement when output safe area changes"
+  parameters:
+    safeAreaProfile: "external platform geometry"
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

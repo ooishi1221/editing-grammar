@@ -12,6 +12,18 @@ avoidWhen:
 tags:
   - comparison
   - common-criteria
+visual:
+  layout:
+    type: "parallel comparison"
+    position: "two comparable subjects aligned to shared criteria"
+implementation:
+  recipe:
+    - "define two comparable subjects"
+    - "define a shared comparison axis"
+    - "render each criterion in stable correspondence"
+  parameters:
+    subjectCount: 2
+    comparisonAxis: "shared criterion"
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +50,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

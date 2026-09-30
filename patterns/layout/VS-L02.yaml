@@ -12,6 +12,17 @@ avoidWhen:
 tags:
   - split-screen
   - simultaneous-view
+visual:
+  layout:
+    type: "split layout"
+    position: "stable spatial separation for two sources"
+implementation:
+  recipe:
+    - "place two sources in persistent separate regions"
+    - "preserve both subjects concurrently"
+    - "maintain separation through the simultaneous view"
+  parameters:
+    subjectCount: 2
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +49,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

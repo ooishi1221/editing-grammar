@@ -9,6 +9,14 @@ avoidWhen:
   - "不要な沈黙を詰めてテンポを上げたい場面"
 tags:
   - afterglow
+timing:
+  trigger: "reaction or decision beat"
+  duration: "preserve intentional pause until the beat resolves"
+implementation:
+  recipe:
+    - "retain the authored pause"
+    - "keep adjacent media from filling it automatically"
+    - "resume only at the next authored beat"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +43,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

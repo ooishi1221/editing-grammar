@@ -9,6 +9,21 @@ avoidWhen:
   - "話者の区別より感情の強さを伝えたい場面"
 tags:
   - speaker-identification
+visual:
+  layout:
+    type: "speaker-discriminated-caption"
+    position: "preserve base caption placement"
+timing:
+  trigger: "active speaker change or utterance render"
+  duration: "while the active utterance is rendered"
+implementation:
+  recipe:
+    - "detect active speaker"
+    - "map speaker identity to a stable visual discriminator"
+    - "apply the discriminator to the active caption"
+    - "preserve base caption readability and placement"
+  parameters:
+    speakerKey: "active speaker identity"
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

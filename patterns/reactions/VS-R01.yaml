@@ -11,6 +11,22 @@ tags:
   - emphasis
   - reaction
   - close-up
+visual:
+  motion:
+    type: "scale"
+    trigger: "local emphasis or reaction moment"
+    parameters:
+      emphasisTarget: "subject or keyword"
+timing:
+  trigger: "local emphasis or reaction moment"
+  duration: "brief emphasis, then return to base framing"
+implementation:
+  recipe:
+    - "identify the emphasis target"
+    - "temporarily crop or scale around the target"
+    - "return to the base framing after the emphasis beat"
+  parameters:
+    emphasisTarget: "subject or keyword"
 evidence:
   - type: observed
     confidence: 1.0
@@ -37,3 +53,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation
