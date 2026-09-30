@@ -1,97 +1,131 @@
 # Editing Grammar
 
-A structured, agent-readable vocabulary of video editing patterns.
+[![CI](https://github.com/ooishi1221/editing-grammar/actions/workflows/ci.yml/badge.svg)](https://github.com/ooishi1221/editing-grammar/actions/workflows/ci.yml)
 
-## Purpose
-
-- Structure video-editing expression patterns.
-- Let an agent search editing candidates from an intended outcome.
-- Treat patterns as candidates, not rules.
-- Separate source, inference, and proposal.
-
-## Non-goals
-
-- Build an NLE.
-- Replace Premiere Pro or After Effects.
-- Copy the appearance of a specific YouTube channel.
-- Put 92 patterns into one large prompt.
-- Make a web UI the primary product.
-
-## Architecture
+Editing Grammar is an agent-readable intermediate layer that turns video-editing intent into portable editing patterns and renderer handoffs.
 
 ```text
-Meaning / Intent
-        ↓
-Editing Grammar Search
-        ↓
-Candidate Patterns
-        ↓
-Brand / Tone / Reference Filter
-        ↓
-Renderer / Video Harness
+Editing intent
+  → Search
+  → Candidate Patterns
+  → Compare
+  → Agent Selection
+  → Portable Handoff
+  → Video Harness / Renderer Adapter
 ```
 
-## Current status
+Patterns are candidates, not rules. Editing Grammar defines structural editing language; an Agent makes contextual editorial decisions; a renderer performs concrete execution. It is not an AI video editor, NLE, renderer, or automatic recommender.
 
-**P0 COMPLETE.**
-
-P0 includes:
-
-- audited 92-Pattern source catalog;
-- frozen Pattern schema;
-- 92 one-pattern-per-YAML files;
-- provenance separation: `observed` / `inferred` / `proposal`;
-- deterministic validation and Dataset Integrity checks;
-- deterministic lexical Search and the `show` command;
-- retrieval tests and the Agent Skill workflow.
-
-P0 remains frozen. Semantic enrichment and P2 Implementation Enrichment are complete. P2 adds renderer-neutral structural implementation guidance where useful; eight Taste-dominant or non-useful Patterns intentionally remain semantic-only, and three historical spike records remain documented exceptions. Editing Grammar is not a renderer. See the [Implementation Enrichment Summary](docs/implementation-enrichment-summary.md). Recommend is not implemented.
-
-`implementation.parameters` uses typed declarations for runtime inputs, execution context, and grammar constants.
-
-**P3 Portable Renderer Handoff is complete.**
-
-## Search
-
-Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. The deterministic default is Search v2, which matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `avoidWhen` is returned as candidate-comparison conflict metadata and never changes ranking. Use `--mode v1` for the frozen v1 lexical baseline.
+## Quickstart
 
 ```sh
-npm run search -- "重要語を強調"
-npm run search -- "比較したい" --category information
-npm run search -- "比較したい" --mode v1
-npm run show -- VS-E02
+git clone https://github.com/ooishi1221/editing-grammar.git
+cd editing-grammar
+npm ci
+npm run validate
 ```
 
-`show` returns one Pattern in full, including evidence and provenance. Search is deterministic; Recommend is not implemented. Queries that rely on unstated concepts or synonyms may still need Agent-side intent reformulation.
+Validation reports the complete catalog:
 
-The [Agent Skill](skills/editing-grammar/SKILL.md) handles semantic query reformulation and candidate comparison; lexical Search remains deterministic retrieval.
+```text
+92 patterns loaded
+92 patterns valid
+0 errors
+```
 
-## Compare
-
-Compare packages a small Search v2 candidate set as structured JSON with retrieval evidence, decision fields, and provenance. It does not choose the best Pattern.
+Retrieve candidates, compare a small set, then build a handoff for the Pattern the Agent selects:
 
 ```sh
+npm run search -- "二つの商品を同じ条件で比較したい"
 npm run compare -- "二つの商品を同じ条件で比較したい"
+npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
 ```
 
-The default limit is 3; `--limit` accepts at most 5.
+The current search returns `VS-I02 — 二項比較` first for this query. Compare returns structured candidate data rather than a winner. The resolved handoff includes:
 
-## Handoff
+```json
+{
+  "pattern": { "id": "VS-I02", "title": "二項比較" },
+  "status": "current-contract",
+  "inputs": {
+    "suppliedValues": { "comparisonAxis": "price" },
+    "unresolved": []
+  }
+}
+```
 
-Handoff builds a portable structural contract for an already-selected Pattern. It validates declared inputs and leaves missing required inputs explicit; it selects no renderer and performs no rendering.
+See [examples/quickstart.md](examples/quickstart.md) for the complete command walkthrough.
+
+## Why the handoff exists
+
+For the intent “compare two products using the same criteria,” Search can retrieve candidate Patterns. The Agent may select `VS-I02` because its purpose is comparison on a shared axis. `comparisonAxis` remains explicit:
+
+```sh
+npm run handoff -- VS-I02
+```
+
+```json
+{ "inputs": { "unresolved": ["comparisonAxis"] } }
+```
+
+Supplying the criterion resolves it:
 
 ```sh
 npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
 ```
 
-## Layout
+This separates Pattern grammar from scene facts. The library does not guess that the comparison axis is price.
 
-- `schema/` — portable JSON Schema and TypeScript draft
-- `patterns/` — future one-pattern-per-YAML library, grouped by editing domain
-- `src/` — future loading, searching, recommendation, validation, and CLI boundaries
-- `skills/` — the small agent-facing routing skill
-- `docs/` — provenance and schema decisions
-- `viewer/` — optional human browser UI, deliberately out of P0 scope
+## Catalog and provenance
+
+The catalog contains 92 Patterns:
+
+- **81 current-contract** — portable implementation grammar is available.
+- **3 historical exceptions** — older experimental implementation metadata is isolated by default.
+- **8 semantic-only** — editorial semantics are useful, but no renderer-neutral execution grammar is invented.
+
+Each field is backed by explicit evidence:
+
+- `observed` — directly supported by a source.
+- `inferred` — a library generalization.
+- `proposal` — a library suggestion or implementation guidance.
+
+Editing Grammar never silently turns a proposal into a source fact. See [schema decisions](docs/schema-decisions.md), the [semantic enrichment contract](docs/semantic-enrichment-contract.md), and the [implementation enrichment summary](docs/implementation-enrichment-summary.md).
+
+## Agent workflow
+
+```text
+Meaning / task
+  → reformulate editing intent
+  → Search
+  → Compare
+  → Agent decides
+  → Handoff
+  → downstream renderer
+```
+
+Search rank measures retrieval relevance, **not** an automatic editing decision. Compare does not choose a winner. Handoff assumes that an Agent has already selected one or more Patterns and validates only the declared inputs needed downstream. The [Agent Skill](skills/editing-grammar/SKILL.md) describes this discipline.
+
+## Integration example
+
+Dialogue line: “Wait, why are there six fingers?!”
+
+An Agent may interpret this as a high-intensity reaction or punchline. Illustrative candidates could include strong speech treatment, local emphasis, and an impact cue. They are not selected automatically.
+
+Editing Grammar returns structural grammar plus declared inputs. A Remotion, FFmpeg, or other adapter supplies exact fonts, colors, pixel positions, animation curves, concrete assets, and timeline implementation. [Renderer Handoff Contract](docs/renderer-handoff-contract.md) defines this boundary.
+
+## Public surface
+
+- [Quickstart walkthrough](examples/quickstart.md)
+- [Agent integration guide](examples/agent-integration.md)
+- [Architecture overview](docs/architecture-overview.md)
+- [P3 handoff closeout](docs/p3-renderer-handoff-closeout.md)
+- [Renderer Handoff Contract](docs/renderer-handoff-contract.md)
+- [JSON Schema](schema/pattern.schema.json)
+
+## Current state
+
+**P3 Portable Renderer Handoff is complete.** P0 through P3 now cover source audit, semantic enrichment, implementation grammar, typed input declarations, deterministic Search v2, Candidate Comparison, and Portable Renderer Handoff. Renderer adapters, npm publishing, and a GitHub release remain out of scope.
 
 ## License
 
