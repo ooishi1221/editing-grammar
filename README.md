@@ -47,6 +47,8 @@ npm run show -- VS-E02
 
 `show` returns one Pattern in full, including evidence and provenance. Semantic enrichment is not part of P0 search, so queries that rely on unstated concepts or synonyms may not retrieve an intended Pattern yet.
 
+The [Agent Skill](skills/editing-grammar/SKILL.md) handles semantic query reformulation and candidate comparison; lexical Search remains deterministic retrieval.
+
 ## Layout
 
 - `schema/` — portable JSON Schema and TypeScript draft
