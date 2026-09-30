@@ -10,6 +10,16 @@ avoidWhen:
 tags:
   - reaction
   - repetition
+timing:
+  trigger: ordered reaction sequence
+  duration: through the supplied reaction sequence
+implementation:
+  recipe:
+    - receive the ordered reaction beats
+    - present repeated beats while preserving sequence
+    - maintain cumulative reaction context
+  parameters:
+    reactionSequence: ordered reaction beat identities
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

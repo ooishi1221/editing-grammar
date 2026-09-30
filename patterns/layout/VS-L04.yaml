@@ -10,6 +10,18 @@ avoidWhen:
 tags:
   - pip
   - reaction
+visual:
+  layout:
+    type: primary-material-bounded-reaction-view
+    position: preserve primary material and expose reaction as secondary
+implementation:
+  recipe:
+    - receive the primary material and bounded reaction source
+    - preserve the primary material
+    - expose the reaction as a secondary view
+  parameters:
+    primarySource: primary material source
+    secondarySource: bounded reaction source
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

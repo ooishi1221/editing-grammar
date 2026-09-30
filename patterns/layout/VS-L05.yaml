@@ -9,6 +9,23 @@ avoidWhen:
   - "話者の反応を継続して見せる必要がある場面"
 tags:
   - b-roll
+visual:
+  layout:
+    type: narration-b-roll-substitution
+    position: preserve narration continuity across the insertion
+timing:
+  trigger: authored B-roll insertion interval
+  duration: from supplied entry beat to supplied exit beat
+implementation:
+  recipe:
+    - receive the narration interval and related visual
+    - substitute or supplement the primary view with B-roll
+    - preserve narration continuity
+    - return at the authored exit beat
+  parameters:
+    primarySource: narration continuity source
+    secondarySource: related B-roll source
+    segmentId: authored insertion interval identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

@@ -10,6 +10,17 @@ avoidWhen:
 tags:
   - emphasis
   - focus
+visual:
+  layout:
+    type: isolated-target
+    position: preserve target identity and surrounding context
+implementation:
+  recipe:
+    - receive the target object or subject
+    - isolate it from surrounding content
+    - preserve target identity and context
+  parameters:
+    targetId: target object or subject identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

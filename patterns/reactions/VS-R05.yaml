@@ -9,6 +9,16 @@ avoidWhen:
   - "一瞬の表情や判断点だけを止めて見せたい場面"
 tags:
   - review
+timing:
+  trigger: bounded replay segment
+  duration: through the supplied replay segment
+implementation:
+  recipe:
+    - receive the bounded source segment
+    - replay the segment in original event order
+    - return to the current timeline afterward
+  parameters:
+    segmentId: bounded replay segment identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +45,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

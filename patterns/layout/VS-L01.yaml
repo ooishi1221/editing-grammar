@@ -9,6 +9,17 @@ avoidWhen:
   - "二者の反応を同じ大きさで並行して追わせたい場面"
 tags:
   - conversation
+visual:
+  layout:
+    type: participant-concurrent-view
+    position: preserve spatial relationship among relevant participants
+implementation:
+  recipe:
+    - receive the participating sources
+    - keep relevant participants concurrently visible
+    - preserve spatial relationship while the conversation continues
+  parameters:
+    participantSet: relevant participant source identities
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

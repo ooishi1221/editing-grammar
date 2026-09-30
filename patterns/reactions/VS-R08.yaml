@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - reaction
   - impact
+visual:
+  motion:
+    type: global-impact-response
+    trigger: impact event
+    parameters:
+      impactEvent: supplied impact event
+timing:
+  trigger: impact event
+  duration: until the impact response resolves
+implementation:
+  recipe:
+    - receive the impact event
+    - apply a temporary global motion response
+    - restore the stable frame afterward
+  parameters:
+    impactEvent: supplied impact event
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

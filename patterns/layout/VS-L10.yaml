@@ -10,6 +10,18 @@ avoidWhen:
 tags:
   - close-up
   - demonstration
+visual:
+  layout:
+    type: fine-detail-secondary-view
+    position: preserve relationship to the primary view
+implementation:
+  recipe:
+    - receive the operation target and source region
+    - expose a fine-detail secondary view
+    - preserve relationship to the primary view
+  parameters:
+    targetId: operation target identity
+    sourceRegion: operation source region
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

@@ -10,6 +10,17 @@ avoidWhen:
 tags:
   - emphasis
   - focus
+visual:
+  layout:
+    type: target-directed-attention
+    position: preserve target visibility
+implementation:
+  recipe:
+    - receive the focus target
+    - direct surrounding attention toward the target
+    - preserve target visibility
+  parameters:
+    targetId: focus target identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

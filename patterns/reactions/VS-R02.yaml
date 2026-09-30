@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - reaction
   - close-up
+visual:
+  motion:
+    type: temporary-reframe
+    trigger: selected face or subject emphasis
+    parameters:
+      targetId: selected face or subject identity
+timing:
+  trigger: selected face or subject emphasis
+  duration: until the emphasis beat resolves
+implementation:
+  recipe:
+    - receive the selected face or subject
+    - temporarily reframe around the target
+    - restore the base framing afterward
+  parameters:
+    targetId: selected face or subject identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

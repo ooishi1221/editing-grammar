@@ -9,6 +9,18 @@ avoidWhen:
   - "縦画面のUI安全領域を優先したい場面"
 tags:
   - vertical-video
+visual:
+  layout:
+    type: aspect-ratio-adaptation
+    position: preserve complete or critical vertical source content
+implementation:
+  recipe:
+    - receive the source aspect ratio and target frame
+    - preserve complete or critical vertical source content
+    - resolve unused frame area without altering semantic source content
+  parameters:
+    sourceAspectRatio: supplied source aspect ratio
+    targetFrame: supplied target frame identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

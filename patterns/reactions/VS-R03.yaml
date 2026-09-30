@@ -11,6 +11,23 @@ tags:
   - emphasis
   - focus
   - contrast
+visual:
+  motion:
+    type: target-emphasis
+    trigger: selected emphasis target
+    parameters:
+      targetId: selected emphasis target identity
+timing:
+  trigger: selected emphasis target
+  duration: until the emphasis beat resolves
+implementation:
+  recipe:
+    - receive the selected emphasis target
+    - suppress surrounding information
+    - emphasize the target temporarily
+    - restore the ordinary state
+  parameters:
+    targetId: selected emphasis target identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -37,3 +54,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

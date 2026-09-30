@@ -9,6 +9,17 @@ avoidWhen:
   - "時間順の出来事を連続して説明したい場面"
 tags:
   - comparison
+visual:
+  layout:
+    type: paired-state-comparison
+    position: preserve state correspondence in stable comparative regions
+implementation:
+  recipe:
+    - receive paired states of the same subject
+    - preserve state correspondence
+    - display both in stable comparative regions
+  parameters:
+    statePair: paired states of one subject
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

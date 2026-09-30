@@ -10,6 +10,16 @@ avoidWhen:
 tags:
   - reaction
   - motion-analysis
+timing:
+  trigger: selected motion-analysis segment
+  duration: through the supplied analysis segment
+implementation:
+  recipe:
+    - receive the selected motion-analysis segment
+    - reduce temporal progression for the segment
+    - return to the base playback state
+  parameters:
+    segmentId: selected motion-analysis segment identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +46,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - timing
+      - implementation

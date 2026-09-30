@@ -36,6 +36,27 @@ const h1ImplementationEnrichmentFields = {
   "VS-T14": ["visual", "timing", "implementation"],
 } as const;
 const h1ImplementationEnrichmentIds = new Set(Object.keys(h1ImplementationEnrichmentFields));
+const h2ImplementationEnrichmentFields = {
+  "VS-R02": ["visual", "timing", "implementation"],
+  "VS-R03": ["visual", "timing", "implementation"],
+  "VS-R04": ["visual", "timing", "implementation"],
+  "VS-R05": ["timing", "implementation"],
+  "VS-R06": ["visual", "implementation"],
+  "VS-R07": ["timing", "implementation"],
+  "VS-R08": ["visual", "timing", "implementation"],
+  "VS-R11": ["timing", "implementation"],
+  "VS-R12": ["visual", "implementation"],
+  "VS-L01": ["visual", "implementation"],
+  "VS-L03": ["visual", "implementation"],
+  "VS-L04": ["visual", "implementation"],
+  "VS-L05": ["visual", "timing", "implementation"],
+  "VS-L06": ["visual", "implementation"],
+  "VS-L07": ["visual", "implementation"],
+  "VS-L08": ["visual", "implementation"],
+  "VS-L09": ["visual", "implementation"],
+  "VS-L10": ["visual", "implementation"],
+} as const;
+const h2ImplementationEnrichmentIds = new Set(Object.keys(h2ImplementationEnrichmentFields));
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -147,7 +168,7 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
     assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
     assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
     for (const field of optionalSemanticOrImplementationFields) {
-      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id)) {
+      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id)) {
         assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
       }
     }
@@ -157,10 +178,10 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
 test("source-converted Patterns preserve semantic provenance separation", async () => {
   const sourceConvertedPatterns = (await loadPatterns(patternsDirectory)).filter((pattern) => (
     !originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id)
-    && !h1ImplementationEnrichmentIds.has(pattern.id)
+    && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id)
   ));
 
-  assert.equal(sourceConvertedPatterns.length, 71);
+  assert.equal(sourceConvertedPatterns.length, 53);
   for (const pattern of sourceConvertedPatterns) {
     for (const field of optionalSemanticOrImplementationFields) {
       assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
@@ -217,6 +238,28 @@ test("H1 caption implementation fields and proposal provenance are bounded to el
   const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
 
   for (const [id, fields] of Object.entries(h1ImplementationEnrichmentFields)) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing ${id}`);
+    const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
+    assert.deepEqual(addedFields, fields, `${id}: implementation fields`);
+    assert.ok((pattern.implementation?.recipe.length ?? 0) > 0, `${id}: implementation recipe`);
+    assert.equal(pattern.implementation?.deterministic, undefined, `${id}: deterministic must remain absent`);
+    assert.equal(pattern.implementation?.rendererCandidates, undefined, `${id}: renderer candidates must remain absent`);
+
+    const proposals = pattern.evidence.filter((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && JSON.stringify(evidence.scope) === JSON.stringify(fields)
+    ));
+    assert.equal(proposals.length, 1, `${id}: implementation proposal evidence`);
+  }
+});
+
+test("H2 reaction and layout implementation fields and proposal provenance are bounded to eighteen Patterns", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+
+  for (const [id, fields] of Object.entries(h2ImplementationEnrichmentFields)) {
     const pattern = patternsById.get(id);
     assert.ok(pattern, `Missing ${id}`);
     const addedFields = ["visual", "audio", "timing", "implementation"].filter((field) => Object.hasOwn(pattern, field));
