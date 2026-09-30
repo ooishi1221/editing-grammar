@@ -46,21 +46,21 @@ When a conversational query is weak, the Agent must reformulate the intent: shor
 
 For example, 「最後ちょっと寂しい感じで終わらせたい」 can be searched as 「余韻」 and then 「感情の場面を区切る」. Do not fabricate Pattern names or add hidden search synonyms.
 
-### 5. Inspect a small candidate set
+### 5. Compare a small candidate set
 
-Read only the relevant candidates returned by search.
+Use `compare` for the top candidates before reading full YAML. It returns structured retrieval evidence, semantic decision fields, and complete provenance; it does not recommend a winner or interpret tone, brand, or reference context.
 
 ```sh
-npm run show -- VS-T02
+npm run compare -- "話者を識別"
 ```
 
-`show` returns the full Pattern, including evidence and provenance. The expected discipline is search → small candidate list → show relevant IDs → reason; never `loadPatterns()` followed by reading all 92 YAML files by default.
+`show` returns one Pattern in full when comparison identifies a candidate that needs deeper inspection. The expected discipline is search → compare a small candidate list → show relevant IDs if needed → reason; never `loadPatterns()` followed by reading all 92 YAML files by default.
 
 ### 6. Compare and select
 
 Compare title, purpose, category, provenance, and available structured fields. Use `goodFor` to judge candidate fit and `avoidWhen` to identify a plausible candidate's decision boundary. Do not invent semantic values when a field is absent.
 
-Search rank #1 is a closer lexical match, not the automatic answer. Consider user meaning, tone, brand, references, scene context, and neighboring edits. Return multiple plausible options when they apply to different editing materials.
+Search rank #1 is a closer lexical match, not the automatic answer. Compare does not recommend. Consider user meaning, tone, brand, references, scene context, and neighboring edits. Return multiple plausible options when they apply to different editing materials.
 
 ### 7. Hand off implementation when requested
 

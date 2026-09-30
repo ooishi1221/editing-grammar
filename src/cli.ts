@@ -1,4 +1,5 @@
 import type { PatternCategory } from "../schema/pattern.js";
+import { buildCandidateComparisons } from "./compare.js";
 import { loadPatternDocuments, loadPatterns } from "./load.js";
 import { searchPatterns, searchPatternsV2 } from "./search.js";
 import { validatePatternDocuments } from "./validate.js";
@@ -13,6 +14,7 @@ function usage(): string {
     "Usage:",
     "  editing-grammar validate",
     "  editing-grammar search <query> [--category <category>] [--limit <n>] [--mode v1|v2]",
+    "  editing-grammar compare <query> [--category <category>] [--limit <n>]",
     "  editing-grammar show <ID>",
   ].join("\n");
 }
@@ -89,6 +91,22 @@ async function search(args: string[]): Promise<number> {
   return 0;
 }
 
+function parseCompareArguments(args: string[]): { intent: string; category?: PatternCategory; limit: number } {
+  if (args.includes("--mode")) throw new Error("compare always uses Search v2; --mode is not supported.");
+  const query = parseSearchArguments(args);
+  const limit = query.limit ?? 3;
+  if (limit > 5) throw new Error("compare --limit must be at most 5.");
+  return { intent: query.intent, category: query.category, limit };
+}
+
+async function compare(args: string[]): Promise<number> {
+  const query = parseCompareArguments(args);
+  const patterns = await loadPatterns();
+  const searchResults = searchPatternsV2(patterns, query);
+  console.log(JSON.stringify(buildCandidateComparisons(patterns, searchResults), null, 2));
+  return 0;
+}
+
 async function show(args: string[]): Promise<number> {
   if (args.length !== 1) throw new Error("show requires exactly one Pattern ID.");
   const id = args[0].trim().toUpperCase();
@@ -102,6 +120,7 @@ async function run(): Promise<number> {
   const [command, ...args] = process.argv.slice(2);
   if (command === "validate" && args.length === 0) return validate();
   if (command === "search") return search(args);
+  if (command === "compare") return compare(args);
   if (command === "show") return show(args);
   console.error(usage());
   return 1;

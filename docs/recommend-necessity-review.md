@@ -125,4 +125,8 @@ It must preserve multiple candidates and their search order, assign no winner, a
 
 **B. Do not implement Recommend; formalize Candidate Comparison Contract.**
 
-Search v2 already solves deterministic candidate retrieval, while the Agent already owns the semantic inputs that decide among plausible candidates. A comparator would make the existing comparison discipline portable and explicit without duplicating judgment or converting ranking into taste policy. This review defines the contract only; it does not implement `src/compare.ts`, modify Search, or alter the Pattern schema.
+Search v2 already solves deterministic candidate retrieval, while the Agent already owns the semantic inputs that decide among plausible candidates. A comparator would make the existing comparison discipline portable and explicit without duplicating judgment or converting ranking into taste policy. The decision does not require Search or Pattern-schema changes.
+
+## Implementation status
+
+The Candidate Comparison Contract is implemented as the read-only `buildCandidateComparisons` layer and the `compare` CLI command. It preserves Search v2 order and exposes retrieval metadata, stored semantic decision fields, and complete evidence without a winner, recommendation score, or selection policy.

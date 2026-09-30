@@ -9,6 +9,7 @@
     "test": "tsx --test tests/*.test.ts",
     "validate": "tsx src/cli.ts validate",
     "search": "tsx src/cli.ts search",
+    "compare": "tsx src/cli.ts compare",
     "show": "tsx src/cli.ts show"
   },
   "devDependencies": {

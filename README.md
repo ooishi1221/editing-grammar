@@ -62,6 +62,16 @@ npm run show -- VS-E02
 
 The [Agent Skill](skills/editing-grammar/SKILL.md) handles semantic query reformulation and candidate comparison; lexical Search remains deterministic retrieval.
 
+## Compare
+
+Compare packages a small Search v2 candidate set as structured JSON with retrieval evidence, decision fields, and provenance. It does not choose the best Pattern.
+
+```sh
+npm run compare -- "二つの商品を同じ条件で比較したい"
+```
+
+The default limit is 3; `--limit` accepts at most 5.
+
 ## Layout
 
 - `schema/` — portable JSON Schema and TypeScript draft
