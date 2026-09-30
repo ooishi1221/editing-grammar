@@ -45,7 +45,7 @@ P0 includes:
 - deterministic lexical Search and the `show` command;
 - retrieval tests and the Agent Skill workflow.
 
-P0 remains frozen. Semantic enrichment is complete; Recommend is not implemented.
+P0 remains frozen. Semantic enrichment and P2 Implementation Enrichment are complete. P2 adds renderer-neutral structural implementation guidance where useful; eight Taste-dominant or non-useful Patterns intentionally remain semantic-only, and three historical spike records remain documented exceptions. Editing Grammar is not a renderer. See the [Implementation Enrichment Summary](docs/implementation-enrichment-summary.md). Recommend is not implemented.
 
 ## Search
 

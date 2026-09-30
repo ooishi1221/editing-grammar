@@ -64,7 +64,14 @@ Search rank #1 is a closer lexical match, not the automatic answer. Compare does
 
 ### 7. Hand off implementation when requested
 
-Pass only selected Pattern IDs and relevant fields to the downstream renderer or Video Harness. Editing Grammar is not a renderer or timeline editor.
+1. Select the Pattern or Patterns.
+2. Inspect each selected Pattern with `show`.
+3. Use only relevant `visual`, `audio`, `timing`, and `implementation` fields.
+4. Treat implementation fields as library `proposal`, never as source-observed production values.
+5. Combine them with external scene, brand, and platform context.
+6. Pass the resulting handoff to the renderer or Video Harness.
+
+Missing implementation fields are intentional for some Patterns; do not invent them for semantic-only Patterns. Historical exceptions may contain older renderer or Taste proposals. Editing Grammar is not a renderer or timeline editor.
 
 ## Provenance
 

@@ -425,6 +425,63 @@ test("H6 Shorts and functional branding implementation fields and proposal prove
   }
 });
 
+test("P2 implementation coverage partitions the complete catalog", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const currentContractIds = new Set([
+    ...p2ImplementationEnrichmentIds,
+    ...h1ImplementationEnrichmentIds,
+    ...h2ImplementationEnrichmentIds,
+    ...h3ImplementationEnrichmentIds,
+    ...h4ImplementationEnrichmentIds,
+    ...h5ImplementationEnrichmentIds,
+    ...h6ImplementationEnrichmentIds,
+  ]);
+  const historicalExceptionIds = new Set(["VS-T11", "VS-I04", "VS-A03"]);
+  const semanticOnlyIds = new Set([
+    "VS-T09", "VS-R09", "VS-R10", "VS-A07",
+    "VS-B01", "VS-B04", "VS-B05", "VS-B06",
+  ]);
+  const groups = [currentContractIds, historicalExceptionIds, semanticOnlyIds];
+  const allIds = new Set(patterns.map((pattern) => pattern.id));
+
+  assert.equal(currentContractIds.size, 81);
+  assert.deepEqual([...historicalExceptionIds].sort(), ["VS-A03", "VS-I04", "VS-T11"]);
+  assert.equal(semanticOnlyIds.size, 8);
+  for (let left = 0; left < groups.length; left += 1) {
+    for (let right = left + 1; right < groups.length; right += 1) {
+      assert.deepEqual([...groups[left]].filter((id) => groups[right].has(id)), [], `group ${left}/${right} overlap`);
+    }
+  }
+
+  const coveredIds = new Set(groups.flatMap((group) => [...group]));
+  assert.equal(coveredIds.size, 92);
+  assert.deepEqual([...coveredIds].sort(), [...allIds].sort());
+
+  const patternsById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
+  for (const id of currentContractIds) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing current-contract Pattern ${id}`);
+    assert.ok(pattern.implementation, `${id}: implementation`);
+    assert.ok((pattern.implementation.recipe?.length ?? 0) > 0, `${id}: implementation recipe`);
+    assert.equal(pattern.implementation.deterministic, undefined, `${id}: deterministic must remain absent`);
+    assert.equal(pattern.implementation.rendererCandidates, undefined, `${id}: renderer candidates must remain absent`);
+    assert.ok(pattern.evidence.some((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && evidence.scope.includes("implementation")
+    )), `${id}: implementation proposal evidence`);
+  }
+
+  for (const id of semanticOnlyIds) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, `Missing semantic-only Pattern ${id}`);
+    for (const field of ["visual", "audio", "timing", "implementation"] as const) {
+      assert.equal(Object.hasOwn(pattern, field), false, `${id}: ${field} must remain absent`);
+    }
+  }
+});
+
 test("P1 semantic pairs retain distinct decision boundaries", async () => {
   const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
   const pairs = [
