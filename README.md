@@ -33,7 +33,19 @@ Renderer / Video Harness
 
 ## Current status
 
-Three-Pattern Schema Spike complete: VS-T11, VS-I04, and VS-A03 validate as one-YAML-per-pattern samples. Search, recommendation, adapters, the remaining source audit, and the viewer remain out of scope.
+The audited 92-Pattern dataset validates. P0 now includes deterministic local search and full Pattern inspection. Recommendation, adapters, and the viewer remain out of scope.
+
+## Search
+
+Search retrieves plausible candidates from an editing intent; it does not recommend a single best editing decision. It currently matches only the uniformly populated `id`, `title`, `purpose`, and `category` fields.
+
+```sh
+npm run search -- "重要語を強調"
+npm run search -- "比較したい" --category information
+npm run show -- VS-E02
+```
+
+`show` returns one Pattern in full, including evidence and provenance. Semantic enrichment is not part of P0 search, so queries that rely on unstated concepts or synonyms may not retrieve an intended Pattern yet.
 
 ## Layout
 

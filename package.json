@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "validate": "tsx src/cli.ts validate"
+    "validate": "tsx src/cli.ts validate",
+    "search": "tsx src/cli.ts search",
+    "show": "tsx src/cli.ts show"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
