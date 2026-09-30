@@ -1,0 +1,25 @@
+id: "VS-G03"
+title: "カウントダウン"
+category: game_ui
+purpose:
+  - "残り時間を見せる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-G03"
+      category: "企画進行UI"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

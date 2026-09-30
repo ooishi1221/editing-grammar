@@ -1,0 +1,25 @@
+id: "VS-C02"
+title: "疑問・先出し"
+category: retention
+purpose:
+  - "答えへの関心をつくる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-C02"
+      category: "視聴維持・CTA"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

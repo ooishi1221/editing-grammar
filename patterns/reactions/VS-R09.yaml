@@ -1,0 +1,25 @@
+id: "VS-R09"
+title: "モノクロ落胆"
+category: reactions
+purpose:
+  - "落胆を簡潔に表す"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-R09"
+      category: "強調・リアクション"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

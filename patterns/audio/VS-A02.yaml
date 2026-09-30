@@ -1,0 +1,25 @@
+id: "VS-A02"
+title: "ポップ・通知SE"
+category: audio
+purpose:
+  - "情報の出現を知らせる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-A02"
+      category: "音"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

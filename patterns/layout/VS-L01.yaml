@@ -1,0 +1,25 @@
+id: "VS-L01"
+title: "全体引き・対談"
+category: layout
+purpose:
+  - "参加者の関係を見せる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-L01"
+      category: "レイアウト"
+      classification: "実例・手法を参考"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

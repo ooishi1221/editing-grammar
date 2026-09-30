@@ -1,0 +1,25 @@
+id: "VS-E09"
+title: "間を残す"
+category: transitions
+purpose:
+  - "反応を待たせる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-E09"
+      category: "テンポ・遷移"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

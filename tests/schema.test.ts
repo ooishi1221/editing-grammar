@@ -1,21 +1,55 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { loadPatternDocuments, loadPatterns } from "../src/load.js";
 import { validatePattern, validatePatternDocuments } from "../src/validate.js";
 
 const patternsDirectory = fileURLToPath(new URL("../patterns/", import.meta.url));
+const sourceAuditPath = new URL("../docs/source-audit.md", import.meta.url);
 
-test("all three spike YAML files load", async () => {
+async function auditedIds(): Promise<string[]> {
+  const sourceAudit = await readFile(sourceAuditPath, "utf8");
+  return [...sourceAudit.matchAll(/^\| (VS-[A-Z]\d{2}) \|/gm)].map((match) => match[1]);
+}
+
+test("all audited YAML files load with no missing or extra IDs", async () => {
   const patterns = await loadPatterns(patternsDirectory);
-  assert.equal(patterns.length, 3);
-  assert.deepEqual(patterns.map((pattern) => pattern.id), ["VS-A03", "VS-T11", "VS-I04"]);
+  const auditIds = await auditedIds();
+  const patternIds = patterns.map((pattern) => pattern.id);
+
+  assert.equal(patterns.length, 92);
+  assert.equal(new Set(patternIds).size, 92);
+  assert.deepEqual([...patternIds].sort(), [...auditIds].sort());
 });
 
-test("all three spike YAML files pass schema validation", async () => {
+test("all audited YAML files pass schema validation", async () => {
   const results = validatePatternDocuments(await loadPatternDocuments(patternsDirectory));
-  assert.equal(results.length, 3);
+  assert.equal(results.length, 92);
   assert.deepEqual(results.filter((result) => !result.valid), []);
+});
+
+test("loaded YAML files have the expected OSS category distribution", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const counts = Object.fromEntries(
+    [...new Set(patterns.map((pattern) => pattern.category))].map((category) => [
+      category,
+      patterns.filter((pattern) => pattern.category === category).length,
+    ]),
+  );
+
+  assert.deepEqual(counts, {
+    audio: 8,
+    branding: 6,
+    captions: 14,
+    game_ui: 8,
+    information: 14,
+    layout: 10,
+    reactions: 12,
+    retention: 6,
+    shorts: 4,
+    transitions: 10,
+  });
 });
 
 test("invalid evidence type fails", () => {

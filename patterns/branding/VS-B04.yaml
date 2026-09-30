@@ -1,0 +1,25 @@
+id: "VS-B04"
+title: "マンガ・ゲーム装飾"
+category: branding
+purpose:
+  - "企画内の演出トーンを変える"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-B04"
+      category: "ブランド・装飾"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

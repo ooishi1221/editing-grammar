@@ -1,0 +1,25 @@
+id: "VS-R06"
+title: "集中線"
+category: reactions
+purpose:
+  - "中心へ視線を集める"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-R06"
+      category: "強調・リアクション"
+      classification: "実例・手法を参考"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

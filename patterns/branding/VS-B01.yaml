@@ -1,0 +1,25 @@
+id: "VS-B01"
+title: "チャンネルマーク"
+category: branding
+purpose:
+  - "発信元を示す"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-B01"
+      category: "ブランド・装飾"
+      classification: "実例・手法を参考"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category

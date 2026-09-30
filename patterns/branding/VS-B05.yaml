@@ -1,0 +1,25 @@
+id: "VS-B05"
+title: "紙メモ・質感ベース"
+category: branding
+purpose:
+  - "説明を親しみやすく見せる"
+goodFor: []
+avoidWhen: []
+tags: []
+evidence:
+  - type: observed
+    confidence: 1.0
+    scope:
+      - id
+      - title
+      - purpose
+    source:
+      name: "YouTube Editing / Visual Library Japan v0.3"
+      url: "https://youtube-editing-visual-library.ayami.chatgpt.site/"
+      location: "detail / VS-B05"
+      category: "ブランド・装飾"
+      classification: "応用デザイン案"
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - category
