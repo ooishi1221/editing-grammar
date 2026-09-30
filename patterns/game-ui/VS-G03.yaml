@@ -9,6 +9,21 @@ avoidWhen:
   - "長い企画の全体進行を段階として示したい場面"
 tags:
   - countdown
+visual:
+  layout:
+    type: remaining-time-state
+    position: preserve association between remaining state and supplied deadline
+timing:
+  trigger: authoritative clock or deadline state change
+  duration: through the supplied countdown state
+implementation:
+  recipe:
+    - receive the authoritative clock and deadline state
+    - derive and display the remaining state from the supplied clock
+    - terminate or change state when the countdown completes
+  parameters:
+    clockState: supplied authoritative clock state
+    deadlineState: supplied deadline and completion state
 evidence:
   - type: observed
     confidence: 1.0
@@ -35,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

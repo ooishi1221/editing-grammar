@@ -11,6 +11,17 @@ avoidWhen:
 tags:
   - retention
   - recap
+visual:
+  layout:
+    type: concise-key-point-recap
+    position: preserve supplied key-point order and grouping
+implementation:
+  recipe:
+    - receive the selected key-point set
+    - re-present points as a concise recap
+    - preserve the supplied order and grouping
+  parameters:
+    keyPointList: supplied selected key points
 evidence:
   - type: observed
     confidence: 1.0
@@ -37,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

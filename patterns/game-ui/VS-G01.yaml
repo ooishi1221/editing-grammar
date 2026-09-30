@@ -10,6 +10,20 @@ avoidWhen:
 tags:
   - rules
   - explanation
+visual:
+  layout:
+    type: ordered-rule-presentation
+    position: preserve relation between rules and the dependent activity
+timing:
+  trigger: before dependent participation or action
+  duration: through the supplied rule sequence
+implementation:
+  recipe:
+    - receive the ordered rule items
+    - present them before dependent participation or action
+    - preserve rule order and relation to the activity
+  parameters:
+    ruleSequence: supplied ordered rule items
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

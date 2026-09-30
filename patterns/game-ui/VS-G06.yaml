@@ -12,6 +12,18 @@ tags:
   - progress-ui
   - sequence
   - current-state
+visual:
+  layout:
+    type: current-stage-sequence
+    position: preserve stage sequence and identify current state
+implementation:
+  recipe:
+    - receive the stage model and current stage
+    - preserve the supplied sequence
+    - identify the current state and expose remaining stages when supplied
+  parameters:
+    stageSequence: supplied ordered stage model
+    currentStage: supplied current stage identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -38,3 +50,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

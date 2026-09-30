@@ -10,6 +10,18 @@ avoidWhen:
 tags:
   - score
   - competition
+visual:
+  layout:
+    type: participant-score-state
+    position: preserve participant and value correspondence
+implementation:
+  recipe:
+    - receive the current score state
+    - preserve participant and value correspondence
+    - update the displayed state when the supplied score changes
+  parameters:
+    scoreState: supplied current score state
+    participantSet: supplied participant identities
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +48,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation

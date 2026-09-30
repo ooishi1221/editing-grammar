@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - hook
   - retention
+visual:
+  layout:
+    type: future-beat-teaser-sequence
+    position: preserve relation to later source material
+timing:
+  trigger: before main narrative
+  duration: through the supplied teaser sequence
+implementation:
+  recipe:
+    - receive the selected future beats
+    - sequence them before the main narrative
+    - preserve relation to later source material
+    - transition into the main content afterward
+  parameters:
+    teaserSequence: supplied selected future beats
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

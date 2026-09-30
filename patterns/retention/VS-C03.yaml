@@ -10,6 +10,21 @@ avoidWhen:
 tags:
   - call-to-action
   - retention
+visual:
+  layout:
+    type: follow-action-destination
+    position: preserve action and destination identity
+timing:
+  trigger: authored call-to-action beat
+  duration: through the supplied call-to-action state
+implementation:
+  recipe:
+    - receive the follow or subscription action and destination
+    - expose the action at the authored call-to-action beat
+    - preserve destination and action identity
+  parameters:
+    ctaAction: supplied follow or subscription action
+    destinationId: supplied destination identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +51,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

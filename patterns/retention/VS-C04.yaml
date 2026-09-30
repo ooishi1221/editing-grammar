@@ -10,6 +10,20 @@ avoidWhen:
 tags:
   - participation
   - call-to-action
+visual:
+  layout:
+    type: participation-prompt-action
+    position: preserve relation between prompt and response action
+timing:
+  trigger: before the supplied response opportunity
+  duration: through the authored participation prompt
+implementation:
+  recipe:
+    - receive the specific participation prompt
+    - expose the prompt before the response opportunity
+    - preserve prompt and action relation
+  parameters:
+    participationPrompt: supplied participation prompt
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +50,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

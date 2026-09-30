@@ -10,6 +10,22 @@ avoidWhen:
 tags:
   - end-screen
   - call-to-action
+visual:
+  layout:
+    type: end-state-destination-slots
+    position: preserve destination identity through the end state
+timing:
+  trigger: authored end-state
+  duration: through the available end-state interval
+implementation:
+  recipe:
+    - receive the destination slots and actions
+    - expose them at the authored end-state
+    - preserve destination identity
+    - retain them through the available end-state interval
+  parameters:
+    destinationSet: supplied destination slots and actions
+    endState: supplied end-state identity
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +52,9 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - timing
+      - implementation

@@ -10,6 +10,17 @@ avoidWhen:
 tags:
   - goal
   - participation
+visual:
+  layout:
+    type: persistent-active-goal
+    position: keep the active goal available while relevant
+implementation:
+  recipe:
+    - receive the active goal
+    - keep the goal available while relevant
+    - update or retire it when the supplied goal state changes
+  parameters:
+    goalState: supplied active goal and completion state
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +47,8 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - visual
+      - implementation
