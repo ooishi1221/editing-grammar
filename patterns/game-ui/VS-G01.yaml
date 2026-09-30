@@ -23,7 +23,11 @@ implementation:
     - present them before dependent participation or action
     - preserve rule order and relation to the activity
   parameters:
-    ruleSequence: supplied ordered rule items
+    ruleSequence:
+      kind: runtime-input
+      description: Supplied ordered rule items governing the dependent activity.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

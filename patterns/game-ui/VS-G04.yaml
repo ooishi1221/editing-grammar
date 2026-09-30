@@ -20,8 +20,16 @@ implementation:
     - preserve option identity and relation to the question
     - expose options without determining the answer
   parameters:
-    questionId: supplied question identity
-    optionSet: supplied bounded option set
+    questionId:
+      kind: runtime-input
+      description: Supplied identity of the question being presented.
+      required: true
+      valueType: string
+    optionSet:
+      kind: runtime-input
+      description: Supplied bounded option set associated with the question.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

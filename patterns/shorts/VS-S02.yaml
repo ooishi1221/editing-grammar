@@ -26,7 +26,11 @@ implementation:
     - expose one relevant unit at a time or in the authored sequence
     - preserve reading order
   parameters:
-    utteranceSequence: supplied speech and caption-unit sequence
+    utteranceSequence:
+      kind: runtime-input
+      description: Supplied ordered speech and caption-unit sequence.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

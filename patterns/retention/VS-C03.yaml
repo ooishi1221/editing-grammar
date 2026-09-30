@@ -23,8 +23,16 @@ implementation:
     - expose the action at the authored call-to-action beat
     - preserve destination and action identity
   parameters:
-    ctaAction: supplied follow or subscription action
-    destinationId: supplied destination identity
+    ctaAction:
+      kind: runtime-input
+      description: Supplied follow or subscription action to present.
+      required: true
+      valueType: string
+    destinationId:
+      kind: runtime-input
+      description: Supplied destination identity associated with the call to action.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

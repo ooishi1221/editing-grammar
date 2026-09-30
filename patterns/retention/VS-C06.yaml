@@ -24,8 +24,16 @@ implementation:
     - preserve destination identity
     - retain them through the available end-state interval
   parameters:
-    destinationSet: supplied destination slots and actions
-    endState: supplied end-state identity
+    destinationSet:
+      kind: runtime-input
+      description: Supplied destination slots and actions exposed during the end state.
+      required: true
+      valueType: array
+    endState:
+      kind: runtime-input
+      description: Supplied authored end-state identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

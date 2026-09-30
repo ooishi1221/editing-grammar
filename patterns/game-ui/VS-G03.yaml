@@ -22,8 +22,16 @@ implementation:
     - derive and display the remaining state from the supplied clock
     - terminate or change state when the countdown completes
   parameters:
-    clockState: supplied authoritative clock state
-    deadlineState: supplied deadline and completion state
+    clockState:
+      kind: runtime-input
+      description: Supplied authoritative clock state used to derive remaining time.
+      required: true
+      valueType: object
+    deadlineState:
+      kind: runtime-input
+      description: Supplied deadline and countdown-completion state.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

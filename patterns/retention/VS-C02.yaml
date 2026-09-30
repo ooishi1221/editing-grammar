@@ -23,8 +23,16 @@ implementation:
     - expose it before answer availability
     - preserve the unresolved state until the authored answer point
   parameters:
-    questionState: supplied unresolved question or promise
-    boundaryId: authored answer point identity
+    questionState:
+      kind: runtime-input
+      description: Supplied unresolved question or narrative promise.
+      required: true
+      valueType: string
+    boundaryId:
+      kind: runtime-input
+      description: Authored answer-point boundary identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

@@ -24,7 +24,11 @@ implementation:
     - expose the result at the reveal state
     - preserve result and source association
   parameters:
-    resultState: externally supplied result state
+    resultState:
+      kind: runtime-input
+      description: Externally determined result state exposed at the authored reveal beat.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

@@ -23,7 +23,11 @@ implementation:
     - expose the prompt before the response opportunity
     - preserve prompt and action relation
   parameters:
-    participationPrompt: supplied participation prompt
+    participationPrompt:
+      kind: runtime-input
+      description: Supplied specific participation prompt shown before the response opportunity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

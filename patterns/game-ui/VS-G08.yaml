@@ -20,8 +20,16 @@ implementation:
     - update when the supplied state changes
     - preserve value and range correspondence
   parameters:
-    progressValue: supplied current progress value
-    progressRange: supplied valid progress range
+    progressValue:
+      kind: runtime-input
+      description: Supplied current progress value.
+      required: true
+      valueType: number
+    progressRange:
+      kind: runtime-input
+      description: Supplied valid range defining the progress scale.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0

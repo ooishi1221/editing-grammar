@@ -24,8 +24,16 @@ implementation:
     - update the label when the supplied topic changes
     - preserve topic and label association
   parameters:
-    topicId: supplied current topic identity
-    topicLabel: supplied current topic label
+    topicId:
+      kind: runtime-input
+      description: Supplied identity of the current topic or section.
+      required: true
+      valueType: string
+    topicLabel:
+      kind: runtime-input
+      description: Supplied label associated with the current topic.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

@@ -21,7 +21,11 @@ implementation:
     - re-present points as a concise recap
     - preserve the supplied order and grouping
   parameters:
-    keyPointList: supplied selected key points
+    keyPointList:
+      kind: runtime-input
+      description: Supplied ordered key-point set selected for the recap.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

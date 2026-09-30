@@ -22,8 +22,16 @@ implementation:
     - preserve the supplied sequence
     - identify the current state and expose remaining stages when supplied
   parameters:
-    stageSequence: supplied ordered stage model
-    currentStage: supplied current stage identity
+    stageSequence:
+      kind: runtime-input
+      description: Supplied ordered stage model for the current progress display.
+      required: true
+      valueType: array
+    currentStage:
+      kind: runtime-input
+      description: Supplied identity of the current stage within the stage sequence.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

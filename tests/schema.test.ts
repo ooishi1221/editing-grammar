@@ -129,6 +129,11 @@ const m4MigratedTransitionAudioIds = new Set([
   "VS-E01", "VS-E03", "VS-E04", "VS-E05", "VS-E06", "VS-E07", "VS-E08", "VS-E10",
   "VS-A02", "VS-A04", "VS-A05", "VS-A06", "VS-A08",
 ]);
+const m5MigratedStateRetentionShortsBrandingIds = new Set([
+  "VS-G01", "VS-G03", "VS-G04", "VS-G05", "VS-G06", "VS-G07", "VS-G08",
+  "VS-C01", "VS-C02", "VS-C03", "VS-C04", "VS-C05", "VS-C06",
+  "VS-S02", "VS-S04", "VS-B02", "VS-B03",
+]);
 const optionalSemanticOrImplementationFields = [
   "description",
   "visual",
@@ -723,7 +728,7 @@ test("M3 information parameter migrations use complete runtime-input declaration
   assert.equal(conditionSet.required, true);
 });
 
-test("M4 transition and audio parameter migrations use complete runtime-input declarations and preserve the legacy inventory", async () => {
+test("M4 transition and audio parameter migrations use complete runtime-input declarations", async () => {
   const currentContractIds = new Set([
     ...p2ImplementationEnrichmentIds,
     ...h1ImplementationEnrichmentIds,
@@ -759,11 +764,6 @@ test("M4 transition and audio parameter migrations use complete runtime-input de
     }
   }
 
-  const allEntries = patterns.flatMap((pattern) => Object.entries(pattern.implementation?.parameters ?? {}).map(([key, value]) => ({ id: pattern.id, key, value })));
-  const legacyEntries = allEntries.filter(({ value }) => typeof value === "string" || typeof value === "number" || typeof value === "boolean");
-  assert.equal(new Set(legacyEntries.map(({ id }) => id)).size, 17);
-  assert.equal(legacyEntries.length, 28);
-
   const momentSequence = declaredParameter(patternsById.get("VS-E03")!, "momentSequence");
   assert.equal(momentSequence.kind, "runtime-input");
   assert.equal(momentSequence.valueType, "array");
@@ -793,6 +793,86 @@ test("M4 transition and audio parameter migrations use complete runtime-input de
   assert.equal(ambientSource.kind, "runtime-input");
   assert.equal(ambientSource.valueType, "string");
   assert.equal(ambientSource.required, true);
+});
+
+test("M5 completes current-contract implementation parameter declarations", async () => {
+  const currentContractIds = new Set([
+    ...p2ImplementationEnrichmentIds,
+    ...h1ImplementationEnrichmentIds,
+    ...h2ImplementationEnrichmentIds,
+    ...h3ImplementationEnrichmentIds,
+    ...h4ImplementationEnrichmentIds,
+    ...h5ImplementationEnrichmentIds,
+    ...h6ImplementationEnrichmentIds,
+  ]);
+  const fullyDeclaredIds = new Set([
+    ...parameterContractSpikeIds,
+    ...m1MigratedCaptionIds,
+    ...m2MigratedReactionLayoutIds,
+    ...m3MigratedInformationIds,
+    ...m4MigratedTransitionAudioIds,
+    ...m5MigratedStateRetentionShortsBrandingIds,
+  ]);
+  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => currentContractIds.has(pattern.id));
+  const patternsById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
+
+  assert.equal(currentContractIds.size, 81);
+  assert.equal(m5MigratedStateRetentionShortsBrandingIds.size, 17);
+  assert.equal(fullyDeclaredIds.size, 80);
+  for (const id of m5MigratedStateRetentionShortsBrandingIds) {
+    const parameters = patternsById.get(id)?.implementation?.parameters;
+    assert.ok(parameters, `${id}: parameters`);
+    for (const parameter of Object.values(parameters)) {
+      assert.equal(typeof parameter, "object", `${id}: no legacy scalar parameter`);
+      const declaration = parameter as ImplementationParameterDeclaration;
+      assert.equal(declaration.kind, "runtime-input", `${id}: runtime-input kind`);
+      assert.ok(declaration.description.length > 0, `${id}: parameter description`);
+      assert.equal(declaration.required, true, `${id}: required`);
+      assert.ok(["string", "number", "boolean", "object", "array"].includes(declaration.valueType), `${id}: parameter value type`);
+      assert.equal(Object.hasOwn(declaration, "value"), false, `${id}: runtime input must not contain value`);
+    }
+  }
+
+  const parameterizedPatterns = patterns.filter((pattern) => Object.keys(pattern.implementation?.parameters ?? {}).length > 0);
+  const noParameterPatterns = patterns.filter((pattern) => Object.keys(pattern.implementation?.parameters ?? {}).length === 0);
+  assert.equal(parameterizedPatterns.length, 80);
+  assert.deepEqual(noParameterPatterns.map((pattern) => pattern.id), ["VS-E09"]);
+  assert.deepEqual([...fullyDeclaredIds].sort(), parameterizedPatterns.map((pattern) => pattern.id).sort());
+
+  const allEntries = parameterizedPatterns.flatMap((pattern) => Object.entries(pattern.implementation?.parameters ?? {}).map(([key, value]) => ({ id: pattern.id, key, value })));
+  const legacyEntries = allEntries.filter(({ value }) => typeof value === "string" || typeof value === "number" || typeof value === "boolean");
+  assert.equal(new Set(legacyEntries.map(({ id }) => id)).size, 0);
+  assert.equal(legacyEntries.length, 0);
+
+  const clockState = declaredParameter(patternsById.get("VS-G03")!, "clockState");
+  assert.equal(clockState.kind, "runtime-input");
+  assert.equal(clockState.valueType, "object");
+  assert.equal(clockState.required, true);
+
+  const progressValue = declaredParameter(patternsById.get("VS-G08")!, "progressValue");
+  assert.equal(progressValue.kind, "runtime-input");
+  assert.equal(progressValue.valueType, "number");
+  assert.equal(progressValue.required, true);
+
+  const teaserSequence = declaredParameter(patternsById.get("VS-C01")!, "teaserSequence");
+  assert.equal(teaserSequence.kind, "runtime-input");
+  assert.equal(teaserSequence.valueType, "array");
+  assert.equal(teaserSequence.required, true);
+
+  const destinationSet = declaredParameter(patternsById.get("VS-C06")!, "destinationSet");
+  assert.equal(destinationSet.kind, "runtime-input");
+  assert.equal(destinationSet.valueType, "array");
+  assert.equal(destinationSet.required, true);
+
+  const loopStatePair = declaredParameter(patternsById.get("VS-S04")!, "loopStatePair");
+  assert.equal(loopStatePair.kind, "runtime-input");
+  assert.equal(loopStatePair.valueType, "array");
+  assert.equal(loopStatePair.required, true);
+
+  const roleMetadata = declaredParameter(patternsById.get("VS-B03")!, "roleMetadata");
+  assert.equal(roleMetadata.kind, "runtime-input");
+  assert.equal(roleMetadata.valueType, "object");
+  assert.equal(roleMetadata.required, true);
 });
 
 test("P2 implementation coverage partitions the complete catalog", async () => {

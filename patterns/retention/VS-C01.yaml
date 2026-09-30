@@ -24,7 +24,11 @@ implementation:
     - preserve relation to later source material
     - transition into the main content afterward
   parameters:
-    teaserSequence: supplied selected future beats
+    teaserSequence:
+      kind: runtime-input
+      description: Supplied ordered future beats selected for the opening teaser.
+      required: true
+      valueType: array
 evidence:
   - type: observed
     confidence: 1.0

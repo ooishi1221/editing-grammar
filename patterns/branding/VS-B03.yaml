@@ -24,9 +24,21 @@ implementation:
     - expose it at the authored introduction beat
     - retire or update it when identity context changes
   parameters:
-    participantId: supplied participant identity
-    roleMetadata: supplied participant role metadata
-    boundaryId: authored introduction beat identity
+    participantId:
+      kind: runtime-input
+      description: Supplied participant identity receiving the introduction metadata.
+      required: true
+      valueType: string
+    roleMetadata:
+      kind: runtime-input
+      description: Supplied role or title metadata associated with the participant.
+      required: true
+      valueType: object
+    boundaryId:
+      kind: runtime-input
+      description: Authored participant-introduction beat identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

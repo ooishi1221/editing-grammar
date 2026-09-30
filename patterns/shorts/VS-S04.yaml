@@ -24,8 +24,16 @@ implementation:
     - connect the ending to the opening without inserting a terminal stop
     - preserve loop continuity
   parameters:
-    loopStatePair: supplied ending and opening state pair
-    boundaryId: authored loop boundary identity
+    loopStatePair:
+      kind: runtime-input
+      description: Supplied ending and opening state pair used for the loop connection.
+      required: true
+      valueType: array
+    boundaryId:
+      kind: runtime-input
+      description: Authored loop-boundary identity.
+      required: true
+      valueType: string
 evidence:
   - type: observed
     confidence: 1.0

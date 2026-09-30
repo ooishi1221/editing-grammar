@@ -20,7 +20,11 @@ implementation:
     - keep the goal available while relevant
     - update or retire it when the supplied goal state changes
   parameters:
-    goalState: supplied active goal and completion state
+    goalState:
+      kind: runtime-input
+      description: Supplied active goal and completion state.
+      required: true
+      valueType: object
 evidence:
   - type: observed
     confidence: 1.0
