@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-label="Hold composition while caption state changes" data-reference-example="RE-S-CS-04">
+  <rect width="960" height="540" fill="#0f172a"/>
+  <text x="48" y="58" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20" font-weight="700">BEFORE</text>
+  <text x="528" y="58" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20" font-weight="700">AFTER</text>
+  <line x1="480" y1="32" x2="480" y2="508" stroke="#334155" stroke-width="2"/>
+  <g data-layout="held" data-state="before">
+    <rect x="48" y="90" width="384" height="332" rx="24" fill="#1e293b"/>
+    <circle cx="176" cy="254" r="78" fill="#60a5fa"/>
+    <circle cx="304" cy="254" r="78" fill="#fbbf24"/>
+    <rect x="96" y="354" width="288" height="42" rx="12" fill="#334155"/>
+    <text x="240" y="382" text-anchor="middle" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="20">first caption state</text>
+  </g>
+  <g data-layout="held" data-state="after">
+    <rect x="528" y="90" width="384" height="332" rx="24" fill="#1e293b"/>
+    <circle cx="656" cy="254" r="78" fill="#60a5fa"/>
+    <circle cx="784" cy="254" r="78" fill="#fbbf24"/>
+    <rect x="576" y="354" width="288" height="42" rx="12" fill="#fbbf24"/>
+    <text x="720" y="382" text-anchor="middle" fill="#0f172a" font-family="system-ui, sans-serif" font-size="20" font-weight="800">next caption state</text>
+  </g>
+  <text x="240" y="474" text-anchor="middle" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="18">same subjects · same regions</text>
+  <text x="720" y="474" text-anchor="middle" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="18">same subjects · changed text state</text>
+</svg>

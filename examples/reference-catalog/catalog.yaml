@@ -1,0 +1,119 @@
+referenceExamples:
+  - id: RE-P-VS-I05
+    appliesTo:
+      type: pattern
+      id: VS-I05
+    title: important-number-dominates-context
+    media:
+      type: before-after
+      path: assets/re-p-vs-i05.svg
+    demonstrates:
+      - A supplied number becomes the first visual priority.
+      - Existing context remains available but recedes behind the numeric claim.
+    doesNotDemonstrate:
+      - Exact typography, placement, duration, or animation.
+      - That numeric emphasis is the correct choice for every claim.
+    provenance:
+      type: synthetic
+
+  - id: RE-P-VS-R02
+    appliesTo:
+      type: pattern
+      id: VS-R02
+    title: selected-reaction-becomes-close-primary-subject
+    media:
+      type: before-after
+      path: assets/re-p-vs-r02.svg
+    demonstrates:
+      - A selected reaction becomes visually primary relative to a shared context.
+      - Other participants may remain recognizable as context.
+    doesNotDemonstrate:
+      - A required crop percentage, face style, or motion curve.
+      - Automatic selection of the reacting participant.
+    provenance:
+      type: synthetic
+
+  - id: RE-P-VS-L03
+    appliesTo:
+      type: pattern
+      id: VS-L03
+    title: material-primary-with-speaker-secondary
+    media:
+      type: still
+      path: assets/re-p-vs-l03.svg
+    demonstrates:
+      - Authored material can be primary while a speaker remains secondary.
+      - The material and speaker are separate readable regions.
+    doesNotDemonstrate:
+      - A required inset shape, pixel position, or source asset.
+      - That every explanation needs a picture-in-picture treatment.
+    provenance:
+      type: synthetic
+
+  - id: RE-F-CF-01
+    appliesTo:
+      type: frame
+      id: CF-01
+    title: group-baseline-shared-context
+    media:
+      type: still
+      path: assets/re-f-cf-01.svg
+    demonstrates:
+      - Related subjects share one readable context.
+      - Neither subject is elevated as the sole primary attention target.
+    doesNotDemonstrate:
+      - Exact subject scale, geometry, or camera choice.
+      - A required dialogue Pattern.
+    provenance:
+      type: synthetic
+
+  - id: RE-F-CF-02
+    appliesTo:
+      type: frame
+      id: CF-02
+    title: selected-person-reaction-from-baseline
+    media:
+      type: before-after
+      path: assets/re-f-cf-02.svg
+    demonstrates:
+      - Attention moves from a shared baseline to one authored subject.
+      - The relationship to baseline context can remain legible.
+    doesNotDemonstrate:
+      - Automatic selection of a person or a required cut.
+      - Exact crop, position, or animation.
+    provenance:
+      type: synthetic
+
+  - id: RE-F-CF-05
+    appliesTo:
+      type: frame
+      id: CF-05
+    title: text-dominant-over-context
+    media:
+      type: before-after
+      path: assets/re-f-cf-05.svg
+    demonstrates:
+      - Text can become the first visual priority while context remains visible.
+      - Text role is separate from text position.
+    doesNotDemonstrate:
+      - A required font, color, position, or line break.
+      - A mandatory reframe or disappearance of the subject.
+    provenance:
+      type: synthetic
+
+  - id: RE-S-CS-04
+    appliesTo:
+      type: sequence
+      id: CS-04
+    title: hold-composition-update-text-state
+    media:
+      type: before-after
+      path: assets/re-s-cs-04.svg
+    demonstrates:
+      - Subject relation and main regions remain held between states.
+      - Text state can update without a composition change.
+    doesNotDemonstrate:
+      - A fixed duration, transition, or expression animation.
+      - That every new utterance should hold composition.
+    provenance:
+      type: synthetic

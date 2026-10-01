@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-label="Group baseline shared context" data-reference-example="RE-F-CF-01">
+  <rect width="960" height="540" fill="#0f172a"/>
+  <text x="48" y="58" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="24" font-weight="700">GROUP BASELINE</text>
+  <rect x="84" y="106" width="792" height="338" rx="32" fill="#1e293b"/>
+  <circle cx="344" cy="266" r="110" fill="#60a5fa"/>
+  <circle cx="616" cy="266" r="110" fill="#fbbf24"/>
+  <circle cx="306" cy="246" r="13" fill="#0f172a"/><circle cx="382" cy="246" r="13" fill="#0f172a"/>
+  <circle cx="578" cy="246" r="13" fill="#0f172a"/><circle cx="654" cy="246" r="13" fill="#0f172a"/>
+  <rect x="244" y="370" width="472" height="34" rx="12" fill="#334155"/>
+  <text x="480" y="390" text-anchor="middle" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="20">related subjects share one context</text>
+  <text x="344" y="334" text-anchor="middle" fill="#0f172a" font-family="system-ui, sans-serif" font-size="22" font-weight="700">A</text>
+  <text x="616" y="334" text-anchor="middle" fill="#0f172a" font-family="system-ui, sans-serif" font-size="22" font-weight="700">B</text>
+</svg>
