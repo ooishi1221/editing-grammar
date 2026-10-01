@@ -1,0 +1,95 @@
+selectedComposition:
+  frameSelections:
+    - id: held-reaction
+      referenceId: CF-02
+      targetBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      textStateIds:
+        - caption-current
+        - caption-previous
+  textStates:
+    - id: caption-current
+      role: speech-caption
+      targetId: guest
+      status: active
+    - id: caption-previous
+      role: speech-caption
+      targetId: guest
+      status: released
+  sequenceSelections:
+    - referenceId: CS-04
+      stateBindings:
+        preserve:
+          - held-reaction
+        change:
+          - caption-current
+        release:
+          - caption-previous
+        restore: []
+expectations:
+  checks:
+    - id: caption-avoids-guest
+      checkId: E03
+      captionRegionId: caption-main
+      avoidRegionIds:
+        - guest-face
+    - id: caption-inside-short-safe-area
+      checkId: E05
+      regionIds:
+        - caption-main
+      safeAreaId: short-vertical
+    - id: hold-reaction-frame
+      checkId: E07
+      sequenceReferenceId: CS-04
+      preserveStateIds:
+        - held-reaction
+context:
+  safeAreas:
+    short-vertical:
+      left: 60
+      top: 120
+      right: 60
+      bottom: 240
+executionReport:
+  canvas:
+    width: 1080
+    height: 1920
+  regions:
+    - id: guest-face
+      bounds:
+        x: 360
+        y: 980
+        width: 300
+        height: 300
+      authoredIds:
+        - guest
+    - id: caption-main
+      bounds:
+        x: 350
+        y: 1100
+        width: 380
+        height: 120
+      authoredIds:
+        - caption-current
+  compositionStates:
+    - id: before
+      frameReferenceId: CF-02
+      subjectBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      regionBindings:
+        primarySubject: guest-face
+    - id: after
+      frameReferenceId: CF-02
+      subjectBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      regionBindings:
+        primarySubject: guest-face
+  stateLineage:
+    - sequenceReferenceId: CS-04
+      preserveStateIds:
+        - held-reaction
+      beforeStateId: before
+      afterStateId: after

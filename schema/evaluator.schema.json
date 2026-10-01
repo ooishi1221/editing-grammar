@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ooishi1221/editing-grammar/schema/evaluator.schema.json",
+  "title": "Editing Grammar Evaluator Contract",
+  "$defs": {
+    "authoredId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "rectangle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "safeAreaInsets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom"],
+      "properties": {
+        "left": { "type": "number", "minimum": 0 },
+        "top": { "type": "number", "minimum": 0 },
+        "right": { "type": "number", "minimum": 0 },
+        "bottom": { "type": "number", "minimum": 0 }
+      }
+    },
+    "evaluationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "safeAreas": {
+          "type": "object",
+          "propertyNames": { "$ref": "#/$defs/authoredId" },
+          "additionalProperties": { "$ref": "#/$defs/safeAreaInsets" }
+        }
+      }
+    },
+    "e03Expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "checkId", "captionRegionId", "avoidRegionIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "checkId": { "const": "E03" },
+        "captionRegionId": { "$ref": "#/$defs/authoredId" },
+        "avoidRegionIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/authoredId" }
+        }
+      }
+    },
+    "e05Expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "checkId", "regionIds", "safeAreaId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "checkId": { "const": "E05" },
+        "regionIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/authoredId" }
+        },
+        "safeAreaId": { "$ref": "#/$defs/authoredId" }
+      }
+    },
+    "e07Expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "checkId", "sequenceReferenceId", "preserveStateIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "checkId": { "const": "E07" },
+        "sequenceReferenceId": { "const": "CS-04" },
+        "preserveStateIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/authoredId" }
+        }
+      }
+    },
+    "evaluationExpectation": {
+      "oneOf": [
+        { "$ref": "#/$defs/e03Expectation" },
+        { "$ref": "#/$defs/e05Expectation" },
+        { "$ref": "#/$defs/e07Expectation" }
+      ]
+    },
+    "sceneEvaluationExpectations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checks"],
+      "properties": {
+        "checks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evaluationExpectation" }
+        }
+      }
+    },
+    "executionRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "bounds": { "$ref": "#/$defs/rectangle" },
+        "authoredIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/authoredId" }
+        }
+      }
+    },
+    "bindingRecord": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+      "additionalProperties": { "$ref": "#/$defs/authoredId" }
+    },
+    "executionCompositionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "frameReferenceId", "subjectBindings", "regionBindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "frameReferenceId": { "type": "string", "pattern": "^CF-[0-9]{2,}$" },
+        "subjectBindings": { "$ref": "#/$defs/bindingRecord" },
+        "regionBindings": { "$ref": "#/$defs/bindingRecord" }
+      }
+    },
+    "executionStateLineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequenceReferenceId", "preserveStateIds", "beforeStateId", "afterStateId"],
+      "properties": {
+        "sequenceReferenceId": { "type": "string", "pattern": "^CS-[0-9]{2,}$" },
+        "preserveStateIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/authoredId" }
+        },
+        "beforeStateId": { "$ref": "#/$defs/authoredId" },
+        "afterStateId": { "$ref": "#/$defs/authoredId" }
+      }
+    },
+    "sceneExecutionReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canvas", "regions", "compositionStates", "stateLineage"],
+      "properties": {
+        "canvas": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "regions": { "type": "array", "items": { "$ref": "#/$defs/executionRegion" } },
+        "compositionStates": { "type": "array", "items": { "$ref": "#/$defs/executionCompositionState" } },
+        "stateLineage": { "type": "array", "items": { "$ref": "#/$defs/executionStateLineage" } }
+      }
+    }
+  }
+}
