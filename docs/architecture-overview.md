@@ -31,8 +31,8 @@ Editing Grammar is not an NLE, renderer, automatic recommender, video editor, as
 
 ## Current State
 
-P0 through P3 are complete. Current v0.2 development adds an optional
-Composition layer without changing the independent Pattern contract.
+P0 through P3 are complete. Released v0.2.0 adds an optional Composition layer
+without changing the independent Pattern contract.
 
 - 93 total Patterns
 - 82 current-contract
