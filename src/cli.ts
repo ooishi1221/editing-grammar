@@ -1,5 +1,6 @@
 import type { PatternCategory } from "../schema/pattern.js";
 import { buildCandidateComparisons } from "./compare.js";
+import { loadCompositionCatalog } from "./composition.js";
 import { buildImplementationHandoff, type HandoffContext } from "./handoff.js";
 import { loadPatternDocuments, loadPatterns } from "./load.js";
 import { searchPatterns, searchPatternsV2 } from "./search.js";
@@ -13,7 +14,7 @@ const categories = new Set<PatternCategory>([
 function usage(): string {
   return [
     "Usage:",
-    "  editing-grammar validate",
+    "  editing-grammar validate [--composition-dir <path>]",
     "  editing-grammar search <query> [--category <category>] [--limit <n>] [--mode v1|v2]",
     "  editing-grammar compare <query> [--category <category>] [--limit <n>]",
     "  editing-grammar handoff <ID> [--values <json-object>] [--context <json-object>] [--include-historical]",
@@ -21,15 +22,50 @@ function usage(): string {
   ].join("\n");
 }
 
-async function validate(): Promise<number> {
+function parseValidateArguments(args: string[]): { compositionDirectory?: string } {
+  let compositionDirectory: string | undefined;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === "--composition-dir") {
+      if (compositionDirectory !== undefined) throw new Error("--composition-dir may be provided once.");
+      const value = args[++index];
+      if (!value || value.startsWith("--")) throw new Error("--composition-dir requires a path.");
+      compositionDirectory = value;
+    } else if (argument.startsWith("--")) {
+      throw new Error(`Unknown option: ${argument}`);
+    } else {
+      throw new Error(`validate does not accept positional arguments: ${argument}`);
+    }
+  }
+
+  return { compositionDirectory };
+}
+
+async function validate(compositionDirectory?: string): Promise<number> {
   const documents = await loadPatternDocuments();
   const results = validatePatternDocuments(documents);
-  const errors = results.flatMap((result) => result.errors.map((error) => `${result.patternId} (${result.filePath}) ${error.field}: ${error.message}`));
+  const patternErrors = results.flatMap((result) => result.errors.map((error) => `${result.patternId} (${result.filePath}) ${error.field}: ${error.message}`));
+  let composition: Awaited<ReturnType<typeof loadCompositionCatalog>> | undefined;
+  let compositionError: Error | undefined;
+
+  try {
+    composition = await loadCompositionCatalog(compositionDirectory);
+  } catch (error) {
+    compositionError = error instanceof Error ? error : new Error(String(error));
+  }
+
   console.log(`${documents.length} patterns loaded`);
   console.log(`${results.filter((result) => result.valid).length} patterns valid`);
-  console.log(`${errors.length} errors`);
-  if (errors.length > 0) {
-    for (const error of errors) console.error(error);
+  if (composition !== undefined) {
+    console.log(`${composition.frameReferences.length} composition frame references valid`);
+    console.log(`${composition.sequenceReferences.length} composition sequence references valid`);
+    console.log(`${composition.textRoles.length} composition text roles valid`);
+  }
+  console.log(`${patternErrors.length + (compositionError === undefined ? 0 : 1)} errors`);
+  if (patternErrors.length > 0 || compositionError !== undefined) {
+    for (const error of patternErrors) console.error(error);
+    if (compositionError !== undefined) console.error(`Composition validation failed: ${compositionError.message}`);
     return 1;
   }
   return 0;
@@ -183,7 +219,7 @@ async function handoff(args: string[]): Promise<number> {
 
 async function run(): Promise<number> {
   const [command, ...args] = process.argv.slice(2);
-  if (command === "validate" && args.length === 0) return validate();
+  if (command === "validate") return validate(parseValidateArguments(args).compositionDirectory);
   if (command === "search") return search(args);
   if (command === "compare") return compare(args);
   if (command === "show") return show(args);

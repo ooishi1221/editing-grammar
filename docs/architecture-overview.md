@@ -8,11 +8,12 @@ LLMs can describe editing creatively, while renderers require bounded structured
 
 ```text
 Meaning / Intent
-→ Search
+→ Pattern Search
 → Candidate Comparison
 → Agent Decision
 → Pattern Grammar
-→ Portable Handoff
+→ optional Composition Pass
+→ Scene Handoff
 → Renderer Adapter
 ```
 
@@ -30,11 +31,19 @@ Editing Grammar is not an NLE, renderer, automatic recommender, video editor, as
 
 ## Current State
 
-P0 through P3 are complete.
+P0 through P3 are complete. Current v0.2 development adds an optional
+Composition layer without changing the independent Pattern contract.
 
-- 92 total Patterns
-- 81 current-contract
+- 93 total Patterns
+- 82 current-contract
 - 3 historical-exception
 - 8 semantic-only
+- 6 reusable Frame References
+- 4 Sequence References
+- 8 Text Roles
+
+Pattern and Composition selection remain independent. Scene-level Composition
+Handoff is optional, and renderer adapters retain ownership of concrete
+geometry.
 
 See the [Renderer Handoff Contract](renderer-handoff-contract.md) for the portable downstream boundary.

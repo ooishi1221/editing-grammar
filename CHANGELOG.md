@@ -7,6 +7,8 @@
 - Production Composition Grammar.
 - Agent Composition workflow.
 - VS-I15 商品同定・パックショット.
+- Pattern-level `retrievalTerms` for deterministic Search v2 lexical access.
+- Composition catalog validation through `npm run validate`.
 
 ## [0.1.0] - 2026-10-01
 

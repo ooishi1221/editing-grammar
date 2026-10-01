@@ -31,7 +31,7 @@ Turn the meaning into short catalog-oriented wording.
 
 ### 3. Search
 
-Search only retrieves plausible candidates. Its default deterministic v2 mode matches `id`, `title`, `purpose`, `goodFor`, `tags`, and `category`. `goodFor` is evidence of candidate fit; `avoidWhen` is post-retrieval boundary information for comparing candidates and does not affect rank. Use `--mode v1` only when the frozen lexical baseline is specifically needed.
+Search only retrieves plausible candidates. Its default deterministic v2 mode matches `id`, `title`, `purpose`, `goodFor`, `retrievalTerms`, `tags`, and `category`. `retrievalTerms` are explicit Pattern-owned lexical vocabulary, not hidden or global query expansion. `goodFor` is evidence of candidate fit; `avoidWhen` is post-retrieval boundary information for comparing candidates and does not affect rank. Use `--mode v1` only when the frozen lexical baseline is specifically needed.
 
 ```sh
 npm run search -- "話者を識別"
@@ -42,7 +42,7 @@ npm run search -- "比較" --mode v1
 
 ### 4. Reformulate once or twice if needed
 
-When a conversational query is weak, the Agent must reformulate the intent: shorten it, remove incidental context, replace it with editing-purpose wording, or try an adjacent intent. Do not load all 92 Patterns to compensate.
+When a conversational query is weak, the Agent must reformulate the intent: shorten it, remove incidental context, replace it with editing-purpose wording, or try an adjacent intent. Do not load all 93 Patterns to compensate.
 
 For example, 「最後ちょっと寂しい感じで終わらせたい」 can be searched as 「余韻」 and then 「感情の場面を区切る」. Do not fabricate Pattern names or add hidden/global search synonyms. Audited Pattern-level `retrievalTerms` may improve lexical recall without changing a Pattern's purpose or making it a recommendation: 「数字を大きく」 can retrieve VS-I05 through explicit retrieval vocabulary. Ambiguous colloquial requests such as 「エモく終わらせたい」 still require Agent-side reformulation.
 
@@ -54,7 +54,7 @@ Use `compare` for the top candidates before reading full YAML. It returns struct
 npm run compare -- "話者を識別"
 ```
 
-`show` returns one Pattern in full when comparison identifies a candidate that needs deeper inspection. The expected discipline is search → compare a small candidate list → show relevant IDs if needed → reason; never `loadPatterns()` followed by reading all 92 YAML files by default.
+`show` returns one Pattern in full when comparison identifies a candidate that needs deeper inspection. The expected discipline is search → compare a small candidate list → show relevant IDs if needed → reason; never `loadPatterns()` followed by reading all 93 YAML files by default.
 
 ### 6. Compare and select
 
@@ -154,6 +154,17 @@ single Pattern Handoff is not a timeline or renderer plan.
 
 ### 10. Build optional Scene Composition Handoff
 
+The executable source-level path is:
+
+```sh
+npx tsx examples/composition-builder.ts
+```
+
+It imports `loadCompositionCatalog` and
+`buildSceneCompositionHandoff` from `src/composition.ts`. Use it as the
+minimal reference for explicit frame selection, target bindings, and sequence
+state bindings; it does not select Patterns or renderer geometry.
+
 For an authored Composition Pass:
 
 1. Select Frame References for the states that need a relationship decision.
@@ -232,7 +243,7 @@ Do not describe proposal implementation values as source-observed facts.
 
 Do not:
 
-- load all 92 Patterns by default;
+- load all 93 Patterns by default;
 - treat Search rank #1 as the answer;
 - choose by popularity or by an arbitrary 「YouTubeっぽく」 label;
 - copy a reference's visual appearance;

@@ -3,6 +3,11 @@
 Use Composition after an Agent has selected any Editing Patterns that fit the
 scene's editing job. Pattern and Composition selection are independent.
 
+For an executable source-level builder example, run
+`npx tsx examples/composition-builder.ts`. It demonstrates
+`loadCompositionCatalog` and `buildSceneCompositionHandoff` without
+selecting a Pattern or renderer geometry.
+
 ## Dialogue and short-form sequence
 
 | Beat | Agent decision |

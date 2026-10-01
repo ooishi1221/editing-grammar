@@ -90,9 +90,11 @@ and concrete execution remain downstream responsibilities.
 
 ## Search and product identity
 
-There is no Composition Search in this batch. Agents inspect the small catalog
-after choosing Patterns. The known Pattern Search retrieval gap remains a
-separate concern.
+There is no Composition Search. Agents inspect the small catalog after choosing
+Patterns. Pattern Search v2 now supports explicit Pattern-level
+`retrievalTerms`; the prior 「数字を大きく」 → VS-I05 access gap is resolved
+through auditable Pattern-owned retrieval vocabulary. Pattern Search and
+Composition selection remain separate.
 
 CF-06 product-identity is a Composition Reference only. VS-I15
 商品同定・パックショット independently expresses the product-identification

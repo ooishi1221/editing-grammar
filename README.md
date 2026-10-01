@@ -10,7 +10,9 @@ Editing intent
   → Candidate Patterns
   → Compare
   → Agent Selection
-  → Portable Handoff
+  → Pattern Grammar
+  → optional Composition Pass
+  → Scene Handoff
   → Video Harness / Renderer Adapter
 ```
 
@@ -30,6 +32,9 @@ Validation reports the complete catalog:
 ```text
 93 patterns loaded
 93 patterns valid
+6 composition frame references valid
+4 composition sequence references valid
+8 composition text roles valid
 0 errors
 ```
 
@@ -93,6 +98,10 @@ Each field is backed by explicit evidence:
 
 Editing Grammar never silently turns a proposal into a source fact. See [schema decisions](docs/schema-decisions.md), the [semantic enrichment contract](docs/semantic-enrichment-contract.md), and the [implementation enrichment summary](docs/implementation-enrichment-summary.md).
 
+Search v2 also supports explicit, provenance-scoped Pattern `retrievalTerms`
+for deterministic lexical access. They make a Pattern easier to find without
+changing its editorial purpose or becoming hidden query expansion.
+
 ## Agent workflow
 
 ```text
@@ -106,6 +115,19 @@ Meaning / task
 ```
 
 Search rank measures retrieval relevance, **not** an automatic editing decision. Compare does not choose a winner. Handoff assumes that an Agent has already selected one or more Patterns and validates only the declared inputs needed downstream. The [Agent Skill](skills/editing-grammar/SKILL.md) describes this discipline.
+
+## Composition Grammar
+
+Current main also provides an optional scene-level Composition Handoff with six
+Frame References, four Sequence References, and eight Text Roles. Patterns
+select the editing job. Composition expresses attention, screen relationships,
+and preserve/change/release/restore state without selecting renderer geometry.
+
+Run the executable source-level example:
+
+```sh
+npx tsx examples/composition-builder.ts
+```
 
 ## Integration example
 
@@ -128,7 +150,10 @@ Editing Grammar returns structural grammar plus declared inputs. A Remotion, FFm
 
 **Release: v0.1.0**
 
-v0.1.0 is the first public contract release of Editing Grammar. P0 through P3 cover source audit, semantic enrichment, implementation grammar, typed input declarations, deterministic Search v2, Candidate Comparison, and Portable Renderer Handoff. Renderer adapters and npm publishing remain out of scope.
+v0.1.0 is the first public contract release of Editing Grammar. Current v0.2
+development adds Composition Grammar, Agent Composition workflow, VS-I15
+Product Identity, and Pattern-owned retrievalTerms. Renderer adapters and npm
+publishing remain out of scope.
 
 ## License
 
