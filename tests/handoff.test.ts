@@ -30,15 +30,15 @@ function handoffCli(...args: string[]) {
   return spawnSync(tsxPath, [cliPath, "handoff", ...args], { encoding: "utf8" });
 }
 
-test("handoff status sets form the explicit 92-Pattern catalog partition", async () => {
+test("handoff status sets form the explicit 93-Pattern catalog partition", async () => {
   const patterns = await loadPatterns(patternsDirectory);
   const groups = [currentContractIds, historicalExceptionIds, semanticOnlyIds];
   const combined = new Set(groups.flatMap((group) => [...group]));
 
-  assert.equal(currentContractIds.size, 81);
+  assert.equal(currentContractIds.size, 82);
   assert.equal(historicalExceptionIds.size, 3);
   assert.equal(semanticOnlyIds.size, 8);
-  assert.equal(combined.size, 92);
+  assert.equal(combined.size, 93);
   for (let left = 0; left < groups.length; left += 1) {
     for (let right = left + 1; right < groups.length; right += 1) {
       assert.deepEqual([...groups[left]].filter((id) => groups[right].has(id)), [], `status group ${left}/${right} overlap`);
@@ -69,7 +69,7 @@ test("all catalog Patterns build handoffs within their explicit status contracts
   const handoffs = patterns.map((pattern) => buildImplementationHandoff(pattern));
   const byStatus = (status: string) => handoffs.filter((handoff) => handoff.status === status);
 
-  assert.equal(byStatus("current-contract").length, 81);
+  assert.equal(byStatus("current-contract").length, 82);
   assert.equal(byStatus("historical-exception").length, 3);
   assert.equal(byStatus("semantic-only").length, 8);
 
@@ -184,6 +184,36 @@ test("current-contract Pattern without parameters produces empty inputs", async 
   assert.deepEqual(handoff.inputs, { declarations: {}, suppliedValues: {}, unresolved: [] });
 });
 
+test("VS-I15 builds a standalone product-identity handoff with explicit inputs", async () => {
+  const pattern = await patternById("VS-I15");
+  const unresolved = buildImplementationHandoff(pattern);
+  assert.equal(unresolved.status, "current-contract");
+  assert.deepEqual(unresolved.grammar?.recipe, [
+    "receive the exact supplied product identity and product asset",
+    "expose the supplied product or package as the item that must remain identifiable",
+    "preserve exact product/package identity rather than substituting a generic category visual",
+  ]);
+  assert.deepEqual(unresolved.inputs.unresolved, ["productIdentity", "productAsset"]);
+  assert.equal("composition" in unresolved, false);
+
+  const resolved = buildImplementationHandoff(pattern, {
+    suppliedValues: { productIdentity: "product-01", productAsset: "product-asset-01" },
+  });
+  assert.deepEqual(resolved.inputs.unresolved, []);
+  assert.deepEqual(resolved.inputs.suppliedValues, {
+    productIdentity: "product-01",
+    productAsset: "product-asset-01",
+  });
+  assert.throws(
+    () => buildImplementationHandoff(pattern, { suppliedValues: { productIdentity: 1 } }),
+    /Invalid value for productIdentity: expected string/,
+  );
+  assert.throws(
+    () => buildImplementationHandoff(pattern, { suppliedValues: { unknown: "product-01" } }),
+    /Unknown supplied parameter: unknown/,
+  );
+});
+
 test("semantic-only handoff remains valid without invented execution data", async () => {
   const pattern = await patternById("VS-B04");
   const handoff = buildImplementationHandoff(pattern);
@@ -296,6 +326,45 @@ test("scene handoff optionally carries a prebuilt composition without changing v
   assert.notEqual(withComposition.composition, composition);
   withComposition.composition!.frameSelections[0].targetBindings.selectedSubject = "changed";
   assert.equal(composition.frameSelections[0].targetBindings.selectedSubject, "speaker");
+});
+
+test("VS-I15 and CF-06 remain independently selected and bound", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const patternHandoff = buildImplementationHandoff(await patternById("VS-I15"), {
+    suppliedValues: { productIdentity: "product-01", productAsset: "product-asset-01" },
+  });
+  assert.deepEqual(patternHandoff.inputs.unresolved, []);
+
+  const catalog = await loadCompositionCatalog();
+  const unresolvedComposition = buildSceneCompositionHandoff(catalog, {
+    textStates: [],
+    frameSelections: [{
+      id: "product-frame",
+      referenceId: "CF-06",
+      targetBindings: {},
+      textStateIds: [],
+    }],
+    sequenceSelections: [],
+  });
+  assert.deepEqual(unresolvedComposition.frameSelections[0].unresolved, ["productIdentity"]);
+
+  const composition = buildSceneCompositionHandoff(catalog, {
+    textStates: [],
+    frameSelections: [{
+      id: "product-frame",
+      referenceId: "CF-06",
+      targetBindings: { productIdentity: "product-01" },
+      textStateIds: [],
+    }],
+    sequenceSelections: [],
+  });
+  const scene = buildSceneImplementationHandoff(patterns, [{
+    patternId: "VS-I15",
+    suppliedValues: { productIdentity: "product-01", productAsset: "product-asset-01" },
+  }], {}, composition);
+
+  assert.equal(scene.patterns[0].pattern.id, "VS-I15");
+  assert.deepEqual(scene.composition?.frameSelections.map((selection) => selection.referenceId), ["CF-06"]);
 });
 
 test("scene handoff fails clearly for missing IDs and does not infer shared inputs", async () => {

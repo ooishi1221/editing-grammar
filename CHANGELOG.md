@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Production Composition Grammar.
+- Agent Composition workflow.
+- VS-I15 商品同定・パックショット.
+
 ## [0.1.0] - 2026-10-01
 
 ### Added

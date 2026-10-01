@@ -28,8 +28,8 @@ npm run validate
 Validation reports the complete catalog:
 
 ```text
-92 patterns loaded
-92 patterns valid
+93 patterns loaded
+93 patterns valid
 0 errors
 ```
 
@@ -78,9 +78,10 @@ This separates Pattern grammar from scene facts. The library does not guess that
 
 ## Catalog and provenance
 
-The catalog contains 92 Patterns:
+The v0.1.0 release baseline contains the original 92 source-audited Patterns.
+Current main is v0.2 development with 93 Patterns:
 
-- **81 current-contract** — portable implementation grammar is available.
+- **82 current-contract** — portable implementation grammar is available.
 - **3 historical exceptions** — older experimental implementation metadata is isolated by default.
 - **8 semantic-only** — editorial semantics are useful, but no renderer-neutral execution grammar is invented.
 

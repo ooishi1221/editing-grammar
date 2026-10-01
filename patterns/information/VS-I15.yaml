@@ -1,0 +1,81 @@
+id: "VS-I15"
+title: "商品同定・パックショット"
+category: information
+purpose:
+  - "商品・パッケージを識別可能な主役として見せる"
+goodFor:
+  - "商品広告・レビュー・実演で、使用文脈から正確な商品同定へ切り替える場面"
+  - "商品やパッケージ自体を視聴者に明確に識別させたい場面"
+avoidWhen:
+  - "商品は補助映像として一時的に見せるだけで、同定を主目的にしない場面"
+  - "発信元・チャンネル識別やCTA・遷移先提示が主目的の場面"
+tags:
+  - product
+  - package
+  - pack-shot
+implementation:
+  recipe:
+    - receive the exact supplied product identity and product asset
+    - expose the supplied product or package as the item that must remain identifiable
+    - preserve exact product/package identity rather than substituting a generic category visual
+  parameters:
+    productIdentity:
+      kind: runtime-input
+      description: Supplied identity of the exact product or package that must become identifiable.
+      required: true
+      valueType: string
+    productAsset:
+      kind: runtime-input
+      description: Supplied asset or source identity representing the exact product or package.
+      required: true
+      valueType: string
+evidence:
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - id
+      - title
+      - category
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - purpose
+    source:
+      name: "カップヌードルCM「夏はゴロゴロシーフード 篇」30秒 / 吉田沙保里"
+      url: "https://www.youtube.com/watch?v=m_lThKHsOKA"
+      location: "research/composition/observations.yaml / O-C01-028 / 00:28"
+      category: "commercial"
+      classification: "visually verified composition observation"
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - purpose
+    source:
+      name: "Google Pixel 11 Pro | だいじなことだけ、だいじにできる。"
+      url: "https://www.youtube.com/watch?v=SgdAE_6iK80"
+      location: "research/composition/observations.yaml / O-C03-028 / 00:28"
+      category: "commercial"
+      classification: "visually verified composition observation"
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - purpose
+    source:
+      name: "クラフトボス 甘くないイタリアーノ『宇宙人ジョーンズ・真実かフェイクか／第1弾』篇 30秒 トミー・リー・ジョーンズ 役所広司 杉咲花 河合優実 サントリー CM"
+      url: "https://www.youtube.com/watch?v=K7DT1uY3QXo"
+      location: "research/composition/observations.yaml / O-C04-028 / 00:28"
+      category: "commercial"
+      classification: "visually verified composition observation"
+  - type: inferred
+    confidence: 0.8
+    scope:
+      - tags
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - goodFor
+      - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - implementation

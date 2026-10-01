@@ -94,6 +94,6 @@ There is no Composition Search in this batch. Agents inspect the small catalog
 after choosing Patterns. The known Pattern Search retrieval gap remains a
 separate concern.
 
-CF-06 product-identity is a Composition Reference only. The proposed
-product-identity Pattern remains a separate future task; VS-I15 is not part of
-this release.
+CF-06 product-identity is a Composition Reference only. VS-I15
+商品同定・パックショット independently expresses the product-identification
+editorial job. Neither selection automatically requires the other.

@@ -79,6 +79,18 @@ test("Search v2 exposes semantic field matches for English tag queries", async (
   assert.ok(results.some((result) => result.matchedPositiveFields.includes("tags")));
 });
 
+test("Search v2 retrieves VS-I15 from its own product-identity language", async () => {
+  const patterns = await patternsPromise;
+
+  for (const query of ["商品同定", "パックショット"]) {
+    assert.equal(searchPatternsV2(patterns, { intent: query, limit: 5 })[0]?.id, "VS-I15", query);
+  }
+  assert.ok(
+    searchPatternsV2(patterns, { intent: "商品やパッケージを識別", limit: 5 })
+      .some((result) => result.id === "VS-I15"),
+  );
+});
+
 test("Search v1 remains independently available for the benchmark", async () => {
   const patterns = await patternsPromise;
   const entry = (await benchmark()).find((candidate) => candidate.id === "exact-title");

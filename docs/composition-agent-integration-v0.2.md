@@ -64,5 +64,6 @@ references, infer targets, resolve conflicts, select geometry, or invent
 assets. Video Harness or renderer adapters resolve platform safe areas,
 typography, concrete assets, geometry, timing, animation, and execution.
 
-CF-06 product-identity is available as a Composition Reference. The separate
-Product Identity Editing Pattern remains future work; VS-I15 is not included.
+CF-06 product-identity is available as a Composition Reference. VS-I15
+商品同定・パックショット independently expresses the product-identification
+editorial job. Neither selection automatically requires the other.

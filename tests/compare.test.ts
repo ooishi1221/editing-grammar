@@ -49,6 +49,20 @@ test("Candidate Comparison preserves Pattern decision data and provenance", asyn
   assert.deepEqual(comparison.provenance.evidence, pattern.evidence);
 });
 
+test("Candidate Comparison exposes VS-I15 decision data without choosing it", async () => {
+  const patterns = await patternsPromise;
+  const results = searchPatternsV2(patterns, { intent: "商品同定", limit: 3 });
+  const comparison = buildCandidateComparisons(patterns, results).find((entry) => entry.pattern.id === "VS-I15");
+
+  assert.ok(comparison);
+  assert.equal(comparison.pattern.title, "商品同定・パックショット");
+  assert.equal(comparison.pattern.category, "information");
+  assert.deepEqual(comparison.decision.purpose, ["商品・パッケージを識別可能な主役として見せる"]);
+  assert.deepEqual(comparison.decision.tags, ["product", "package", "pack-shot"]);
+  assert.ok(comparison.provenance.evidence.some((entry) => entry.scope.includes("implementation")));
+  assert.equal(hasForbiddenProperty(comparison), false);
+});
+
 test("Candidate Comparison fails clearly for a missing Pattern reference", async () => {
   const patterns = await patternsPromise;
   const [result] = searchPatternsV2(patterns, { intent: "同じ軸で比較", limit: 1 });

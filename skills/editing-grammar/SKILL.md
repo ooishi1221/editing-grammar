@@ -100,7 +100,9 @@ Composition Search or automatic Pattern-to-Composition mapping.
 - **CF-05 text-dominant-over-context** — use when text should temporarily become
   primary while the visual context remains meaningful.
 - **CF-06 product-identity** — use when an exact supplied product or package
-  must remain identifiable.
+  must remain identifiable. VS-I15 商品同定・パックショット may independently
+  express the editorial job when exact product identification is required; do
+  not auto-map either selection to the other.
 
 These are independent choices. Do not encode rules such as VS-R02 → CF-02,
 VS-T08 → CF-05, VS-I05 → CF-05, or VS-L05 → CF-03. Those combinations can be

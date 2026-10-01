@@ -44,8 +44,9 @@ screenshot or its relationship to the claim.
 
 Use CF-06 product-identity only when an exact supplied product or package must
 remain identifiable. Bind its known productIdentity; a missing identity stays
-unresolved. This is a Composition Reference. The independent Product Identity
-Editing Pattern is a separate upcoming task, and VS-I15 does not exist yet.
+unresolved. This is a Composition Reference. VS-I15 商品同定・パックショット
+independently expresses the editorial job when exact product identification is
+required. Neither selection automatically requires the other.
 
 ## Boundary
 

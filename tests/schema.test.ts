@@ -3,11 +3,13 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import type { EditingPattern, ImplementationParameterDeclaration } from "../schema/pattern.js";
+import { currentContractIds, historicalExceptionIds, semanticOnlyIds } from "../src/handoff.js";
 import { loadPatternDocuments, loadPatterns } from "../src/load.js";
 import { validatePattern, validatePatternDocuments } from "../src/validate.js";
 
 const patternsDirectory = fileURLToPath(new URL("../patterns/", import.meta.url));
 const sourceAuditPath = new URL("../docs/source-audit.md", import.meta.url);
+const v02ResearchDerivedPatternIds = new Set(["VS-I15"]);
 const originalSpikeIds = new Set(["VS-T11", "VS-I04", "VS-A03"]);
 const p1SemanticEnrichmentIds = new Set([
   "VS-I02", "VS-L02", "VS-T13", "VS-S02",
@@ -216,14 +218,18 @@ async function auditedEntries(): Promise<AuditEntry[]> {
   return entries;
 }
 
-test("all audited YAML files load with no missing or extra IDs", async () => {
+test("the frozen v0.1 source-audited catalog remains exact while current main adds VS-I15", async () => {
   const patterns = await loadPatterns(patternsDirectory);
   const auditIds = (await auditedEntries()).map((entry) => entry.id);
   const patternIds = patterns.map((pattern) => pattern.id);
 
-  assert.equal(patterns.length, 92);
-  assert.equal(new Set(patternIds).size, 92);
-  assert.deepEqual([...patternIds].sort(), [...auditIds].sort());
+  assert.equal(auditIds.length, 92);
+  assert.equal(patterns.length, 93);
+  assert.equal(new Set(patternIds).size, 93);
+  assert.deepEqual(
+    [...patternIds].sort(),
+    [...new Set([...auditIds, ...v02ResearchDerivedPatternIds])].sort(),
+  );
 });
 
 test("all YAML catalog facts faithfully match the source audit", async () => {
@@ -249,7 +255,7 @@ test("all YAML catalog facts faithfully match the source audit", async () => {
 
 test("all Patterns satisfy the semantic enrichment contract", async () => {
   const patterns = await loadPatterns(patternsDirectory);
-  assert.equal(patterns.length, 92);
+  assert.equal(patterns.length, 93);
 
   for (const pattern of patterns) {
     assert.ok(pattern.tags.length > 0, `${pattern.id}: tags`);
@@ -265,7 +271,7 @@ test("all Patterns satisfy the semantic enrichment contract", async () => {
     assert.ok(pattern.goodFor.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: goodFor duplicates purpose`);
     assert.ok(pattern.avoidWhen.every((entry) => !pattern.purpose.includes(entry)), `${pattern.id}: avoidWhen duplicates purpose`);
     for (const field of optionalSemanticOrImplementationFields) {
-      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id) && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id) && !h5ImplementationEnrichmentIds.has(pattern.id) && !h6ImplementationEnrichmentIds.has(pattern.id)) {
+      if (!originalSpikeIds.has(pattern.id) && !p2ImplementationEnrichmentIds.has(pattern.id) && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id) && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id) && !h5ImplementationEnrichmentIds.has(pattern.id) && !h6ImplementationEnrichmentIds.has(pattern.id) && !v02ResearchDerivedPatternIds.has(pattern.id)) {
         assert.equal(Object.hasOwn(pattern, field), false, `${pattern.id}: ${field} must be absent`);
       }
     }
@@ -278,6 +284,7 @@ test("source-converted Patterns preserve semantic provenance separation", async 
     && !h1ImplementationEnrichmentIds.has(pattern.id) && !h2ImplementationEnrichmentIds.has(pattern.id)
     && !h3ImplementationEnrichmentIds.has(pattern.id) && !h4ImplementationEnrichmentIds.has(pattern.id)
     && !h5ImplementationEnrichmentIds.has(pattern.id) && !h6ImplementationEnrichmentIds.has(pattern.id)
+    && !v02ResearchDerivedPatternIds.has(pattern.id)
   ));
 
   assert.equal(sourceConvertedPatterns.length, 8);
@@ -308,6 +315,35 @@ test("source-converted Patterns preserve semantic provenance separation", async 
     assert.equal(semanticProposal[0].confidence, 0.5, `${pattern.id}: semantic proposal confidence`);
     assert.equal(semanticProposal[0].source, undefined, `${pattern.id}: semantic proposal source`);
   }
+});
+
+test("VS-I15 is a post-v0.1 research-derived Pattern with explicit provenance", async () => {
+  const pattern = (await loadPatterns(patternsDirectory)).find((candidate) => candidate.id === "VS-I15");
+  assert.ok(pattern);
+  assert.equal(pattern.title, "商品同定・パックショット");
+  assert.equal(pattern.category, "information");
+  assert.deepEqual(pattern.tags, ["product", "package", "pack-shot"]);
+  assert.equal(pattern.visual, undefined);
+  assert.equal(pattern.audio, undefined);
+  assert.equal(pattern.timing, undefined);
+  assert.deepEqual(pattern.implementation?.recipe, [
+    "receive the exact supplied product identity and product asset",
+    "expose the supplied product or package as the item that must remain identifiable",
+    "preserve exact product/package identity rather than substituting a generic category visual",
+  ]);
+  assert.equal(declaredParameter(pattern, "productIdentity").valueType, "string");
+  assert.equal(declaredParameter(pattern, "productAsset").valueType, "string");
+
+  const purposeEvidence = pattern.evidence.filter((entry) => entry.type === "inferred" && JSON.stringify(entry.scope) === JSON.stringify(["purpose"]));
+  assert.equal(purposeEvidence.length, 3);
+  assert.deepEqual(purposeEvidence.map((entry) => entry.source?.location), [
+    "research/composition/observations.yaml / O-C01-028 / 00:28",
+    "research/composition/observations.yaml / O-C03-028 / 00:28",
+    "research/composition/observations.yaml / O-C04-028 / 00:28",
+  ]);
+  assert.ok(pattern.evidence.some((entry) => entry.type === "proposal" && JSON.stringify(entry.scope) === JSON.stringify(["id", "title", "category"])));
+  assert.ok(pattern.evidence.some((entry) => entry.type === "proposal" && JSON.stringify(entry.scope) === JSON.stringify(["goodFor", "avoidWhen"])));
+  assert.ok(pattern.evidence.some((entry) => entry.type === "proposal" && JSON.stringify(entry.scope) === JSON.stringify(["implementation"])));
 });
 
 test("P2 implementation spike fields and proposal provenance are bounded to seven Patterns", async () => {
@@ -513,12 +549,13 @@ test("all implementation parameters use declarations after the P3 cutover", asyn
     ...h4ImplementationEnrichmentIds,
     ...h5ImplementationEnrichmentIds,
     ...h6ImplementationEnrichmentIds,
+    ...v02ResearchDerivedPatternIds,
   ]);
   const patterns = await loadPatterns(patternsDirectory);
   const parameterizedPatterns = patterns.filter((pattern) => Object.keys(pattern.implementation?.parameters ?? {}).length > 0);
 
-  assert.equal(currentContractIds.size, 81);
-  assert.equal(parameterizedPatterns.filter((pattern) => currentContractIds.has(pattern.id)).length, 80);
+  assert.equal(currentContractIds.size, 82);
+  assert.equal(parameterizedPatterns.filter((pattern) => currentContractIds.has(pattern.id)).length, 81);
   assert.deepEqual(
     patterns.filter((pattern) => currentContractIds.has(pattern.id) && Object.keys(pattern.implementation?.parameters ?? {}).length === 0).map((pattern) => pattern.id),
     ["VS-E09"],
@@ -930,8 +967,9 @@ test("M5 completes current-contract implementation parameter declarations", asyn
   assert.equal(roleMetadata.required, true);
 });
 
-test("P2 implementation coverage partitions the complete catalog", async () => {
-  const patterns = await loadPatterns(patternsDirectory);
+test("P2 implementation coverage partitions the frozen v0.1 source-audited catalog", async () => {
+  const auditIds = new Set((await auditedEntries()).map((entry) => entry.id));
+  const patterns = (await loadPatterns(patternsDirectory)).filter((pattern) => auditIds.has(pattern.id));
   const currentContractIds = new Set([
     ...p2ImplementationEnrichmentIds,
     ...h1ImplementationEnrichmentIds,
@@ -987,6 +1025,18 @@ test("P2 implementation coverage partitions the complete catalog", async () => {
   }
 });
 
+test("current catalog status partition includes the post-v0.1 research-derived Pattern", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const groups = [currentContractIds, historicalExceptionIds, semanticOnlyIds];
+  const combined = new Set(groups.flatMap((group) => [...group]));
+
+  assert.equal(currentContractIds.size, 82);
+  assert.equal(historicalExceptionIds.size, 3);
+  assert.equal(semanticOnlyIds.size, 8);
+  assert.equal(combined.size, 93);
+  assert.deepEqual([...combined].sort(), patterns.map((pattern) => pattern.id).sort());
+});
+
 test("P1 semantic pairs retain distinct decision boundaries", async () => {
   const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
   const pairs = [
@@ -1007,9 +1057,9 @@ test("P1 semantic pairs retain distinct decision boundaries", async () => {
   }
 });
 
-test("all audited YAML files pass schema validation", async () => {
+test("all current YAML files pass schema validation", async () => {
   const results = validatePatternDocuments(await loadPatternDocuments(patternsDirectory));
-  assert.equal(results.length, 92);
+  assert.equal(results.length, 93);
   assert.deepEqual(results.filter((result) => !result.valid), []);
 });
 
@@ -1027,7 +1077,7 @@ test("loaded YAML files have the expected OSS category distribution", async () =
     branding: 6,
     captions: 14,
     game_ui: 8,
-    information: 14,
+    information: 15,
     layout: 10,
     reactions: 12,
     retention: 6,
