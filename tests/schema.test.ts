@@ -304,7 +304,7 @@ test("source-converted Patterns preserve semantic provenance separation", async 
       evidence.type === "proposal" && JSON.stringify(evidence.scope) === JSON.stringify(["goodFor", "avoidWhen"])
     ));
 
-    assert.equal(pattern.evidence.length, 4, `${pattern.id}: evidence count`);
+    assert.equal(pattern.evidence.length, pattern.retrievalTerms === undefined ? 4 : 5, pattern.id + ": evidence count");
     assert.equal(observed.length, 1, `${pattern.id}: observed evidence count`);
     assert.deepEqual(observed[0].scope, ["id", "title", "purpose"], `${pattern.id}: observed scope`);
     assert.equal(categoryProposal.length, 1, `${pattern.id}: category proposal`);
@@ -314,6 +314,54 @@ test("source-converted Patterns preserve semantic provenance separation", async 
     assert.equal(semanticProposal.length, 1, `${pattern.id}: semantic proposal`);
     assert.equal(semanticProposal[0].confidence, 0.5, `${pattern.id}: semantic proposal confidence`);
     assert.equal(semanticProposal[0].source, undefined, `${pattern.id}: semantic proposal source`);
+    if (pattern.retrievalTerms !== undefined) {
+      assert.ok(pattern.evidence.some((evidence) => (
+        evidence.type === "proposal"
+        && evidence.confidence === 0.5
+        && evidence.source === undefined
+        && JSON.stringify(evidence.scope) === JSON.stringify(["retrievalTerms"])
+      )), pattern.id + ": retrievalTerms proposal");
+    }
+  }
+});
+
+test("retrievalTerms are bounded Pattern-level lexical vocabulary with proposal provenance", async () => {
+  const patternsById = new Map((await loadPatterns(patternsDirectory)).map((pattern) => [pattern.id, pattern]));
+  const expectedTerms = new Map([
+    ["VS-I05", ["数字を大きく見せる", "数字を強調する", "数字を目立たせる"]],
+    ["VS-R05", ["決定的な動きをもう一度見せる", "重要な瞬間をリプレイする"]],
+    ["VS-I08", ["出来事の順番を追う", "起きた順番を見せる", "時系列で追う"]],
+    ["VS-C04", ["答えを書いてもらう", "コメントで回答してもらう", "視聴者に回答を促す"]],
+    ["VS-B01", ["誰が発信しているか示す", "発信者を分かるようにする", "誰の動画か伝える"]],
+  ]);
+
+  assert.equal(
+    (await loadPatterns(patternsDirectory)).filter((pattern) => pattern.retrievalTerms !== undefined).length,
+    expectedTerms.size,
+  );
+  for (const [id, terms] of expectedTerms) {
+    const pattern = patternsById.get(id);
+    assert.ok(pattern, "Missing " + id);
+    assert.deepEqual(pattern.retrievalTerms, terms);
+    assert.ok(pattern.evidence.some((evidence) => (
+      evidence.type === "proposal"
+      && evidence.confidence === 0.5
+      && evidence.source === undefined
+      && JSON.stringify(evidence.scope) === JSON.stringify(["retrievalTerms"])
+    )), id + ": proposal provenance");
+  }
+});
+
+test("retrievalTerms schema rejects empty, duplicate, oversized, and blank lists", async () => {
+  const pattern = (await loadPatterns(patternsDirectory)).find((candidate) => candidate.id === "VS-I05");
+  assert.ok(pattern);
+  for (const retrievalTerms of [
+    [],
+    ["same", "same"],
+    ["one", "two", "three", "four", "five", "six"],
+    ["valid", ""],
+  ]) {
+    assert.equal(validatePattern({ ...pattern, retrievalTerms }).valid, false);
   }
 });
 

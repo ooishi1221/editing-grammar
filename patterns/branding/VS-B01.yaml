@@ -10,6 +10,10 @@ avoidWhen:
 tags:
   - identity
   - branding
+retrievalTerms:
+  - 誰が発信しているか示す
+  - 発信者を分かるようにする
+  - 誰の動画か伝える
 evidence:
   - type: observed
     confidence: 1.0
@@ -36,3 +40,7 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - retrievalTerms

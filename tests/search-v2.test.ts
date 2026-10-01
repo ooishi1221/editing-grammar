@@ -60,6 +60,14 @@ test("Search v2 ranks intended pairwise candidates above their documented neighb
   }
 });
 
+test("Search v2 preserves every non-known-limitation benchmark target within its frozen topN", async () => {
+  const patterns = await patternsPromise;
+  for (const entry of (await benchmark()).filter((candidate) => !candidate.knownLimitation)) {
+    const ids = searchPatternsV2(patterns, { intent: entry.query, limit: entry.topN }).map((result) => result.id);
+    assert.ok(entry.expectedIds.some((id) => ids.includes(id)), entry.id);
+  }
+});
+
 test("Search v2 keeps avoidWhen as conflict metadata without subtracting from score", async () => {
   const patterns = await patternsPromise;
   const results = searchPatternsV2(patterns, { intent: "二項比較で二者の反応を同時に見せたい", limit: 92 });
@@ -91,6 +99,24 @@ test("Search v2 retrieves VS-I15 from its own product-identity language", async 
   );
 });
 
+test("Search v2 exposes VS-I05 retrievalTerms for the documented numeric-access gap", async () => {
+  const patterns = await patternsPromise;
+  const direct = searchPatternsV2(patterns, { intent: "数字を大きく", limit: 5 });
+  assert.equal(direct[0]?.id, "VS-I05");
+  assert.ok(direct[0].matchedPositiveFields.includes("retrievalTerms"));
+
+  const emphasis = searchPatternsV2(patterns, { intent: "数字を強調したい", limit: 3 });
+  assert.ok(emphasis.some((result) => result.id === "VS-I05"));
+});
+
+test("Search v1 remains unchanged by Pattern retrievalTerms", async () => {
+  const patterns = await patternsPromise;
+  assert.equal(
+    searchPatterns(patterns, { intent: "数字を大きく", limit: 5 }).some((result) => result.id === "VS-I05"),
+    false,
+  );
+});
+
 test("Search v1 remains independently available for the benchmark", async () => {
   const patterns = await patternsPromise;
   const entry = (await benchmark()).find((candidate) => candidate.id === "exact-title");
@@ -116,6 +142,22 @@ test("Search v2 ranks intended holdout pairwise candidates above their neighbor"
   for (const entry of cases) {
     const ids = searchPatternsV2(patterns, { intent: entry.query, limit: 92 }).map((result) => result.id);
     assert.ok(rank(ids, entry.pairwise.intendedId) < rank(ids, entry.pairwise.falsePositiveId), entry.id);
+  }
+});
+
+test("Search v2 retrieves the four frozen-holdout lexical misses through explicit retrievalTerms", async () => {
+  const patterns = await patternsPromise;
+  const selectedIds = new Set([
+    "repeat-decisive-moment",
+    "chronological-story",
+    "prompt-specific-comments",
+    "publisher-identity",
+  ]);
+  for (const entry of (await holdout()).filter((candidate) => selectedIds.has(candidate.id))) {
+    const results = searchPatternsV2(patterns, { intent: entry.query, limit: entry.topN });
+    const match = results.find((result) => entry.expectedIds.includes(result.id));
+    assert.ok(match, entry.id);
+    assert.ok(match.matchedPositiveFields.includes("retrievalTerms"), entry.id);
   }
 });
 

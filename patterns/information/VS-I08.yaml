@@ -9,6 +9,10 @@ avoidWhen:
   - "進行中の企画の現在地だけを示したい場面"
 tags:
   - chronology
+retrievalTerms:
+  - 出来事の順番を追う
+  - 起きた順番を見せる
+  - 時系列で追う
 visual:
   layout:
     type: chronological-event-structure
@@ -50,6 +54,10 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - retrievalTerms
   - type: proposal
     confidence: 0.5
     scope:

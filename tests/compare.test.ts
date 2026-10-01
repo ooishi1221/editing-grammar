@@ -63,6 +63,16 @@ test("Candidate Comparison exposes VS-I15 decision data without choosing it", as
   assert.equal(hasForbiddenProperty(comparison), false);
 });
 
+test("Candidate Comparison keeps retrievalTerms in retrieval evidence, not decision semantics", async () => {
+  const patterns = await patternsPromise;
+  const result = searchPatternsV2(patterns, { intent: "数字を大きく", limit: 1 })[0];
+  const comparison = buildCandidateComparisons(patterns, [result])[0];
+
+  assert.equal(comparison.pattern.id, "VS-I05");
+  assert.ok(comparison.retrieval.matchedPositiveFields.includes("retrievalTerms"));
+  assert.equal(Object.hasOwn(comparison.decision, "retrievalTerms"), false);
+});
+
 test("Candidate Comparison fails clearly for a missing Pattern reference", async () => {
   const patterns = await patternsPromise;
   const [result] = searchPatternsV2(patterns, { intent: "同じ軸で比較", limit: 1 });

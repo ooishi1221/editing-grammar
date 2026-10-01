@@ -44,7 +44,7 @@ npm run search -- "比較" --mode v1
 
 When a conversational query is weak, the Agent must reformulate the intent: shorten it, remove incidental context, replace it with editing-purpose wording, or try an adjacent intent. Do not load all 92 Patterns to compensate.
 
-For example, 「最後ちょっと寂しい感じで終わらせたい」 can be searched as 「余韻」 and then 「感情の場面を区切る」. Do not fabricate Pattern names or add hidden search synonyms.
+For example, 「最後ちょっと寂しい感じで終わらせたい」 can be searched as 「余韻」 and then 「感情の場面を区切る」. Do not fabricate Pattern names or add hidden/global search synonyms. Audited Pattern-level `retrievalTerms` may improve lexical recall without changing a Pattern's purpose or making it a recommendation: 「数字を大きく」 can retrieve VS-I05 through explicit retrieval vocabulary. Ambiguous colloquial requests such as 「エモく終わらせたい」 still require Agent-side reformulation.
 
 ### 5. Compare a small candidate set
 
@@ -238,7 +238,9 @@ Do not:
 - copy a reference's visual appearance;
 - treat proposal fields as observed facts;
 - invent missing `goodFor` or `avoidWhen`;
-- add hidden Search synonyms, modify YAML for one query, or hard-code Pattern IDs as answers;
+- add hidden/global Search synonyms or hard-code Pattern IDs as answers; bounded,
+  provenance-scoped Pattern-level `retrievalTerms` are allowed only when they
+  provide reusable lexical access rather than a benchmark-specific alias;
 - treat one Pattern as universally correct.
 - reuse one baseline composition for every semantic beat;
 - vary composition merely for visual variety;

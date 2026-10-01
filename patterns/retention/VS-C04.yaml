@@ -10,6 +10,10 @@ avoidWhen:
 tags:
   - participation
   - call-to-action
+retrievalTerms:
+  - 答えを書いてもらう
+  - コメントで回答してもらう
+  - 視聴者に回答を促す
 visual:
   layout:
     type: participation-prompt-action
@@ -54,6 +58,10 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - retrievalTerms
   - type: proposal
     confidence: 0.5
     scope:

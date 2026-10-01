@@ -57,6 +57,7 @@ export interface EditingPattern {
   goodFor: string[];
   avoidWhen: string[];
   tags: string[];
+  retrievalTerms?: string[];
   visual?: {
     palette?: string[];
     typography?: { style?: string; weight?: string; case?: string; alignment?: string };

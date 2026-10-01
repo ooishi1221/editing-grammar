@@ -19,7 +19,7 @@ export interface PatternSearchResult {
   matchedFields: SearchableField[];
 }
 
-export const searchV2PositiveFields = ["id", "title", "purpose", "goodFor", "tags", "category"] as const;
+export const searchV2PositiveFields = ["id", "title", "purpose", "goodFor", "retrievalTerms", "tags", "category"] as const;
 
 export type SearchV2PositiveField = (typeof searchV2PositiveFields)[number];
 
@@ -168,6 +168,7 @@ export function searchPatternsV2(patterns: readonly EditingPattern[], query: Pat
         title: fieldScore(normalizedIntent, fields.title, "title") * 5,
         purpose: fieldScore(normalizedIntent, fields.purpose, "purpose") * 2,
         goodFor: bestFieldScore(normalizedIntent, pattern.goodFor, "purpose") * 1.2,
+        retrievalTerms: bestFieldScore(normalizedIntent, pattern.retrievalTerms ?? [], "purpose") * 0.8,
         tags: bestFieldScore(normalizedIntent, pattern.tags, "category") * 0.35,
         category: fieldScore(normalizedIntent, fields.category, "category") * 0.25,
       };

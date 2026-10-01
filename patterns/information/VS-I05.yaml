@@ -10,6 +10,10 @@ avoidWhen:
 tags:
   - numeric-emphasis
   - memory
+retrievalTerms:
+  - 数字を大きく見せる
+  - 数字を強調する
+  - 数字を目立たせる
 visual:
   layout:
     type: single-value-emphasis
@@ -59,6 +63,10 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - retrievalTerms
   - type: proposal
     confidence: 0.5
     scope:

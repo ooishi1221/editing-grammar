@@ -9,6 +9,9 @@ avoidWhen:
   - "一瞬の表情や判断点だけを止めて見せたい場面"
 tags:
   - review
+retrievalTerms:
+  - 決定的な動きをもう一度見せる
+  - 重要な瞬間をリプレイする
 timing:
   trigger: bounded replay segment
   duration: through the supplied replay segment
@@ -49,6 +52,10 @@ evidence:
     scope:
       - goodFor
       - avoidWhen
+  - type: proposal
+    confidence: 0.5
+    scope:
+      - retrievalTerms
   - type: proposal
     confidence: 0.5
     scope:
