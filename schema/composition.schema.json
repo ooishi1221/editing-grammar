@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ooishi1221/editing-grammar/schema/composition.schema.json",
+  "title": "Editing Grammar Composition Contract",
+  "$defs": {
+    "semanticId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "authoredId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semanticIdList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/semanticId" },
+      "uniqueItems": true
+    },
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "authoredIdList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/authoredId" },
+      "uniqueItems": true
+    },
+    "compositionEvidence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "sourceIds", "observationIds"],
+          "properties": {
+            "type": { "const": "inferred" },
+            "sourceIds": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "observationIds": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "researchRelationIds": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/authoredId" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "rationale"],
+          "properties": {
+            "type": { "const": "proposal" },
+            "rationale": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        }
+      ]
+    },
+    "targetSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "required"],
+      "properties": {
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "required": { "type": "boolean" }
+      }
+    },
+    "frameReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "primaryAttention",
+        "subjectRelation",
+        "framingRelation",
+        "regionRelation",
+        "targetSlots",
+        "invariants",
+        "evidence"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^CF-[0-9]{2,}$" },
+        "label": { "$ref": "#/$defs/semanticId" },
+        "primaryAttention": { "$ref": "#/$defs/semanticId" },
+        "subjectRelation": { "$ref": "#/$defs/semanticId" },
+        "framingRelation": { "$ref": "#/$defs/semanticId" },
+        "regionRelation": { "$ref": "#/$defs/semanticId" },
+        "targetSlots": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+          "additionalProperties": { "$ref": "#/$defs/targetSlot" }
+        },
+        "invariants": { "$ref": "#/$defs/nonEmptyStringList" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/compositionEvidence" }
+        }
+      }
+    },
+    "sequenceEffects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preserve", "change", "release", "restore"],
+      "properties": {
+        "preserve": { "$ref": "#/$defs/semanticIdList" },
+        "change": { "$ref": "#/$defs/semanticIdList" },
+        "release": { "$ref": "#/$defs/semanticIdList" },
+        "restore": { "$ref": "#/$defs/semanticIdList" }
+      }
+    },
+    "sequenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "effects", "invariants", "evidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^CS-[0-9]{2,}$" },
+        "label": { "$ref": "#/$defs/semanticId" },
+        "effects": { "$ref": "#/$defs/sequenceEffects" },
+        "invariants": { "$ref": "#/$defs/nonEmptyStringList" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/compositionEvidence" }
+        }
+      }
+    },
+    "textRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/semanticId" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "textRoleCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["textRoles"],
+      "properties": {
+        "textRoles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/textRole" }
+        }
+      }
+    },
+    "textState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "role": { "$ref": "#/$defs/semanticId" },
+        "targetId": { "$ref": "#/$defs/authoredId" },
+        "status": { "enum": ["active", "released"] }
+      }
+    },
+    "targetBindings": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+      "additionalProperties": { "$ref": "#/$defs/authoredId" }
+    },
+    "frameSelectionInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "referenceId", "targetBindings", "textStateIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "referenceId": { "type": "string", "pattern": "^CF-[0-9]{2,}$" },
+        "targetBindings": { "$ref": "#/$defs/targetBindings" },
+        "textStateIds": { "$ref": "#/$defs/authoredIdList" }
+      }
+    },
+    "frameSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "referenceId", "targetBindings", "textStateIds", "unresolved"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "referenceId": { "type": "string", "pattern": "^CF-[0-9]{2,}$" },
+        "targetBindings": { "$ref": "#/$defs/targetBindings" },
+        "textStateIds": { "$ref": "#/$defs/authoredIdList" },
+        "unresolved": {
+          "type": "array",
+          "items": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "sequenceSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["referenceId", "stateBindings"],
+      "properties": {
+        "referenceId": { "type": "string", "pattern": "^CS-[0-9]{2,}$" },
+        "stateBindings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["preserve", "change", "release", "restore"],
+          "properties": {
+            "preserve": { "$ref": "#/$defs/authoredIdList" },
+            "change": { "$ref": "#/$defs/authoredIdList" },
+            "release": { "$ref": "#/$defs/authoredIdList" },
+            "restore": { "$ref": "#/$defs/authoredIdList" }
+          }
+        }
+      }
+    },
+    "sceneCompositionInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frameSelections", "textStates", "sequenceSelections"],
+      "properties": {
+        "frameSelections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/frameSelectionInput" }
+        },
+        "textStates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/textState" }
+        },
+        "sequenceSelections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sequenceSelection" }
+        }
+      }
+    },
+    "sceneComposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frameSelections", "textStates", "sequenceSelections"],
+      "properties": {
+        "frameSelections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/frameSelection" }
+        },
+        "textStates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/textState" }
+        },
+        "sequenceSelections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sequenceSelection" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+id: CF-05
+label: text-dominant-over-context
+primaryAttention: text
+subjectRelation: context-retained-behind-text
+framingRelation: may-hold-baseline
+regionRelation: text-dominant-over-existing-context
+targetSlots:
+  context:
+    description: Authored identity of the visual context retained while text gains priority.
+    required: true
+invariants:
+  - text role remains explicit
+  - existing subject relationship may remain intact
+  - text dominance does not imply a mandatory reframing
+evidence:
+  - type: inferred
+    sourceIds: [S02, N02, MV03]
+    observationIds: [O-S02-019, O-S02-025, O-N02-180, O-MV03-062]

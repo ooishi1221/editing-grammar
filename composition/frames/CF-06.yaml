@@ -1,0 +1,17 @@
+id: CF-06
+label: product-identity
+primaryAttention: product-identity
+subjectRelation: product-primary
+framingRelation: identity-readable
+regionRelation: single-primary-region
+targetSlots:
+  productIdentity:
+    description: Authored identity of the exact product or package that must remain identifiable.
+    required: true
+invariants:
+  - product or package identity remains distinguishable
+  - product identity is not replaced by a generic category illustration
+evidence:
+  - type: inferred
+    sourceIds: [C01, C03, C04]
+    observationIds: [O-C01-028, O-C03-028, O-C04-028]

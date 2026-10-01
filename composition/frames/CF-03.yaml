@@ -1,0 +1,20 @@
+id: CF-03
+label: contextual-detail-insert
+primaryAttention: detail-or-object
+subjectRelation: detail-corresponds-to-authored-context
+framingRelation: detail
+regionRelation: primary-insert
+targetSlots:
+  detailTarget:
+    description: Authored identity of the detail, object, or operation receiving attention.
+    required: true
+  sourceContext:
+    description: Authored identity of the source context to which the detail belongs.
+    required: true
+invariants:
+  - detail identity corresponds to the authored context
+  - the insert does not fabricate a relationship to a different subject or object
+evidence:
+  - type: inferred
+    sourceIds: [TV03, S03, X01]
+    observationIds: [O-TV03-010, O-S03-015, O-X01-022]

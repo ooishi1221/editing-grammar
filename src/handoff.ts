@@ -4,6 +4,7 @@ import type {
   PatternCategory,
   PatternEvidence,
 } from "../schema/pattern.js";
+import type { SceneCompositionHandoff } from "../schema/composition.js";
 
 export type HandoffStatus = "current-contract" | "historical-exception" | "semantic-only";
 
@@ -40,6 +41,7 @@ export interface ImplementationHandoff {
 
 export interface SceneImplementationHandoff {
   patterns: ImplementationHandoff[];
+  composition?: SceneCompositionHandoff;
   context: HandoffContext;
 }
 
@@ -269,6 +271,7 @@ export function buildSceneImplementationHandoff(
   patterns: readonly EditingPattern[],
   selections: readonly ImplementationHandoffSelection[],
   context: HandoffContext = {},
+  composition?: SceneCompositionHandoff,
 ): SceneImplementationHandoff {
   const patternsById = new Map(patterns.map((pattern) => [pattern.id, pattern]));
   return {
@@ -281,6 +284,7 @@ export function buildSceneImplementationHandoff(
         includeHistoricalMetadata: selection.includeHistoricalMetadata,
       });
     }),
+    ...(composition === undefined ? {} : { composition: copyValue(composition) }),
     context: copyValue(context),
   };
 }

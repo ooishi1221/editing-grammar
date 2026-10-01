@@ -1,0 +1,17 @@
+id: CF-01
+label: group-baseline
+primaryAttention: group-or-context
+subjectRelation: multiple-related-subjects
+framingRelation: context-preserving
+regionRelation: shared-or-coherent-frame
+targetSlots:
+  contextSubjects:
+    description: Authored identity representing the related subjects or contextual group.
+    required: true
+invariants:
+  - related subject identities remain explicit
+  - the shared context remains understandable
+evidence:
+  - type: inferred
+    sourceIds: [Y08, S09]
+    observationIds: [O-Y08-180, O-Y08-188, O-S09-016, O-S09-030]

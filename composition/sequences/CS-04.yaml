@@ -1,0 +1,15 @@
+id: CS-04
+label: hold-composition-update-state-only
+effects:
+  preserve: [subject-relation, main-regions, baseline-framing]
+  change: [text-state, expression-state]
+  release: [authored-temporary-state]
+  restore: []
+invariants:
+  - a change of text or expression does not itself require a composition change
+  - hold is an affirmative editorial choice, not missing coverage
+evidence:
+  - type: inferred
+    sourceIds: [TT01, TT06, MV01]
+    observationIds: [O-TT01-001, O-TT01-003, O-TT01-006, O-TT06-005, O-TT06-015, O-TT06-020, O-MV01-061, O-MV01-068]
+    researchRelationIds: [Q12]

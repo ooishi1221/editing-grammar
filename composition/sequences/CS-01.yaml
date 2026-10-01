@@ -1,0 +1,15 @@
+id: CS-01
+label: baseline-to-reaction-to-baseline
+effects:
+  preserve: [shared-context, participant-relationship]
+  change: [primary-attention]
+  release: [temporary-reaction-priority]
+  restore: [baseline-composition-relationship]
+invariants:
+  - selection is authored; the reference does not choose the reacting participant
+  - return to baseline is a relationship, not a required third shot
+evidence:
+  - type: inferred
+    sourceIds: [Y08, S09]
+    observationIds: [O-Y08-180, O-Y08-182, O-Y08-187, O-Y08-188, O-S09-016, O-S09-018, O-S09-019, O-S09-030]
+    researchRelationIds: [Q01]

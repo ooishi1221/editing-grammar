@@ -1,0 +1,15 @@
+id: CS-02
+label: explanation-to-supporting-visual-to-return
+effects:
+  preserve: [explanation-support-correspondence]
+  change: [primary-attention-to-supporting-visual]
+  release: [temporary-supporting-visual-priority]
+  restore: [explanation-context-relationship]
+invariants:
+  - supporting visual is authored and corresponds to the explanation
+  - this reference does not require a single frame reference for every scene
+evidence:
+  - type: inferred
+    sourceIds: [TV03, S03, S08]
+    observationIds: [O-TV03-001, O-TV03-010, O-TV03-035, O-S03-010, O-S03-015, O-S03-050, O-S08-005, O-S08-015, O-S08-040]
+    researchRelationIds: [Q03]

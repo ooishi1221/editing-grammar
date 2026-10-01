@@ -1,0 +1,15 @@
+id: CS-03
+label: persistent-question-to-reaction-or-result
+effects:
+  preserve: [persistent-context, question-answer-association]
+  change: [subject-priority, text-priority]
+  release: [question-state]
+  restore: []
+invariants:
+  - persistent context, question, and answer-result are separate text roles
+  - this reference does not determine correctness or choose the reacting subject
+evidence:
+  - type: inferred
+    sourceIds: [Y15, S01, S09]
+    observationIds: [O-Y15-180, O-Y15-181, O-Y15-182, O-S01-016, O-S01-017, O-S01-020, O-S09-016, O-S09-018, O-S09-019]
+    researchRelationIds: [Q04]

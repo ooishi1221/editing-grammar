@@ -1,0 +1,25 @@
+textRoles:
+  - id: persistent-context
+    label: Persistent context
+    description: Context that remains relevant while other scene states change.
+  - id: speech-caption
+    label: Speech caption
+    description: Caption content associated with authored speech.
+  - id: reaction-caption
+    label: Reaction caption
+    description: Text associated with an authored reaction state.
+  - id: question
+    label: Question
+    description: A question or prompt awaiting an authored answer or release.
+  - id: answer-result
+    label: Answer or result
+    description: An authored answer, result, or revealed outcome.
+  - id: source-proof
+    label: Source proof
+    description: Source or supporting evidence associated with a material.
+  - id: product-copy
+    label: Product copy
+    description: Text that clarifies a supplied product without replacing its identity.
+  - id: cta
+    label: Call to action
+    description: An authored action prompt kept distinct from product identity.

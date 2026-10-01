@@ -1,0 +1,20 @@
+id: CF-04
+label: material-with-secondary-person
+primaryAttention: material
+subjectRelation: primary-material-plus-secondary-person
+framingRelation: material-readable-with-secondary-presence
+regionRelation: primary-plus-secondary-region
+targetSlots:
+  primaryMaterial:
+    description: Authored identity of the primary material or source.
+    required: true
+  secondarySubject:
+    description: Authored identity of the secondary speaker or reaction subject.
+    required: true
+invariants:
+  - primary and secondary roles remain distinct
+  - secondary view does not obscure the material it contextualizes
+evidence:
+  - type: inferred
+    sourceIds: [Y10, S07, S06]
+    observationIds: [O-Y10-180, O-S07-001, O-S06-016]

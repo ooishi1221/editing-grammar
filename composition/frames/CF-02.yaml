@@ -1,0 +1,21 @@
+id: CF-02
+label: selected-person-reaction
+primaryAttention: selected-subject
+subjectRelation: single-selected-from-context
+framingRelation: closer-than-baseline
+regionRelation: single-primary-region
+targetSlots:
+  selectedSubject:
+    description: Authored identity of the subject receiving primary attention.
+    required: true
+  baselineContext:
+    description: Authored identity of the surrounding baseline context when a return relationship is needed.
+    required: false
+invariants:
+  - selected subject identity remains explicit
+  - unrelated participant is not substituted for the selected subject
+  - source context is available for a later return when authored
+evidence:
+  - type: inferred
+    sourceIds: [Y08, S09, N02]
+    observationIds: [O-Y08-182, O-Y08-187, O-S09-019, O-N02-045]

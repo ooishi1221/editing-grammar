@@ -10,6 +10,10 @@ import {
   historicalExceptionIds,
   semanticOnlyIds,
 } from "../src/handoff.js";
+import {
+  buildSceneCompositionHandoff,
+  loadCompositionCatalog,
+} from "../src/composition.js";
 import { loadPatterns } from "../src/load.js";
 
 const patternsDirectory = fileURLToPath(new URL("../patterns/", import.meta.url));
@@ -262,6 +266,36 @@ test("scene handoff preserves selection order, duplicates, and shared context", 
   assert.deepEqual(handoff.patterns.map((entry) => entry.pattern.id), ["VS-I02", "VS-A01", "VS-I02"]);
   assert.deepEqual(handoff.context, context);
   assert.deepEqual(handoff.patterns.map((entry) => entry.context), [context, context, context]);
+});
+
+test("scene handoff optionally carries a prebuilt composition without changing v0.1 behavior", async () => {
+  const patterns = await loadPatterns(patternsDirectory);
+  const context = { scene: { sceneId: "scene-1" } };
+  const withoutComposition = buildSceneImplementationHandoff(patterns, [
+    { patternId: "VS-I02", suppliedValues: { comparisonAxis: "price" } },
+  ], context);
+  assert.equal("composition" in withoutComposition, false);
+
+  const composition = buildSceneCompositionHandoff(await loadCompositionCatalog(), {
+    textStates: [{ id: "caption", role: "speech-caption", status: "active" }],
+    frameSelections: [{
+      id: "speaker-frame",
+      referenceId: "CF-02",
+      targetBindings: { selectedSubject: "speaker" },
+      textStateIds: ["caption"],
+    }],
+    sequenceSelections: [],
+  });
+  const withComposition = buildSceneImplementationHandoff(patterns, [
+    { patternId: "VS-I02", suppliedValues: { comparisonAxis: "price" } },
+  ], context, composition);
+
+  assert.deepEqual(withComposition.composition, composition);
+  assert.deepEqual(withComposition.context, context);
+  assert.deepEqual(withComposition.patterns, withoutComposition.patterns);
+  assert.notEqual(withComposition.composition, composition);
+  withComposition.composition!.frameSelections[0].targetBindings.selectedSubject = "changed";
+  assert.equal(composition.frameSelections[0].targetBindings.selectedSubject, "speaker");
 });
 
 test("scene handoff fails clearly for missing IDs and does not infer shared inputs", async () => {
