@@ -1,0 +1,155 @@
+fixture_version: "0.1"
+status: experimental
+contract_status: proposal
+scope: Composition reference candidates for a bounded fixture spike; not production Patterns or schema.
+frame_references:
+  - id: CF-01
+    label: group-baseline
+    editorial_job: 関連する複数人物または対象を、同じ文脈のbaselineとして見せる。
+    primary_attention: group-or-context
+    subject_relation: multiple-related-subjects
+    framing_relation: context-preserving
+    region_relation: shared-or-coherent-frame
+    text_roles:
+      - persistent-context may remain separate from speech captions
+    invariants:
+      - related subject identities remain explicit
+      - the shared context remains understandable
+    renderer_unresolved:
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [Y08, S09]
+      observation_ids: [O-Y08-180, O-Y08-188, O-S09-016, O-S09-030]
+
+  - id: CF-02
+    label: selected-person-reaction
+    editorial_job: 共同状況から、意味上重要な人物の発話または反応へ注意を移す。
+    primary_attention: selected-subject
+    subject_relation: single-selected-from-context
+    framing_relation: closer-than-baseline
+    region_relation: single-primary-region
+    text_roles:
+      - speech-caption may remain associated with selected subject
+      - reaction-caption may temporarily become primary
+    invariants:
+      - selected subject identity remains explicit
+      - unrelated participant is not substituted for the selected subject
+      - source context is available for a later return when authored
+    renderer_unresolved:
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - animation
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [Y08, S09, N02]
+      observation_ids: [O-Y08-182, O-Y08-187, O-S09-019, O-N02-045]
+
+  - id: CF-03
+    label: contextual-detail-insert
+    editorial_job: 人物または状況の文脈から、重要な物・操作・細部へ一時的に注意を移す。
+    primary_attention: detail-or-object
+    subject_relation: detail-corresponds-to-authored-context
+    framing_relation: detail
+    region_relation: primary-insert
+    text_roles:
+      - source-proof or explanatory label may remain associated with the detail
+    invariants:
+      - detail identity corresponds to the authored context
+      - the insert does not fabricate a relationship to a different subject or object
+    renderer_unresolved:
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - transition method
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [TV03, S03, X01]
+      observation_ids: [O-TV03-010, O-S03-015, O-X01-022]
+
+  - id: CF-04
+    label: material-with-secondary-person
+    editorial_job: 資料または対象を主役にしつつ、話者・反応をsecondaryとして維持する。
+    primary_attention: material
+    subject_relation: primary-material-plus-secondary-person
+    framing_relation: material-readable-with-secondary-presence
+    region_relation: primary-plus-secondary-region
+    text_roles:
+      - explanatory text may belong to the material
+      - speech-caption may remain associated with the secondary person
+    invariants:
+      - primary and secondary roles remain distinct
+      - secondary view does not obscure the material it contextualizes
+    renderer_unresolved:
+      - region geometry
+      - exact crop
+      - exact coordinate placement
+      - mask shape
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [Y10, S07, S06]
+      observation_ids: [O-Y10-180, O-S07-001, O-S06-016]
+
+  - id: CF-05
+    label: text-dominant-over-context
+    editorial_job: 人物または背景の文脈を完全には捨てず、一時的に文字を主役へ上げる。
+    primary_attention: text
+    subject_relation: context-retained-behind-text
+    framing_relation: may-hold-baseline
+    region_relation: text-dominant-over-existing-context
+    text_roles:
+      - reaction-caption
+      - speech-caption
+      - important-number
+      - editorial-comment
+    invariants:
+      - text role remains explicit
+      - existing subject relationship may remain intact
+      - text dominance does not imply a mandatory reframing
+    renderer_unresolved:
+      - font
+      - text treatment
+      - exact text occupancy
+      - exact coordinate placement
+      - animation
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [S02, N02, MV03]
+      observation_ids: [O-S02-019, O-S02-025, O-N02-180, O-MV03-062]
+
+  - id: CF-06
+    label: product-identity
+    editorial_job: 商品またはpackageそのものを、識別可能な主役として成立させる。
+    primary_attention: product-identity
+    subject_relation: product-primary
+    framing_relation: identity-readable
+    region_relation: single-primary-region
+    text_roles:
+      - product-copy may clarify identity without replacing the product
+      - brand label may remain distinct from a call to action
+    invariants:
+      - product or package identity remains distinguishable
+      - product identity is not replaced by a generic category illustration
+    renderer_unresolved:
+      - product asset
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [C01, C03, C04]
+      observation_ids: [O-C01-028, O-C03-028, O-C04-028]

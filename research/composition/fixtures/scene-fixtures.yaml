@@ -1,0 +1,140 @@
+fixture_version: "0.1"
+status: experimental
+scope: Synthetic scenes for evaluating proposed composition references. They are not recommendations, renderer plans, or catalog data.
+scene_fixtures:
+  - scene_id: SF-01
+    genre: dialogue-reaction
+    aspect_context: landscape conversation with two known participants
+    selected_pattern_ids: [VS-L01, VS-R02]
+    frame_reference_ids: [CF-01, CF-02]
+    sequence_reference_ids: [CS-01]
+    authored_targets:
+      participants: [host, guest]
+      selected_reaction_subject: guest
+      baseline_relationship: host-and-guest-in-conversation
+    text_layers:
+      - role: speech-caption
+        state: associated-with-current-speaker
+      - role: reaction-caption
+        state: temporary-for-guest-reaction
+    external_context:
+      platform_profile: supplied outside this fixture
+      brand_treatment: supplied outside this fixture
+    expected_portable_result: A selected guest reaction can gain priority and return to the two-person relationship without the reference choosing a crop or a font.
+    must_not_infer:
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - exact font
+      - exact duration
+      - missing participant identity
+
+  - scene_id: SF-02
+    genre: explainer
+    aspect_context: speaker-led explanation with a related source visual
+    selected_pattern_ids: [VS-L05, VS-L03]
+    frame_reference_ids: [CF-03, CF-04]
+    sequence_reference_ids: [CS-02]
+    authored_targets:
+      speaker: presenter
+      supporting_visual: product-detail-or-source-material
+      correspondence: visual-supports-presenter-claim
+    text_layers:
+      - role: speech-caption
+        state: associated-with-presenter
+      - role: source-proof
+        state: associated-with-supporting-visual-when-needed
+    external_context:
+      source_asset: supplied outside this fixture
+      source_rights: supplied outside this fixture
+    expected_portable_result: Attention can move to an authored supporting visual and return to the explanation without declaring a required cut or one fixed layout.
+    must_not_infer:
+      - exact transition
+      - exact region geometry
+      - exact crop
+      - exact font
+      - exact duration
+      - missing source asset
+
+  - scene_id: SF-03
+    genre: quiz-game
+    aspect_context: vertical quiz with a persistent program label and a question panel
+    selected_pattern_ids: [VS-G04, VS-G05, VS-R02]
+    frame_reference_ids: [CF-01, CF-02, CF-05]
+    sequence_reference_ids: [CS-03]
+    authored_targets:
+      question_id: q-01
+      result_state: supplied-by-game-logic
+      selected_reaction_subject: participant-a
+    text_layers:
+      - role: persistent-context
+        state: remains-while-question-is-active
+      - role: question
+        state: releases-at-authored-answer-point
+      - role: answer/result
+        state: gains-priority-at-authored-reveal
+    external_context:
+      safe_area_profile: supplied outside this fixture
+      game_state: supplied outside this fixture
+    expected_portable_result: Persistent context, the question, and the answer-result remain separate roles while the selected subject or text gains priority.
+    must_not_infer:
+      - exact text placement
+      - exact font
+      - exact transition
+      - exact duration
+      - answer correctness
+      - platform safe-area pixels
+
+  - scene_id: SF-04
+    genre: static-short-form
+    aspect_context: vertical talking head with a stable single-person baseline
+    selected_pattern_ids: [VS-S02, VS-T01]
+    frame_reference_ids: [CF-02, CF-05]
+    sequence_reference_ids: [CS-04]
+    authored_targets:
+      speaker: creator
+      utterance_sequence: supplied-by-transcript-process
+      expression_state: authored-observation
+    text_layers:
+      - role: speech-caption
+        state: updates-with-utterance
+      - role: reaction-caption
+        state: optional-temporary-priority
+    external_context:
+      transcript: supplied outside this fixture
+      platform_profile: supplied outside this fixture
+    expected_portable_result: Text and expression can change while the composition remains held; variation is not required merely because a new utterance begins.
+    must_not_infer:
+      - exact caption segmentation
+      - exact font
+      - exact coordinate placement
+      - exact duration
+      - automatic reframing
+      - platform safe-area pixels
+
+  - scene_id: SF-05
+    genre: product-demonstration
+    aspect_context: product-use context followed by an authored product identity state
+    selected_pattern_ids: [VS-L05]
+    frame_reference_ids: [CF-03, CF-06]
+    sequence_reference_ids: []
+    authored_targets:
+      product_asset: supplied-product-package
+      product_identity: supplied-product-and-package-identity
+      use_context: authored-demonstration-context
+    text_layers:
+      - role: product-copy
+        state: may-clarify-identity-without-replacing-product
+      - role: cta
+        state: separate-if-authored
+    external_context:
+      product_asset: supplied outside this fixture
+      brand_system: supplied outside this fixture
+    expected_portable_result: CF-06 makes the product identity requirement explicit, but the fixture leaves open whether that responsibility ultimately needs an independent Pattern.
+    must_not_infer:
+      - missing product asset
+      - exact crop
+      - exact scale
+      - exact coordinate placement
+      - exact font
+      - exact duration

@@ -1,0 +1,141 @@
+fixture_version: "0.1"
+status: experimental
+contract_status: proposal
+scope: Meaning relationships between composition states; not a timeline, shot list, or rendering instruction.
+sequence_references:
+  - id: CS-01
+    label: baseline-to-reaction-to-baseline
+    research_relation: Q01
+    meaning_transition: 共同状況 → 注目話者または反応 → 共同状況
+    start_state: CF-01
+    change_state: CF-02
+    end_state: CF-01
+    preserve:
+      - shared context and participant relationship remain available
+    change:
+      - primary attention moves to the selected subject
+    release:
+      - temporary reaction priority when the authored beat resolves
+    restore: baseline composition relationship
+    mandatory_cut: false
+    applicability:
+      - dialogue
+      - panel talk
+      - quiz reaction
+    invariants:
+      - selection is authored; the reference does not choose the reacting participant
+      - return to baseline is a relationship, not a required third shot
+    renderer_unresolved:
+      - exact shot count
+      - exact transition
+      - exact duration
+      - exact crop
+      - font
+    evidence:
+      evidence_type: inferred
+      source_ids: [Y08, S09]
+      observation_ids: [O-Y08-180, O-Y08-182, O-Y08-187, O-Y08-188, O-S09-016, O-S09-018, O-S09-019, O-S09-030]
+
+  - id: CS-02
+    label: explanation-to-supporting-visual-to-return
+    research_relation: Q03
+    meaning_transition: 説明する人物または文脈 → 対象・資料・商品・細部 → 説明文脈
+    start_state: explanation-context
+    change_state:
+      frame_reference_options: [CF-03, CF-04]
+      primary_attention: supporting-visual
+    end_state: explanation-context
+    preserve:
+      - explanation subject and supporting visual correspondence
+    change:
+      - primary attention moves to the authored visual support
+    release:
+      - temporary visual-support priority after its explanatory job completes
+    restore: explanation context relationship
+    mandatory_cut: false
+    applicability:
+      - explainer
+      - product demonstration
+      - news context
+    invariants:
+      - supporting visual is authored and corresponds to the explanation
+      - this reference does not require a single frame reference for every scene
+    renderer_unresolved:
+      - exact shot count
+      - exact transition
+      - exact duration
+      - region geometry
+      - font
+    evidence:
+      evidence_type: inferred
+      source_ids: [TV03, S03, S08]
+      observation_ids: [O-TV03-001, O-TV03-010, O-TV03-035, O-S03-010, O-S03-015, O-S03-050, O-S08-005, O-S08-015, O-S08-040]
+
+  - id: CS-03
+    label: persistent-question-to-reaction-or-result
+    research_relation: Q04
+    meaning_transition: 問いまたは持続文脈 → 回答・結果または反応による主従変更 → 次状態
+    start_state: question-or-persistent-context
+    change_state: answer-result-or-reaction-priority
+    end_state: next-state-after-question
+    preserve:
+      - persistent-context such as a program label may remain visible
+      - question identity remains associated with its answer or result until release
+    change:
+      - subject and text priority may move to answer, result, or reaction
+    release:
+      - question panel when the authored answer state makes it no longer needed
+    restore: optional; a baseline return is not implied
+    mandatory_cut: false
+    applicability:
+      - quiz
+      - game
+      - interactive short-form
+    invariants:
+      - persistent context, question, and answer-result are separate text roles
+      - this reference does not determine correctness or choose the reacting subject
+    renderer_unresolved:
+      - exact transition
+      - exact duration
+      - exact text placement
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [Y15, S01, S09]
+      observation_ids: [O-Y15-180, O-Y15-181, O-Y15-182, O-S01-016, O-S01-017, O-S01-020, O-S09-016, O-S09-018, O-S09-019]
+
+  - id: CS-04
+    label: hold-composition-update-state-only
+    research_relation: Q12
+    meaning_transition: 同じ文脈の継続
+    start_state: stable-composition
+    change_state: hold-composition-update-text-or-expression
+    end_state: stable-composition-or-authored-next-state
+    preserve:
+      - subject relation
+      - main regions
+      - baseline framing
+    change:
+      - text content or text priority
+      - expression or small reaction state
+    release:
+      - optional; only an authored text or reaction state may retire
+    restore: composition remains held unless another authored relation applies
+    mandatory_cut: false
+    applicability:
+      - static short-form
+      - talking head
+      - held reaction
+    invariants:
+      - a change of text or expression does not itself require a composition change
+      - hold is an affirmative editorial choice, not missing coverage
+    renderer_unresolved:
+      - exact duration
+      - exact text treatment
+      - font
+      - safe-area geometry
+    evidence:
+      evidence_type: inferred
+      source_ids: [TT01, TT06, MV01]
+      observation_ids: [O-TT01-001, O-TT01-003, O-TT01-006, O-TT06-005, O-TT06-015, O-TT06-020, O-MV01-061, O-MV01-068]
