@@ -1,0 +1,72 @@
+selectedComposition:
+  frameSelections:
+    - id: held-reaction
+      referenceId: CF-02
+      targetBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      textStateIds:
+        - caption-current
+        - caption-previous
+  textStates:
+    - id: caption-current
+      role: speech-caption
+      targetId: guest
+      status: active
+    - id: caption-previous
+      role: speech-caption
+      targetId: guest
+      status: released
+  sequenceSelections:
+    - referenceId: CS-04
+      stateBindings:
+        preserve:
+          - held-reaction
+        change:
+          - caption-current
+        release:
+          - caption-previous
+        restore: []
+executionReport:
+  canvas:
+    width: 1080
+    height: 1920
+  platformSafeArea:
+    left: 60
+    top: 120
+    right: 60
+    bottom: 240
+  regions:
+    - id: guest-face
+      role: protected-target
+      bounds:
+        x: 360
+        y: 980
+        width: 300
+        height: 300
+    - id: caption-main
+      role: caption
+      safeAreaRequired: true
+      bounds:
+        x: 350
+        y: 1100
+        width: 380
+        height: 120
+  compositionStates:
+    - stateId: before
+      frameRef: CF-02
+      subjectBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      regionBindings:
+        primarySubject: guest-face
+    - stateId: after
+      frameRef: CF-02
+      subjectBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      regionBindings:
+        primarySubject: guest-face
+  holdComparison:
+    beforeStateId: before
+    afterStateId: after
