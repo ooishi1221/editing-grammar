@@ -1,6 +1,16 @@
 import type { PatternCategory } from "../schema/pattern.js";
+import type { SceneCompositionInput } from "../schema/composition.js";
+import type {
+  EvaluationContext,
+  SceneEvaluationExpectations,
+  SceneExecutionReport,
+} from "../schema/evaluator.schema.js";
+import { readFile } from "node:fs/promises";
+import { extname } from "node:path";
+import { parseDocument } from "yaml";
 import { buildCandidateComparisons } from "./compare.js";
-import { loadCompositionCatalog } from "./composition.js";
+import { buildSceneCompositionHandoff, loadCompositionCatalog } from "./composition.js";
+import { evaluateScene, EvaluatorInputError } from "./evaluator.js";
 import { buildImplementationHandoff, type HandoffContext } from "./handoff.js";
 import { loadPatternDocuments, loadPatterns } from "./load.js";
 import { searchPatterns, searchPatternsV2 } from "./search.js";
@@ -19,6 +29,7 @@ function usage(): string {
     "  editing-grammar compare <query> [--category <category>] [--limit <n>]",
     "  editing-grammar handoff <ID> [--values <json-object>] [--context <json-object>] [--include-historical]",
     "  editing-grammar show <ID>",
+    "  editing-grammar evaluate <input-file>",
   ].join("\n");
 }
 
@@ -217,6 +228,106 @@ async function handoff(args: string[]): Promise<number> {
   return 0;
 }
 
+interface EvaluationInputDocument {
+  selectedComposition: SceneCompositionInput;
+  expectations: SceneEvaluationExpectations;
+  context: EvaluationContext;
+  executionReport: SceneExecutionReport;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+async function readEvaluationInput(filePath: string): Promise<unknown> {
+  const extension = extname(filePath).toLowerCase();
+  if (extension !== ".json" && extension !== ".yaml" && extension !== ".yml") {
+    throw new Error("Unsupported evaluation input extension: " + (extension || "<none>") + ". Use .json, .yaml, or .yml.");
+  }
+
+  let source: string;
+  try {
+    source = await readFile(filePath, "utf8");
+  } catch (error) {
+    throw new Error("Invalid evaluation input file: " + (error instanceof Error ? error.message : String(error)));
+  }
+
+  if (extension === ".json") {
+    try {
+      return JSON.parse(source) as unknown;
+    } catch {
+      throw new Error("Invalid evaluation input file: invalid JSON.");
+    }
+  }
+
+  const document = parseDocument(source, { prettyErrors: true, uniqueKeys: true });
+  if (document.errors.length > 0) {
+    throw new Error("Invalid evaluation input file: " + document.errors.map((error) => error.message).join("; "));
+  }
+  return document.toJS();
+}
+
+function parseEvaluationInput(value: unknown): EvaluationInputDocument {
+  if (!isRecord(value)) throw new Error("Invalid evaluation input file: expected an object.");
+  const requiredKeys = ["selectedComposition", "expectations", "context", "executionReport"];
+  for (const key of requiredKeys) {
+    if (!(key in value)) throw new Error("Invalid evaluation input file: missing " + key + ".");
+  }
+  for (const key of Object.keys(value)) {
+    if (!requiredKeys.includes(key)) throw new Error("Invalid evaluation input file: unknown field " + key + ".");
+  }
+  if (!isRecord(value.selectedComposition)) throw new Error("Invalid selected composition: expected an object.");
+  if (!isRecord(value.expectations)) throw new Error("Invalid evaluation expectations: expected an object.");
+  if (!isRecord(value.context)) throw new Error("Invalid evaluation context: expected an object.");
+  if (!isRecord(value.executionReport)) throw new Error("Invalid execution report: expected an object.");
+
+  return value as unknown as EvaluationInputDocument;
+}
+
+function evaluationErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+async function evaluate(args: string[]): Promise<number> {
+  if (args.length !== 1) {
+    console.error("evaluate requires exactly one input file.");
+    return 2;
+  }
+
+  let input: EvaluationInputDocument;
+  try {
+    input = parseEvaluationInput(await readEvaluationInput(args[0]));
+  } catch (error) {
+    console.error(evaluationErrorMessage(error));
+    return 2;
+  }
+
+  const compositionCatalog = await loadCompositionCatalog();
+  let selectedComposition;
+  try {
+    selectedComposition = buildSceneCompositionHandoff(compositionCatalog, input.selectedComposition);
+  } catch (error) {
+    console.error("Invalid selected composition: " + evaluationErrorMessage(error));
+    return 2;
+  }
+
+  try {
+    const result = evaluateScene({
+      compositionCatalog,
+      selectedComposition,
+      expectations: input.expectations,
+      context: input.context,
+      executionReport: input.executionReport,
+    });
+    console.log(JSON.stringify(result, null, 2));
+    return result.hasFailures ? 1 : 0;
+  } catch (error) {
+    const prefix = error instanceof EvaluatorInputError ? "Evaluator input error: " : "Invalid evaluation input: ";
+    console.error(prefix + evaluationErrorMessage(error));
+    return 2;
+  }
+}
+
 async function run(): Promise<number> {
   const [command, ...args] = process.argv.slice(2);
   if (command === "validate") return validate(parseValidateArguments(args).compositionDirectory);
@@ -224,6 +335,7 @@ async function run(): Promise<number> {
   if (command === "compare") return compare(args);
   if (command === "show") return show(args);
   if (command === "handoff") return handoff(args);
+  if (command === "evaluate") return evaluate(args);
   console.error(usage());
   return 1;
 }

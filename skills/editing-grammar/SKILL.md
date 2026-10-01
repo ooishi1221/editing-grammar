@@ -202,6 +202,39 @@ Platform safe area is external platform context. Brand typography, assets, and
 concrete execution remain renderer/Harness responsibilities. Editing Grammar is
 not a renderer or timeline editor.
 
+### 12. Optionally evaluate execution after rendering metadata exists
+
+The optional Evaluator runs after a renderer or Video Harness has emitted
+normalized execution metadata. It does not choose the edit or judge whether it
+looks good; it checks explicit authored constraints against execution facts.
+
+Use it when the renderer or Harness can emit region bounds, safe-area
+compliance matters, named protected-region constraints exist, or a selected
+CS-04 HOLD must be preserved. Omit it when no execution metadata or evaluation
+expectations were authored. Do not substitute raw-video inference for missing
+metadata.
+
+Author expectations explicitly. For example, `caption-main` may be required to
+avoid `guest-face`; this does not mean every caption automatically avoids every
+face. The project or Agent owns that obligation before evaluation.
+
+The renderer/Harness reports facts such as canvas dimensions, region bounds,
+authored IDs, composition states, and state lineage. It must not put policy
+fields such as `protected-target` or `safeAreaRequired` in its execution
+report. Evaluation Context supplies named safe-area insets.
+
+Run the process boundary with one JSON, YAML, or YML document containing
+`selectedComposition`, `expectations`, `context`, and `executionReport`:
+
+```sh
+npm run evaluate -- scene-evaluation.yaml
+```
+
+The command writes only `SceneEvaluationResult` JSON to stdout. Exit `0` means
+evaluation completed with no failures, `1` means one or more checks failed,
+and `2` means input, validation, or cross-reference error. PASS and SKIPPED
+may coexist with exit `0`.
+
 ## Provenance
 
 - `observed`: directly supported by the source.
@@ -260,5 +293,9 @@ Do not:
 - treat text position as text role;
 - treat Sequence References as mandatory cuts;
 - treat Pattern array order as timeline order;
+- use the Evaluator to choose Patterns, score aesthetic quality, or infer what
+  a renderer did not report;
+- put protected-target or safeAreaRequired policy into an Execution Report;
+- turn malformed evaluation input into SKIPPED;
 - resolve renderer geometry; or
 - invent assets.

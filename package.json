@@ -11,7 +11,8 @@
     "search": "tsx src/cli.ts search",
     "compare": "tsx src/cli.ts compare",
     "handoff": "tsx src/cli.ts handoff",
-    "show": "tsx src/cli.ts show"
+    "show": "tsx src/cli.ts show",
+    "evaluate": "tsx src/cli.ts evaluate"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
