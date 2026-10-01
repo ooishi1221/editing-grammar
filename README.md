@@ -148,12 +148,16 @@ Editing Grammar returns structural grammar plus declared inputs. A Remotion, FFm
 
 ## Current state
 
-**Release: v0.1.0**
+**Release: v0.2.0**
 
-v0.1.0 is the first public contract release of Editing Grammar. Current v0.2
-development adds Composition Grammar, Agent Composition workflow, VS-I15
-Product Identity, and Pattern-owned retrievalTerms. Renderer adapters and npm
-publishing remain out of scope.
+The current public contract contains 93 Patterns: 82 current-contract, 3
+historical-exception, and 8 semantic-only. It also includes 6 Frame References,
+4 Sequence References, and 8 Text Roles for optional Composition Grammar.
+
+v0.1.0 remains the original 92-Pattern source-audited baseline. v0.2.0 adds
+Composition Grammar, Agent Composition workflow, VS-I15 Product Identity, and
+Pattern-owned retrievalTerms. Renderer adapters and npm publishing remain out
+of scope.
 
 ## License
 

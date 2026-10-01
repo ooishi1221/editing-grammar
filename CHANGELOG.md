@@ -2,13 +2,35 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-01
+
 ### Added
 
-- Production Composition Grammar.
-- Agent Composition workflow.
+- Production Composition Grammar with 6 Frame References, 4 Sequence
+  References, and 8 Text Roles.
+- Optional scene-level Composition Handoff with explicit authored target
+  bindings and unresolved required target handling.
+- Agent Composition workflow and CS-04 HOLD semantics for intentional
+  composition stability.
 - VS-I15 商品同定・パックショット.
 - Pattern-level `retrievalTerms` for deterministic Search v2 lexical access.
+- Executable Composition builder example.
 - Composition catalog validation through `npm run validate`.
+
+### Improved
+
+- Search v2 lexical access.
+- Frozen holdout Recall@5 from 16/20 to 20/20.
+- 「数字を大きく」 now retrieves VS-I05 through explicit Pattern-owned
+  `retrievalTerms`.
+
+### Compatibility
+
+- Existing v0.1 Pattern workflows remain valid.
+- Composition is optional.
+- SceneImplementationHandoff composition is an additive field.
+- `retrievalTerms` is optional.
+- No intentional breaking changes.
 
 ## [0.1.0] - 2026-10-01
 
