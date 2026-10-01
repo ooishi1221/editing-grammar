@@ -73,6 +73,8 @@ export interface CompositionFrameSelection extends CompositionFrameSelectionInpu
 }
 
 export interface CompositionSequenceSelectionInput {
+  /** Optional stable authored instance ID for callers that need to address this selection. */
+  id?: AuthoredCompositionId;
   referenceId: string;
   stateBindings: {
     preserve: AuthoredCompositionId[];

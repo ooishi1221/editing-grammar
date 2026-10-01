@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ooishi1221/editing-grammar/schema/shot-plan.schema.json",
+  "title": "Editing Grammar Shot Planning Contract",
+  "$defs": {
+    "authoredId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authoredIdList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/authoredId" }
+    },
+    "sourceRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["startMs", "endMs"],
+      "properties": {
+        "startMs": { "type": "number", "minimum": 0 },
+        "endMs": { "type": "number" }
+      }
+    },
+    "semanticBeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "meaning"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "meaning": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceRange": { "$ref": "#/$defs/sourceRange" }
+      }
+    },
+    "semanticScene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sceneId", "beats"],
+      "properties": {
+        "sceneId": { "$ref": "#/$defs/authoredId" },
+        "beats": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/semanticBeat" }
+        }
+      }
+    },
+    "shotDecision": {
+      "enum": ["establish", "switch", "insert", "return", "hold"]
+    },
+    "shotPlanStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "beatId", "decision", "rationale"],
+      "properties": {
+        "id": { "$ref": "#/$defs/authoredId" },
+        "beatId": { "$ref": "#/$defs/authoredId" },
+        "decision": { "$ref": "#/$defs/shotDecision" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "patternIds": { "$ref": "#/$defs/authoredIdList" },
+        "frameSelectionId": { "$ref": "#/$defs/authoredId" },
+        "sequenceSelectionId": { "$ref": "#/$defs/authoredId" },
+        "returnToStepId": { "$ref": "#/$defs/authoredId" }
+      }
+    },
+    "shotPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planId", "sceneId", "steps"],
+      "properties": {
+        "planId": { "$ref": "#/$defs/authoredId" },
+        "sceneId": { "$ref": "#/$defs/authoredId" },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/shotPlanStep" }
+        }
+      }
+    }
+  }
+}

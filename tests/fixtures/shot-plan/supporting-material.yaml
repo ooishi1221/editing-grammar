@@ -1,0 +1,53 @@
+scene:
+  sceneId: supporting-material-demo
+  beats:
+    - id: beat-01
+      meaning: speaker introduces an explanation
+    - id: beat-02
+      meaning: authored supporting material becomes useful evidence
+    - id: beat-03
+      meaning: explanation returns to speaker context
+selectedComposition:
+  frameSelections:
+    - id: speaker-context
+      referenceId: CF-02
+      targetBindings:
+        selectedSubject: presenter
+      textStateIds: []
+    - id: material-support
+      referenceId: CF-04
+      targetBindings:
+        primaryMaterial: chart-01
+        secondarySubject: presenter
+      textStateIds: []
+  textStates: []
+  sequenceSelections:
+    - id: support-cycle
+      referenceId: CS-02
+      stateBindings:
+        preserve: [speaker-context]
+        change: [material-support]
+        release: []
+        restore: [speaker-context]
+plan:
+  planId: supporting-material-demo-plan
+  sceneId: supporting-material-demo
+  steps:
+    - id: step-01
+      beatId: beat-01
+      decision: establish
+      frameSelectionId: speaker-context
+      rationale: Establish the authored speaker as explanation context.
+    - id: step-02
+      beatId: beat-02
+      decision: insert
+      patternIds: [VS-L03]
+      frameSelectionId: material-support
+      sequenceSelectionId: support-cycle
+      rationale: Authored material becomes primary while the speaker remains secondary.
+    - id: step-03
+      beatId: beat-03
+      decision: return
+      sequenceSelectionId: support-cycle
+      returnToStepId: step-01
+      rationale: Temporary supporting material ends when explanation returns to speaker context.

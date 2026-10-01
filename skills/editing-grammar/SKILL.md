@@ -189,7 +189,33 @@ Text role is not text position. Do not infer persistent, speech, or reaction
 role from top, bottom, center, left, or right. Text state can persist, release,
 or become active independently of other text states.
 
-### 11. Pass both handoffs downstream
+### 11. Build an optional Shot Plan for multi-beat scenes
+
+Use Shot Planning after Composition when a scene has multiple authored semantic
+beats and the Agent must state where a visual state establishes, switches,
+inserts temporary support, returns, or intentionally HOLDS. Do not require it
+for a single stable scene.
+
+The Agent authors one decision for each semantic beat:
+
+- `establish` starts the first visual state;
+- `switch` starts a different selected Frame state because meaning changes;
+- `insert` makes an authored supporting state temporarily primary;
+- `return` restores an earlier plan state;
+- `hold` keeps the current state and must reference a selected CS-04 instance.
+
+Use actual scene `frameSelectionId` values, not bare CF IDs. When a step names
+a Sequence, use an explicit authored `sequenceSelectionId` from the Scene
+Composition Handoff. Existing Sequence selections may omit IDs for ordinary
+Composition use, but a Shot Plan cannot address an unnamed instance.
+
+Never switch merely for variety. Every `switch`, `insert`, and `return` needs
+a rationale tied to attention, reveal, reaction, support, or another semantic
+change. When meaning remains visually stable, use HOLD with selected CS-04.
+The plan is anchored by authored beat IDs; it does not invent timestamps,
+durations, cuts, transitions, geometry, or renderer settings.
+
+### 12. Pass handoffs downstream
 
 Pass selected Pattern Handoff(s), optional Scene Composition Handoff, and
 external context to Video Harness or a renderer adapter. Composition may state
@@ -202,7 +228,7 @@ Platform safe area is external platform context. Brand typography, assets, and
 concrete execution remain renderer/Harness responsibilities. Editing Grammar is
 not a renderer or timeline editor.
 
-### 12. Optionally evaluate execution after rendering metadata exists
+### 13. Optionally evaluate execution after rendering metadata exists
 
 The optional Evaluator runs after a renderer or Video Harness has emitted
 normalized execution metadata. It does not choose the edit or judge whether it

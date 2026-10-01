@@ -1,0 +1,87 @@
+scene:
+  sceneId: reaction-demo
+  beats:
+    - id: beat-01
+      meaning: establish two-person context
+      sourceRange:
+        startMs: 0
+        endMs: 2100
+    - id: beat-02
+      meaning: guest delivers a punchline and reaction becomes primary
+      sourceRange:
+        startMs: 2100
+        endMs: 3400
+    - id: beat-03
+      meaning: return to the shared conversation
+      sourceRange:
+        startMs: 3400
+        endMs: 5000
+    - id: beat-04
+      meaning: conversation continues without a new attention relationship
+      sourceRange:
+        startMs: 5000
+        endMs: 6500
+selectedComposition:
+  frameSelections:
+    - id: baseline
+      referenceId: CF-01
+      targetBindings:
+        contextSubjects: host-and-guest
+      textStateIds: []
+    - id: guest-reaction
+      referenceId: CF-02
+      targetBindings:
+        selectedSubject: guest
+        baselineContext: host-and-guest
+      textStateIds: []
+  textStates:
+    - id: caption-current
+      role: speech-caption
+      targetId: host-and-guest
+      status: active
+    - id: caption-previous
+      role: speech-caption
+      targetId: host-and-guest
+      status: released
+  sequenceSelections:
+    - id: reaction-cycle
+      referenceId: CS-01
+      stateBindings:
+        preserve: [baseline]
+        change: [guest-reaction]
+        release: []
+        restore: [baseline]
+    - id: conversation-hold
+      referenceId: CS-04
+      stateBindings:
+        preserve: [baseline]
+        change: [caption-current]
+        release: [caption-previous]
+        restore: []
+plan:
+  planId: reaction-demo-plan
+  sceneId: reaction-demo
+  steps:
+    - id: step-01
+      beatId: beat-01
+      decision: establish
+      frameSelectionId: baseline
+      rationale: Keep the two related participants readable as a shared baseline.
+    - id: step-02
+      beatId: beat-02
+      decision: switch
+      patternIds: [VS-R02]
+      frameSelectionId: guest-reaction
+      sequenceSelectionId: reaction-cycle
+      rationale: The punchline changes primary attention to the guest reaction.
+    - id: step-03
+      beatId: beat-03
+      decision: return
+      sequenceSelectionId: reaction-cycle
+      returnToStepId: step-01
+      rationale: The temporary reaction emphasis ends when shared conversation resumes.
+    - id: step-04
+      beatId: beat-04
+      decision: hold
+      sequenceSelectionId: conversation-hold
+      rationale: The ongoing conversation adds no new attention relationship.

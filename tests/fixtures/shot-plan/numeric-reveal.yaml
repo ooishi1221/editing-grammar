@@ -1,0 +1,67 @@
+scene:
+  sceneId: numeric-reveal-demo
+  beats:
+    - id: beat-01
+      meaning: speaker establishes explanatory context
+    - id: beat-02
+      meaning: important number becomes primary information
+    - id: beat-03
+      meaning: speaker continues while numeric state remains useful
+    - id: beat-04
+      meaning: copy updates while the attention relationship remains stable
+selectedComposition:
+  frameSelections:
+    - id: speaker-context
+      referenceId: CF-02
+      targetBindings:
+        selectedSubject: presenter
+      textStateIds: []
+    - id: numeric-priority
+      referenceId: CF-05
+      targetBindings:
+        context: presenter
+      textStateIds:
+        - numeric-copy-current
+        - numeric-copy-previous
+  textStates:
+    - id: numeric-copy-current
+      role: speech-caption
+      targetId: numeric-result
+      status: active
+    - id: numeric-copy-previous
+      role: speech-caption
+      targetId: numeric-result
+      status: released
+  sequenceSelections:
+    - id: numeric-hold
+      referenceId: CS-04
+      stateBindings:
+        preserve: [numeric-priority]
+        change: [numeric-copy-current]
+        release: [numeric-copy-previous]
+        restore: []
+plan:
+  planId: numeric-reveal-demo-plan
+  sceneId: numeric-reveal-demo
+  steps:
+    - id: step-01
+      beatId: beat-01
+      decision: establish
+      frameSelectionId: speaker-context
+      rationale: Establish the presenter as the explanatory context.
+    - id: step-02
+      beatId: beat-02
+      decision: switch
+      patternIds: [VS-I05]
+      frameSelectionId: numeric-priority
+      rationale: The important number becomes primary while context remains meaningful.
+    - id: step-03
+      beatId: beat-03
+      decision: hold
+      sequenceSelectionId: numeric-hold
+      rationale: Explanation continues without a new visual relationship.
+    - id: step-04
+      beatId: beat-04
+      decision: hold
+      sequenceSelectionId: numeric-hold
+      rationale: Copy updates while the established relationship remains correct.

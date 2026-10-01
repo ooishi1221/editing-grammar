@@ -142,6 +142,10 @@ function validateSceneCompositionInput(input: SceneCompositionInput): void {
   assertSchema(validateSceneInput, input, "Invalid scene composition input");
   assertUnique(input.frameSelections.map((selection) => selection.id), "frame selection ID");
   assertUnique(input.textStates.map((state) => state.id), "text state ID");
+  assertUnique(
+    input.sequenceSelections.flatMap((selection) => selection.id === undefined ? [] : [selection.id]),
+    "sequence selection ID",
+  );
 
   const frameIds = new Set(input.frameSelections.map((selection) => selection.id));
   for (const state of input.textStates) {
