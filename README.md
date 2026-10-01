@@ -1,22 +1,118 @@
 # Editing Grammar
 
 [![CI](https://github.com/ooishi1221/editing-grammar/actions/workflows/ci.yml/badge.svg)](https://github.com/ooishi1221/editing-grammar/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/ooishi1221/editing-grammar)](https://github.com/ooishi1221/editing-grammar/releases/latest)
+[![MIT License](https://img.shields.io/github/license/ooishi1221/editing-grammar)](LICENSE)
 
-Editing Grammar is an agent-readable intermediate layer that turns video-editing intent into portable editing patterns and renderer handoffs.
+Bad AI video editing often comes from asking a model to invent editing
+decisions from scratch. Editing Grammar gives AI agents a structured editing
+vocabulary instead:
+
+- Search 93 reusable editing Patterns by intent.
+- Compare candidates without forcing a winner.
+- Bind explicit scene inputs instead of guessing.
+- Apply optional Composition Grammar for attention and shot relationships.
+- Hand renderer-neutral instructions to Remotion, FFmpeg, or another video
+  pipeline.
+
+Patterns describe why an edit exists. Composition describes what should receive
+attention and what should stay, change, disappear, or return. The renderer
+decides the pixels.
+
+## Why this exists
+
+“Make this part more impactful” can lead an AI agent to invent random zooms,
+arbitrary caption styles, unnecessary layout changes, or renderer-specific
+magic numbers.
+
+Editing Grammar keeps the decision boundary explicit:
 
 ```text
-Editing intent
-  → Search
-  → Candidate Patterns
-  → Compare
-  → Agent Selection
-  → Pattern Grammar
-  → optional Composition Pass
-  → Scene Handoff
-  → Video Harness / Renderer Adapter
+Meaning
+  → Editing Pattern
+  → optional Composition
+  → explicit Handoff
+  → Renderer
 ```
 
-Patterns are candidates, not rules. Editing Grammar defines structural editing language; an Agent makes contextual editorial decisions; a renderer performs concrete execution. It is not an AI video editor, NLE, renderer, or automatic recommender.
+It is structured editorial grammar, not a prompt collection or an automatic
+director.
+
+## 30-second example
+
+Search v2 can retrieve an existing Pattern from a natural-language editing
+intent:
+
+```sh
+npm run search -- "数字を大きく"
+```
+
+This retrieves `VS-I05 — 数値ドン`. Search provides candidates only; the Agent
+still compares the result with the scene and makes the editorial choice.
+
+```sh
+npm run compare -- "数字を大きく"
+npm run handoff -- VS-I05 --values '{"valueId":"value-01","claimId":"claim-01"}'
+```
+
+Compare preserves purpose, fit boundaries, and provenance without choosing a
+winner. Handoff validates supplied identities and leaves any missing required
+input explicit.
+
+## Pattern is not enough
+
+The same short-form scene can need different screen relationships:
+
+```text
+two-person context
+        ↓
+strong reaction
+        ↓
+numeric reveal
+        ↓
+same speaker continues
+```
+
+An Agent may express that relationship with:
+
+```text
+CF-01 group-baseline
+        ↓
+CF-02 selected-person-reaction
+        ↓
+VS-I05 + optional CF-05 text-dominant-over-context
+        ↓
+CS-04 HOLD
+```
+
+Composition can change when meaning changes and explicitly HOLD when it should
+not. These are Agent choices, not automatic mappings from Pattern IDs.
+
+## Four-layer model
+
+| Layer | Responsibility |
+| --- | --- |
+| Editing Pattern | Why the edit exists |
+| Composition Frame | What receives attention now |
+| Composition Sequence | What is preserved, changed, released, or restored |
+| Renderer | Exact geometry, font, timing, crop, animation, and assets |
+
+Editing Grammar remains renderer-neutral. Remotion and FFmpeg are downstream
+examples, not runtime dependencies.
+
+## What you get
+
+Current v0.2.0 includes:
+
+- 93 Editing Patterns, including 82 current-contract Patterns
+- 6 Composition Frame References
+- 4 Composition Sequence References
+- 8 Text Roles
+- Deterministic Search v2 and Candidate Comparison
+- Typed Pattern Handoff and optional Scene Composition Handoff
+- Explicit unresolved inputs
+- Observed / inferred / proposal provenance
+- 112 tests and GitHub Actions CI validation
 
 ## Quickstart
 
@@ -27,7 +123,7 @@ npm ci
 npm run validate
 ```
 
-Validation reports the complete catalog:
+Validation covers every production catalog:
 
 ```text
 93 patterns loaded
@@ -38,126 +134,89 @@ Validation reports the complete catalog:
 0 errors
 ```
 
-Retrieve candidates, compare a small set, then build a handoff for the Pattern the Agent selects:
+Then use the public workflow:
 
 ```sh
-npm run search -- "二つの商品を同じ条件で比較したい"
-npm run compare -- "二つの商品を同じ条件で比較したい"
-npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
+npm run search -- "数字を大きく"
+npm run compare -- "数字を大きく"
+npm run show -- VS-I05
+npm run handoff -- VS-I05 --values '{"valueId":"value-01","claimId":"claim-01"}'
 ```
-
-The current search returns `VS-I02 — 二項比較` first for this query. Compare returns structured candidate data rather than a winner. The resolved handoff includes:
-
-```json
-{
-  "pattern": { "id": "VS-I02", "title": "二項比較" },
-  "status": "current-contract",
-  "inputs": {
-    "suppliedValues": { "comparisonAxis": "price" },
-    "unresolved": []
-  }
-}
-```
-
-See [examples/quickstart.md](examples/quickstart.md) for the complete command walkthrough.
-
-## Why the handoff exists
-
-For the intent “compare two products using the same criteria,” Search can retrieve candidate Patterns. The Agent may select `VS-I02` because its purpose is comparison on a shared axis. `comparisonAxis` remains explicit:
-
-```sh
-npm run handoff -- VS-I02
-```
-
-```json
-{ "inputs": { "unresolved": ["comparisonAxis"] } }
-```
-
-Supplying the criterion resolves it:
-
-```sh
-npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
-```
-
-This separates Pattern grammar from scene facts. The library does not guess that the comparison axis is price.
-
-## Catalog and provenance
-
-The v0.1.0 release baseline contains the original 92 source-audited Patterns.
-Current main is v0.2 development with 93 Patterns:
-
-- **82 current-contract** — portable implementation grammar is available.
-- **3 historical exceptions** — older experimental implementation metadata is isolated by default.
-- **8 semantic-only** — editorial semantics are useful, but no renderer-neutral execution grammar is invented.
-
-Each field is backed by explicit evidence:
-
-- `observed` — directly supported by a source.
-- `inferred` — a library generalization.
-- `proposal` — a library suggestion or implementation guidance.
-
-Editing Grammar never silently turns a proposal into a source fact. See [schema decisions](docs/schema-decisions.md), the [semantic enrichment contract](docs/semantic-enrichment-contract.md), and the [implementation enrichment summary](docs/implementation-enrichment-summary.md).
-
-Search v2 also supports explicit, provenance-scoped Pattern `retrievalTerms`
-for deterministic lexical access. They make a Pattern easier to find without
-changing its editorial purpose or becoming hidden query expansion.
-
-## Agent workflow
-
-```text
-Meaning / task
-  → reformulate editing intent
-  → Search
-  → Compare
-  → Agent decides
-  → Handoff
-  → downstream renderer
-```
-
-Search rank measures retrieval relevance, **not** an automatic editing decision. Compare does not choose a winner. Handoff assumes that an Agent has already selected one or more Patterns and validates only the declared inputs needed downstream. The [Agent Skill](skills/editing-grammar/SKILL.md) describes this discipline.
 
 ## Composition Grammar
 
-Current main also provides an optional scene-level Composition Handoff with six
-Frame References, four Sequence References, and eight Text Roles. Patterns
-select the editing job. Composition expresses attention, screen relationships,
-and preserve/change/release/restore state without selecting renderer geometry.
+Composition is optional. Use it when scene meaning needs an explicit attention
+relationship or a preserve/change/release/restore relationship across nearby
+beats.
 
-Run the executable source-level example:
+Run the executable source-level builder example:
 
 ```sh
 npx tsx examples/composition-builder.ts
 ```
 
-## Integration example
+It loads CF-01 and CF-02, binds authored targets, and uses CS-01 to express a
+baseline → reaction → baseline relationship without renderer geometry or
+automatic Pattern selection.
 
-Dialogue line: “Wait, why are there six fingers?!”
+## Provenance
 
-An Agent may interpret this as a high-intensity reaction or punchline. Illustrative candidates could include strong speech treatment, local emphasis, and an impact cue. They are not selected automatically.
+AI systems often blur what a source actually showed, what a library inferred,
+and what a library merely proposes. Editing Grammar keeps those separate:
 
-Editing Grammar returns structural grammar plus declared inputs. A Remotion, FFmpeg, or other adapter supplies exact fonts, colors, pixel positions, animation curves, concrete assets, and timeline implementation. [Renderer Handoff Contract](docs/renderer-handoff-contract.md) defines this boundary.
+- `observed` — directly supported by a source
+- `inferred` — a library generalization
+- `proposal` — library guidance or a proposed value
 
-## Public surface
+The library never silently turns a proposal into a source fact. Search v2
+`retrievalTerms` are explicit, Pattern-owned, proposal-provenance vocabulary
+for deterministic lexical access; they are not hidden global query expansion.
+
+## What this is not
+
+Editing Grammar is not:
+
+- A renderer
+- An NLE
+- An automatic director
+- An asset generator
+- A winner-ranking recommendation engine
+
+It supplies structured editorial grammar to an Agent and a downstream video
+system.
+
+## Explore
 
 - [Quickstart walkthrough](examples/quickstart.md)
 - [Agent integration guide](examples/agent-integration.md)
+- [Composition workflow](examples/composition-agent-workflow.md)
+- [Composition builder example](examples/composition-builder.ts)
 - [Architecture overview](docs/architecture-overview.md)
-- [P3 handoff closeout](docs/p3-renderer-handoff-closeout.md)
 - [Renderer Handoff Contract](docs/renderer-handoff-contract.md)
-- [JSON Schema](schema/pattern.schema.json)
+- [Pattern JSON Schema](schema/pattern.schema.json)
+- [v0.2.0 Release](docs/releases/v0.2.0.md)
 
-## Current state
+## Who this is for
 
-**Release: v0.2.0**
+- AI coding agents building video workflows
+- Teams generating video with Remotion or FFmpeg pipelines
+- Developers building AI-assisted editors
+- Researchers exploring structured editorial reasoning
 
-The current public contract contains 93 Patterns: 82 current-contract, 3
-historical-exception, and 8 semantic-only. It also includes 6 Frame References,
-4 Sequence References, and 8 Text Roles for optional Composition Grammar.
+## Current release
 
-v0.1.0 remains the original 92-Pattern source-audited baseline. v0.2.0 adds
+**v0.2.0**
+
+- 93 Patterns: 82 current-contract, 3 historical-exception, 8 semantic-only
+- 6 Frame References, 4 Sequence References, and 8 Text Roles
+
+v0.1.0 remains the original source-audited 92-Pattern baseline. v0.2.0 adds
 Composition Grammar, Agent Composition workflow, VS-I15 Product Identity, and
-Pattern-owned retrievalTerms. Renderer adapters and npm publishing remain out
-of scope.
+Pattern-owned retrievalTerms.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
