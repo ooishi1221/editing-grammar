@@ -1,0 +1,10 @@
+sceneId: numeric-reveal-demo
+beats:
+  - id: beat-01
+    meaning: speaker establishes explanatory context
+  - id: beat-02
+    meaning: important number becomes the primary information
+  - id: beat-03
+    meaning: speaker continues explanation while numeric state remains useful
+  - id: beat-04
+    meaning: copy updates but the attention relationship remains stable

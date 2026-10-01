@@ -1,0 +1,26 @@
+planId: reaction-demo-plan
+sceneId: reaction-demo
+steps:
+  - id: step-01
+    beatId: beat-01
+    decision: establish
+    frameReferenceId: CF-01
+    rationale: Keep the two related participants readable as a shared baseline.
+  - id: step-02
+    beatId: beat-02
+    decision: switch
+    patternIds: [VS-R02]
+    frameReferenceId: CF-02
+    sequenceReferenceId: CS-01
+    rationale: The punchline changes primary attention to the authored guest reaction.
+  - id: step-03
+    beatId: beat-03
+    decision: return
+    sequenceReferenceId: CS-01
+    returnToStepId: step-01
+    rationale: The temporary reaction emphasis ends when the shared conversation resumes.
+  - id: step-04
+    beatId: beat-04
+    decision: hold
+    sequenceReferenceId: CS-04
+    rationale: The ongoing conversation does not introduce a new attention relationship.

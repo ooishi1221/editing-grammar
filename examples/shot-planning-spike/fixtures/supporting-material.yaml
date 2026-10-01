@@ -1,0 +1,8 @@
+sceneId: supporting-material-demo
+beats:
+  - id: beat-01
+    meaning: speaker introduces an explanation
+  - id: beat-02
+    meaning: authored supporting material becomes useful evidence
+  - id: beat-03
+    meaning: explanation returns to the speaker context

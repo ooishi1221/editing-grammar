@@ -1,0 +1,21 @@
+planId: supporting-material-demo-plan
+sceneId: supporting-material-demo
+steps:
+  - id: step-01
+    beatId: beat-01
+    decision: establish
+    frameReferenceId: CF-02
+    rationale: Establish the authored speaker as the explanation context.
+  - id: step-02
+    beatId: beat-02
+    decision: insert
+    patternIds: [VS-L03]
+    frameReferenceId: CF-04
+    sequenceReferenceId: CS-02
+    rationale: The authored material becomes primary while a secondary speaker relationship remains useful.
+  - id: step-03
+    beatId: beat-03
+    decision: return
+    sequenceReferenceId: CS-02
+    returnToStepId: step-01
+    rationale: The temporary support ends when the explanation returns to its speaker context.

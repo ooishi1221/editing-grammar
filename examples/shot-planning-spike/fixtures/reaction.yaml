@@ -1,0 +1,22 @@
+sceneId: reaction-demo
+beats:
+  - id: beat-01
+    meaning: establish two-person context
+    sourceRange:
+      startMs: 0
+      endMs: 2100
+  - id: beat-02
+    meaning: guest delivers a punchline and reaction becomes primary
+    sourceRange:
+      startMs: 2100
+      endMs: 3400
+  - id: beat-03
+    meaning: return to the shared conversation
+    sourceRange:
+      startMs: 3400
+      endMs: 5000
+  - id: beat-04
+    meaning: conversation continues without a new attention relationship
+    sourceRange:
+      startMs: 5000
+      endMs: 6500

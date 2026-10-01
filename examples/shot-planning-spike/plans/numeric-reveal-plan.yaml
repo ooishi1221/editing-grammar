@@ -1,0 +1,24 @@
+planId: numeric-reveal-demo-plan
+sceneId: numeric-reveal-demo
+steps:
+  - id: step-01
+    beatId: beat-01
+    decision: establish
+    frameReferenceId: CF-02
+    rationale: Establish the authored speaker as the explanatory context.
+  - id: step-02
+    beatId: beat-02
+    decision: switch
+    patternIds: [VS-I05]
+    frameReferenceId: CF-05
+    rationale: The important number becomes primary while the speaker context remains meaningful.
+  - id: step-03
+    beatId: beat-03
+    decision: hold
+    sequenceReferenceId: CS-04
+    rationale: Explanation continues without a new visual relationship after numeric emphasis is established.
+  - id: step-04
+    beatId: beat-04
+    decision: hold
+    sequenceReferenceId: CS-04
+    rationale: Copy may update while the same attention relationship remains correct.
