@@ -62,16 +62,132 @@ Compare title, purpose, category, provenance, and available structured fields. U
 
 Search rank #1 is a closer lexical match, not the automatic answer. Compare does not recommend. Consider user meaning, tone, brand, references, scene context, and neighboring edits. Return multiple plausible options when they apply to different editing materials.
 
-### 7. Build a renderer handoff when requested
+### 7. Run a Composition Pass when it adds a semantic relationship
 
-1. Select the Pattern or Patterns.
-2. Inspect each selected Pattern with `show`.
-3. Build a portable handoff with `npm run handoff -- <ID> --values '<json-object>'`.
-4. Supply only known declared runtime or context inputs; inspect `unresolved` required inputs and obtain them from scene or application context.
-5. Never guess a missing required input or treat a grammar constant as caller input.
-6. Treat implementation fields as library `proposal`, never as source-observed production values, then pass the handoff to Video Harness or a renderer adapter.
+Pattern selection answers **what editing job should happen**. Composition
+selection answers **what receives attention and which relationships should
+change or stay**. Run this optional pass after Pattern selection when:
 
-Missing implementation fields are intentional for semantic-only Patterns; do not invent them. Historical exceptions may contain older renderer or Taste proposals, which require explicit handoff opt-in. Editing Grammar is not a renderer or timeline editor.
+- primary attention changes;
+- a speaker or reaction subject changes;
+- material, evidence, operation, or detail becomes important;
+- text temporarily becomes dominant;
+- an exact product or package must remain identifiable;
+- multiple screen regions change roles;
+- neighboring beats need preserve, release, or restore behavior;
+- the application baseline is becoming semantically misleading; or
+- an intentional HOLD decision is useful.
+
+Omit Composition when the current baseline already communicates the meaning,
+neighboring beats retain the same visual relationship, or a change would add
+noise. Do not run it mechanically for every Pattern.
+
+The current Composition catalog is deliberately small and may be inspected in
+full after Pattern selection: six Frame References (CF-01 through CF-06), four
+Sequence References (CS-01 through CS-04), and eight Text Roles. There is no
+Composition Search or automatic Pattern-to-Composition mapping.
+
+#### Frame References
+
+- **CF-01 group-baseline** — use when related people or subjects need to remain
+  understandable as one shared context.
+- **CF-02 selected-person-reaction** — use when one authored person or reaction
+  should become primary relative to a broader context.
+- **CF-03 contextual-detail-insert** — use when attention temporarily moves to
+  an authored object, operation, evidence, or detail.
+- **CF-04 material-with-secondary-person** — use when material is primary while
+  a speaker or reaction remains secondary.
+- **CF-05 text-dominant-over-context** — use when text should temporarily become
+  primary while the visual context remains meaningful.
+- **CF-06 product-identity** — use when an exact supplied product or package
+  must remain identifiable.
+
+These are independent choices. Do not encode rules such as VS-R02 → CF-02,
+VS-T08 → CF-05, VS-I05 → CF-05, or VS-L05 → CF-03. Those combinations can be
+plausible, but scene meaning decides. For example, a loud line may use
+text-dominant composition or may remain in a held baseline.
+
+#### Sequence References
+
+Inspect neighboring semantic beats only when a relationship between states
+matters. A Sequence Reference is optional and is never a timeline or required
+cut plan.
+
+- **CS-01 baseline-to-reaction-to-baseline** — shared context → selected
+  person/reaction → shared context. It expresses temporary priority and a
+  possible return relationship, not three mandatory cuts.
+- **CS-02 explanation-to-supporting-visual-to-return** — explanation → authored
+  material/detail → explanation context. The supporting visual must correspond
+  to the authored explanation; never invent B-roll.
+- **CS-03 persistent-question-to-reaction-or-result** — distinguish what
+  persists, changes priority, is released, and is restored. Keep program label,
+  question, and answer/result as separate states.
+- **CS-04 hold-composition-update-state-only** — use when subject relation,
+  main regions, and baseline framing still serve the scene while text or a
+  small expression state changes.
+
+CS-04 HOLD is affirmative. Do not change composition merely because a new
+utterance begins, captions change, expression changes slightly, or a small
+reaction occurs. HOLD is neither missing editing nor lack of coverage.
+
+### 8. Bind declared Pattern inputs
+
+Build each selected Pattern handoff with only known runtime or context inputs.
+Inspect its unresolved required keys, obtain missing scene or application facts,
+and never guess a missing value or treat a grammar constant as caller input.
+
+~~~sh
+npm run handoff -- VS-I02 --values '{"comparisonAxis":"price"}'
+~~~
+
+Missing implementation fields are intentional for semantic-only Patterns; do
+not invent them. Historical exceptions may contain older renderer or Taste
+proposals, which require explicit handoff opt-in. Implementation fields remain
+library proposal, not source-observed production values.
+
+### 9. Build Pattern Handoff(s)
+
+Inspect selected Patterns with show, then build their portable handoffs. A
+single Pattern Handoff is not a timeline or renderer plan.
+
+### 10. Build optional Scene Composition Handoff
+
+For an authored Composition Pass:
+
+1. Select Frame References for the states that need a relationship decision.
+2. Bind only known target identities, for example CF-02
+   selectedSubject = guest, CF-03 detailTarget = screenshot-01 and
+   sourceContext = claim-03, CF-04 primaryMaterial = chart-01 and
+   secondarySubject = presenter, or CF-06 productIdentity = package-01.
+3. Use the Text Role catalog when text state matters:
+   persistent-context, speech-caption, reaction-caption, question,
+   answer-result, source-proof, product-copy, and cta.
+4. Bind neighboring state IDs under preserve, change, release, and restore
+   only when a Sequence Reference applies.
+5. Build SceneCompositionHandoff and inspect derived unresolved target slots.
+6. Attach that already-built, optional composition object to
+   SceneImplementationHandoff.
+
+If a required target is unknown, leave it unresolved. Never guess which person
+reacted, which product is meant, which asset supports a claim, or which detail
+should be shown. Do not use Pattern array order as timeline order.
+
+Text role is not text position. Do not infer persistent, speech, or reaction
+role from top, bottom, center, left, or right. Text state can persist, release,
+or become active independently of other text states.
+
+### 11. Pass both handoffs downstream
+
+Pass selected Pattern Handoff(s), optional Scene Composition Handoff, and
+external context to Video Harness or a renderer adapter. Composition may state
+that a selected subject is primary, text dominates context, material is primary
+with a secondary person, or a product remains identifiable. It does not set
+coordinates, crop, fonts, durations, animation curves, safe-area pixels, or
+renderer syntax.
+
+Platform safe area is external platform context. Brand typography, assets, and
+concrete execution remain renderer/Harness responsibilities. Editing Grammar is
+not a renderer or timeline editor.
 
 ## Provenance
 
@@ -122,3 +238,12 @@ Do not:
 - invent missing `goodFor` or `avoidWhen`;
 - add hidden Search synonyms, modify YAML for one query, or hard-code Pattern IDs as answers;
 - treat one Pattern as universally correct.
+- reuse one baseline composition for every semantic beat;
+- vary composition merely for visual variety;
+- auto-map Pattern IDs to Composition IDs;
+- infer missing Composition target bindings;
+- treat text position as text role;
+- treat Sequence References as mandatory cuts;
+- treat Pattern array order as timeline order;
+- resolve renderer geometry; or
+- invent assets.
